@@ -1,0 +1,267 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/pos_saas_chile/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// ============ MULTI-TENANT CORE ============
+
+model Tenant {
+  id          String   @id @default(cuid())
+  businessName String
+  rut         String   @unique // RUT chileno
+  email       String   @unique
+  phone       String?
+  address     String?
+  isActive    Boolean  @default(true)
+  planType    PlanType @default(BASIC)
+  maxCashiers Int      @default(2)
+  extraCashiers Int    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  users       User[]
+  products    Product[]
+  sales       Sale[]
+  cashSessions CashSession[]
+  fixedExpenses FixedExpense[]
+  stockAdjustments StockAdjustment[]
+  auditLogs   AuditLog[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole
+  isActive  Boolean  @default(true)
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sales     Sale[]
+  cashSessions CashSession[]
+  stockAdjustments StockAdjustment[]
+  auditLogs AuditLog[]
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+// ============ PRODUCTS & INVENTORY ============
+
+model Product {
+  id          String   @id @default(cuid())
+  sku         String   // código interno
+  barcode     String?  // EAN-13
+  name        String
+  description String?
+  category    String
+  brand       String?
+  costPrice   Decimal  @db.Decimal(10,2) // costo de compra
+  salePrice   Decimal  @db.Decimal(10,2) // precio de venta
+  stock       Int      @default(0)
+  minStock    Int      @default(5) // umbral de reposición
+  isActive    Boolean  @default(true)
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tenant      Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  saleItems   SaleItem[]
+  stockAdjustments StockAdjustment[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId, barcode])
+  @@index([tenantId, category])
+  @@map("products")
+}
+
+model StockAdjustment {
+  id        String           @id @default(cuid())
+  productId String
+  quantity  Int              // puede ser negativo para mermas
+  type      AdjustmentType
+  reason    String?
+  userId    String
+  tenantId  String
+  createdAt DateTime         @default(now())
+
+  // Relations
+  product   Product @relation(fields: [productId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, productId])
+  @@map("stock_adjustments")
+}
+
+// ============ SALES & CASH MANAGEMENT ============
+
+model CashSession {
+  id             String           @id @default(cuid())
+  initialAmount  Decimal          @db.Decimal(10,2)
+  finalAmount    Decimal?         @db.Decimal(10,2)
+  expectedAmount Decimal?         @db.Decimal(10,2)
+  difference     Decimal?         @db.Decimal(10,2)
+  status         CashSessionStatus @default(OPEN)
+  openedAt       DateTime         @default(now())
+  closedAt       DateTime?
+  userId         String
+  tenantId       String
+
+  // Relations
+  user      User   @relation(fields: [userId], references: [id])
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sales     Sale[]
+
+  @@index([tenantId, userId])
+  @@map("cash_sessions")
+}
+
+model Sale {
+  id            String      @id @default(cuid())
+  saleNumber    String      // número consecutivo por tenant
+  subtotal      Decimal     @db.Decimal(10,2)
+  tax           Decimal     @db.Decimal(10,2) @default(0)
+  total         Decimal     @db.Decimal(10,2)
+  paymentMethod PaymentMethod
+  cashReceived  Decimal?    @db.Decimal(10,2)
+  change        Decimal?    @db.Decimal(10,2)
+  status        SaleStatus  @default(COMPLETED)
+  userId        String
+  tenantId      String
+  cashSessionId String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  user         User         @relation(fields: [userId], references: [id])
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cashSession  CashSession? @relation(fields: [cashSessionId], references: [id])
+  items        SaleItem[]
+
+  @@unique([tenantId, saleNumber])
+  @@index([tenantId, createdAt])
+  @@map("sales")
+}
+
+model SaleItem {
+  id         String  @id @default(cuid())
+  quantity   Int
+  unitPrice  Decimal @db.Decimal(10,2)
+  unitCost   Decimal @db.Decimal(10,2) // para calcular margen
+  subtotal   Decimal @db.Decimal(10,2)
+  saleId     String
+  productId  String
+  tenantId   String
+
+  // Relations
+  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([tenantId, saleId])
+  @@map("sale_items")
+}
+
+// ============ BUSINESS INTELLIGENCE ============
+
+model FixedExpense {
+  id          String   @id @default(cuid())
+  name        String   // ej: "Arriendo local"
+  amount      Decimal  @db.Decimal(10,2)
+  frequency   ExpenseFrequency // MONTHLY, DAILY, etc
+  isActive    Boolean  @default(true)
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("fixed_expenses")
+}
+
+// ============ AUDIT & SECURITY ============
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // CREATE, UPDATE, DELETE
+  entity    String   // tabla afectada
+  entityId  String   // ID del registro
+  oldValues Json?
+  newValues Json?
+  userId    String?
+  tenantId  String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user   User?  @relation(fields: [userId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, entity])
+  @@index([tenantId, userId])
+  @@map("audit_logs")
+}
+
+// ============ ENUMS ============
+
+enum UserRole {
+  PROVEEDOR    // Administrador SaaS
+  ADMIN        // Administrador Cliente
+  CAJA         // Operador punto de venta
+  INVENTARIO   // Encargado de stock  
+  SOPORTE      // Soporte técnico
+}
+
+enum PlanType {
+  BASIC
+  PRO
+  ENTERPRISE
+}
+
+enum PaymentMethod {
+  CASH        // Efectivo
+  DEBIT       // Débito
+  CREDIT      // Crédito
+  TRANSFER    // Transferencia
+}
+
+enum SaleStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum CashSessionStatus {
+  OPEN
+  CLOSED
+}
+
+enum AdjustmentType {
+  PURCHASE    // Compra
+  LOSS        // Merma
+  CORRECTION  // Corrección de inventario
+  RETURN      // Devolución
+}
+
+enum ExpenseFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
