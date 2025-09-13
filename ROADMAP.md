@@ -1,16 +1,16 @@
 
-# 🗺️ Roadmap CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
+# Roadmap CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
 
-## 📅 Cronograma General del Proyecto
+## Cronograma General del Proyecto
 
 **Duración Total**: 12-16 semanas
-**Inicio**: Septiembre 2024
+**Inicio**: Septiembre 2025
 **Objetivo**: Tesis de titulación - Plataforma POS SaaS completa
 
 ---
 
-## 🎯 Fase 1: Landing Page + Roles Básicos
-**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: 🔄 En Planificación
+## Fase 1: Landing Page + Roles Básicos
+**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: En Planificación
 
 ### Objetivos de la Fase 1
 - Establecer presencia web profesional
@@ -19,11 +19,11 @@
 - Crear dashboards iniciales por rol
 
 ### Entregables Principales
-- ✅ Landing page responsive y profesional
-- ✅ Sistema de registro/login completo
-- ✅ 5 roles de usuario implementados
-- ✅ Dashboard básico por cada rol
-- ✅ Navegación y layout base
+- Landing page responsive y profesional
+- Sistema de registro/login completo
+- 5 roles de usuario implementados
+- Dashboard básico por cada rol
+- Navegación y layout base
 
 ### Cronograma Detallado Fase 1
 ```
@@ -45,8 +45,8 @@ Semana 3 (Buffer):
 
 ---
 
-## 🛒 Fase 2: POS + Inventario Core
-**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: 📋 Planificado
+## Fase 2: POS + Inventario Core
+**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: Planificado
 
 ### Objetivos de la Fase 2
 - Desarrollar sistema POS funcional completo
@@ -55,11 +55,11 @@ Semana 3 (Buffer):
 - Crear sistema de reportes básicos
 
 ### Entregables Principales
-- ✅ Interface POS completa y funcional
-- ✅ Gestión de productos e inventario
-- ✅ Sistema de ventas y transacciones
-- ✅ Reportes básicos de ventas
-- ✅ Integración códigos de barras chilenos
+- Interface POS completa y funcional
+- Gestión de productos e inventario
+- Sistema de ventas y transacciones
+- Reportes básicos de ventas
+- Integración códigos de barras chilenos
 
 ### Cronograma Detallado Fase 2
 ```
@@ -84,28 +84,28 @@ Semana 5-6: Reportes y Optimización
 
 ---
 
-## 🚀 Fase 3: Funcionalidades Avanzadas
-**Duración**: 6-8 semanas | **Prioridad**: Media | **Estado**: 📝 Conceptual
+## Fase 3: Funcionalidades Avanzadas
+**Duración**: 6-8 semanas | **Prioridad**: Media | **Estado**: Conceptual
 
 ### Objetivos de la Fase 3
-- Implementar facturación electrónica SII
+- Implementar registro avanzado de flujo de dinero
 - Desarrollar reportes avanzados y analytics
 - Integrar APIs chilenas (bancos, servicios)
 - Optimizar rendimiento y escalabilidad
 
 ### Entregables Principales
-- ✅ Facturación electrónica SII integrada
-- ✅ Reportes avanzados y analytics
-- ✅ Integración APIs chilenas
-- ✅ Sistema de backup y recuperación
-- ✅ Optimizaciones de rendimiento
+- Sistema avanzado de registro de flujo de dinero
+- Reportes avanzados y analytics
+- Integración APIs chilenas
+- Sistema de backup y recuperación
+- Optimizaciones de rendimiento
 
 ### Cronograma Detallado Fase 3
 ```
-Semana 1-2: Facturación Electrónica
-├── Integración API SII
-├── Generación de documentos tributarios
-├── Validación y envío automático
+Semana 1-2: Registro de Flujo Avanzado
+├── Sistema detallado de tipos de pago
+├── Análisis de flujo de dinero
+├── Reportes financieros avanzados
 └── Testing con casos reales
 
 Semana 3-4: Reportes Avanzados
@@ -129,8 +129,8 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🏗️ Fase 4: Despliegue y Producción
-**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: 📝 Conceptual
+## Fase 4: Despliegue y Producción
+**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: Conceptual
 
 ### Objetivos de la Fase 4
 - Desplegar en Google Cloud Platform
@@ -139,15 +139,15 @@ Semana 7-8: Optimización Final
 - Preparar documentación final de tesis
 
 ### Entregables Principales
-- ✅ Aplicación desplegada en GCP
-- ✅ Pipeline CI/CD configurado
-- ✅ Monitoreo y alertas activas
-- ✅ Documentación técnica completa
-- ✅ Presentación de tesis preparada
+- Aplicación desplegada en GCP
+- Pipeline CI/CD configurado
+- Monitoreo y alertas activas
+- Documentación técnica completa
+- Presentación de tesis preparada
 
 ---
 
-## 📊 Métricas de Éxito por Fase
+## Métricas de Éxito por Fase
 
 ### Fase 1 - Métricas
 - [ ] Landing page con tiempo de carga < 3s
@@ -162,7 +162,7 @@ Semana 7-8: Optimización Final
 - [ ] 99% precisión en códigos de barras
 
 ### Fase 3 - Métricas
-- [ ] Facturación SII 100% compatible
+- [ ] Registro de flujo 100% preciso
 - [ ] Reportes avanzados en tiempo real
 - [ ] APIs integradas con 99.5% uptime
 - [ ] Performance optimizada (< 1s load time)
@@ -175,7 +175,7 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🎯 Hitos Críticos
+## Hitos Críticos
 
 | Fecha | Hito | Descripción |
 |-------|------|-------------|
@@ -186,7 +186,7 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🔄 Metodología de Desarrollo
+## Metodología de Desarrollo
 
 ### Enfoque Ágil Adaptado
 - **Sprints**: 1 semana por sprint
@@ -202,12 +202,12 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🚨 Riesgos y Mitigaciones
+## Riesgos y Mitigaciones
 
 ### Riesgos Técnicos
 | Riesgo | Probabilidad | Impacto | Mitigación |
 |--------|--------------|---------|------------|
-| Integración SII compleja | Alta | Alto | Comenzar investigación temprana, APIs de prueba |
+| Complejidad del registro de flujo | Alta | Alto | Comenzar investigación temprana, APIs de prueba |
 | Performance en producción | Media | Alto | Testing de carga, optimización continua |
 | Compatibilidad códigos barras | Media | Medio | Validación con productos reales chilenos |
 
@@ -220,24 +220,47 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 📈 Próximos Pasos Inmediatos
+## Funcionalidades Clave del Sistema
 
-### Esta Semana (Semana 1)
-1. ✅ Configurar repositorio GitHub
-2. ✅ Crear documentación base
-3. 🔄 Iniciar desarrollo landing page
-4. 🔄 Configurar entorno Google Cloud
+### Sistema de Registro de Flujo de Dinero
+- **Registro Detallado**: Cada transacción registra método de pago específico
+- **Tipos de Pago**: Efectivo, tarjeta de crédito, tarjeta de débito
+- **Sin Integración SII**: El sistema NO emite boletas electrónicas
+- **Control Interno**: Mantiene registro completo para análisis interno
+- **Transbank**: Solo para pago de suscripción de la plataforma
 
-### Próxima Semana (Semana 2)
-1. 📋 Completar landing page
-2. 📋 Implementar sistema de autenticación
-3. 📋 Comenzar desarrollo de roles
-4. 📋 Preparar demo Fase 1
+### Gestión de Inventario
+- **Productos Chilenos**: Base de datos con productos locales
+- **Códigos de Barras**: Integración con códigos EAN-13 chilenos
+- **Control de Stock**: Seguimiento en tiempo real
+- **Alertas**: Notificaciones de stock bajo
+
+### Reportes y Analytics
+- **Flujo de Dinero**: Análisis detallado por tipo de pago
+- **Ventas**: Reportes por período, producto, vendedor
+- **Inventario**: Estado de stock, rotación, valorización
+- **Exportación**: PDF, Excel para análisis externo
 
 ---
 
-**Última actualización**: Septiembre 12, 2024
-**Próxima revisión**: Septiembre 19, 2024
+## Próximos Pasos Inmediatos
+
+### Esta Semana (Semana 1)
+1. Configurar repositorio GitHub
+2. Crear documentación base
+3. Iniciar desarrollo landing page
+4. Configurar entorno Google Cloud
+
+### Próxima Semana (Semana 2)
+1. Completar landing page
+2. Implementar sistema de autenticación
+3. Comenzar desarrollo de roles
+4. Preparar demo Fase 1
+
+---
+
+**Última actualización**: Septiembre 13, 2025
+**Próxima revisión**: Septiembre 20, 2025
 
 ---
 
