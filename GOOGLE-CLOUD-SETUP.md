@@ -1,11 +1,11 @@
 
-# ☁️ Guía Completa: Configuración Google Cloud para CRTLPyme
+# Guía Completa: Configuración Google Cloud para CRTLPyme
 
 **Objetivo**: Desplegar CRTLPyme en Google Cloud Platform de manera profesional y escalable para el proyecto de tesis.
 
 ---
 
-## 📋 Índice de Contenidos
+## Índice de Contenidos
 
 1. [Preparación Inicial](#preparación-inicial)
 2. [Configuración de Proyecto GCP](#configuración-de-proyecto-gcp)
@@ -20,7 +20,7 @@
 
 ---
 
-## 🚀 Preparación Inicial
+## Preparación Inicial
 
 ### Prerrequisitos
 - [ ] Cuenta de Google Cloud Platform activa
@@ -43,7 +43,7 @@ Nota: Con crédito gratuito de $300, cubrirá todo el desarrollo de la tesis.
 
 ---
 
-## 🏗️ Configuración de Proyecto GCP
+## Configuración de Proyecto GCP
 
 ### Paso 1: Crear Proyecto en Google Cloud Console
 
@@ -121,7 +121,7 @@ gcloud config list
 
 ---
 
-## 🗄️ Configuración de Base de Datos
+## Configuración de Base de Datos
 
 ### Paso 1: Crear Instancia Cloud SQL (PostgreSQL)
 
@@ -200,7 +200,7 @@ gcloud sql instances describe crtlpyme-db --format="value(ipAddresses[0].ipAddre
 
 ---
 
-## 🚀 Configuración de App Engine
+## Configuración de App Engine
 
 ### Paso 1: Preparar Aplicación para Deployment
 
@@ -300,7 +300,7 @@ gcloud app browse
 
 ---
 
-## 📦 Configuración de Storage
+## Configuración de Storage
 
 ### Paso 1: Crear Bucket para Archivos
 
@@ -333,7 +333,7 @@ gsutil cors set cors.json gs://crtlpyme-files
 
 ---
 
-## 🌐 Configuración de Dominio (Opcional)
+## Configuración de Dominio (Opcional)
 
 ### Paso 1: Configurar Dominio Personalizado
 
@@ -350,7 +350,7 @@ App Engine automáticamente provee certificados SSL para dominios personalizados
 
 ---
 
-## 📊 Monitoreo y Logging
+## Monitoreo y Logging
 
 ### Paso 1: Configurar Cloud Monitoring
 
@@ -392,7 +392,7 @@ notificationChannels:
 
 ---
 
-## 🤖 Scripts de Automatización
+## Scripts de Automatización
 
 ### Script de Deployment Completo
 
@@ -402,50 +402,50 @@ notificationChannels:
 
 set -e
 
-echo "🚀 Iniciando deployment de CRTLPyme..."
+echo "Iniciando deployment de CRTLPyme..."
 
 # Verificar que estamos en el directorio correcto
 if [ ! -f "package.json" ]; then
-    echo "❌ Error: No se encuentra package.json. Ejecutar desde el directorio raíz del proyecto."
+    echo "Error: No se encuentra package.json. Ejecutar desde el directorio raíz del proyecto."
     exit 1
 fi
 
 # Verificar configuración de gcloud
-echo "📋 Verificando configuración de gcloud..."
+echo "Verificando configuración de gcloud..."
 gcloud config list
 
 # Instalar dependencias
-echo "📦 Instalando dependencias..."
+echo "Instalando dependencias..."
 npm install
 
 # Ejecutar tests (si existen)
 if [ -f "jest.config.js" ]; then
-    echo "🧪 Ejecutando tests..."
+    echo "Ejecutando tests..."
     npm test
 fi
 
 # Build del proyecto
-echo "🏗️ Building proyecto..."
+echo "Building proyecto..."
 npm run build
 
 # Ejecutar migraciones de base de datos
-echo "🗄️ Ejecutando migraciones de base de datos..."
+echo "Ejecutando migraciones de base de datos..."
 npx prisma migrate deploy
 
 # Desplegar a App Engine
-echo "☁️ Desplegando a Google App Engine..."
+echo "Desplegando a Google App Engine..."
 gcloud app deploy --quiet
 
 # Obtener URL de la aplicación
 APP_URL=$(gcloud app browse --no-launch-browser)
-echo "✅ Deployment completado!"
-echo "🌐 Aplicación disponible en: $APP_URL"
+echo "Deployment completado!"
+echo "Aplicación disponible en: $APP_URL"
 
 # Ejecutar health check
-echo "🏥 Ejecutando health check..."
-curl -f "$APP_URL/api/health" || echo "⚠️ Health check falló"
+echo "Ejecutando health check..."
+curl -f "$APP_URL/api/health" || echo "Health check falló"
 
-echo "🎉 Deployment de CRTLPyme completado exitosamente!"
+echo "Deployment de CRTLPyme completado exitosamente!"
 ```
 
 ### Script de Backup de Base de Datos
@@ -460,17 +460,17 @@ INSTANCE_NAME="crtlpyme-db"
 DATABASE_NAME="crtlpyme"
 BACKUP_NAME="crtlpyme-backup-$(date +%Y%m%d-%H%M%S)"
 
-echo "💾 Creando backup de base de datos..."
+echo "Creando backup de base de datos..."
 
 # Crear backup
 gcloud sql backups create \
     --instance=$INSTANCE_NAME \
     --description="Backup automático de CRTLPyme - $(date)"
 
-echo "✅ Backup creado exitosamente: $BACKUP_NAME"
+echo "Backup creado exitosamente: $BACKUP_NAME"
 
 # Listar backups recientes
-echo "📋 Backups recientes:"
+echo "Backups recientes:"
 gcloud sql backups list --instance=$INSTANCE_NAME --limit=5
 ```
 
@@ -482,30 +482,30 @@ gcloud sql backups list --instance=$INSTANCE_NAME --limit=5
 
 APP_URL="https://crtlpyme-tesis-[tu-id].uc.r.appspot.com"
 
-echo "🏥 Ejecutando health check de CRTLPyme..."
+echo "Ejecutando health check de CRTLPyme..."
 
 # Check de aplicación
 if curl -f "$APP_URL/api/health" > /dev/null 2>&1; then
-    echo "✅ Aplicación: OK"
+    echo "Aplicación: OK"
 else
-    echo "❌ Aplicación: ERROR"
+    echo "Aplicación: ERROR"
 fi
 
 # Check de base de datos
 if curl -f "$APP_URL/api/db-health" > /dev/null 2>&1; then
-    echo "✅ Base de datos: OK"
+    echo "Base de datos: OK"
 else
-    echo "❌ Base de datos: ERROR"
+    echo "Base de datos: ERROR"
 fi
 
 # Métricas básicas
-echo "📊 Métricas recientes:"
+echo "Métricas recientes:"
 gcloud logging read "resource.type=gae_app" --limit=5 --format="table(timestamp,severity,textPayload)"
 ```
 
 ---
 
-## ✅ Checklist de Verificación
+## Checklist de Verificación
 
 ### Pre-Deployment
 - [ ] Proyecto GCP creado y configurado
@@ -536,7 +536,7 @@ gcloud logging read "resource.type=gae_app" --limit=5 --format="table(timestamp,
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Problemas Comunes y Soluciones
 
@@ -600,7 +600,7 @@ gcloud app versions migrate [VERSION_ID]
 
 ---
 
-## 📞 Recursos de Ayuda
+## Recursos de Ayuda
 
 ### Documentación Oficial
 - [Google Cloud App Engine](https://cloud.google.com/appengine/docs)
@@ -619,7 +619,7 @@ gcloud app versions migrate [VERSION_ID]
 
 ---
 
-## 💰 Optimización de Costos
+## Optimización de Costos
 
 ### Tips para Minimizar Costos Durante Desarrollo
 
@@ -649,7 +649,7 @@ gcloud app versions migrate [VERSION_ID]
 
 ---
 
-**Última actualización**: Septiembre 12, 2024
+**Última actualización**: Septiembre 13, 2025
 **Próxima revisión**: Cuando se inicie el deployment
 
 ---

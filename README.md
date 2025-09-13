@@ -7,11 +7,11 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Prisma](https://img.shields.io/badge/Prisma-5-green)
 
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 
 CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto forma parte de una tesis de titulación y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
 
-## 🎯 Objetivos del Proyecto
+## Objetivos del Proyecto
 
 - **Objetivo Principal**: Desarrollar una plataforma POS SaaS completa para PYMEs chilenas
 - **Objetivos Específicos**:
@@ -19,10 +19,10 @@ CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente p
   - Integrar productos chilenos con códigos de barras
   - Crear dashboards personalizados por rol
   - Desarrollar sistema de inventario y ventas
-  - Implementar facturación electrónica (SII Chile)
+  - Registrar flujo de dinero y tipos de pago
   - Desplegar en Google Cloud Platform
 
-## 🏗️ Arquitectura Técnica
+## Arquitectura Técnica
 
 ### Stack Tecnológico
 - **Frontend**: Next.js 14 con TypeScript
@@ -49,7 +49,7 @@ CRTLPyme/
 └── scripts/              # Scripts de automatización
 ```
 
-## 👥 Sistema de Roles
+## Sistema de Roles
 
 1. **Super Admin**: Gestión completa del sistema
 2. **Admin Empresa**: Administración de empresa específica
@@ -57,7 +57,7 @@ CRTLPyme/
 4. **Vendedor**: Operaciones de venta
 5. **Cajero**: Operaciones de caja
 
-## 🚀 Fases de Desarrollo
+## Fases de Desarrollo
 
 ### Fase 1: Landing Page + Roles Básicos (2-3 semanas)
 - Landing page profesional
@@ -72,12 +72,12 @@ CRTLPyme/
 - Reportes básicos
 
 ### Fase 3: Funcionalidades Avanzadas (6-8 semanas)
-- Facturación electrónica SII
+- Registro de flujo de dinero
 - Reportes avanzados
 - Integración con APIs chilenas
 - Optimizaciones de rendimiento
 
-## 🛠️ Instalación y Configuración
+## Instalación y Configuración
 
 ### Prerrequisitos
 - Node.js 18+
@@ -88,7 +88,7 @@ CRTLPyme/
 ### Instalación Local
 ```bash
 # Clonar el repositorio
-git clone https://github.com/[usuario]/CRTLPyme.git
+git clone https://github.com/kbzas090/CRTLPyme.git
 cd CRTLPyme
 
 # Instalar dependencias
@@ -119,9 +119,9 @@ NEXTAUTH_URL="http://localhost:3000"
 GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 ```
 
-## 📊 Características Principales
+## Características Principales
 
-### ✅ Implementado
+### Implementado
 - [x] Estructura base Next.js 14
 - [x] Configuración Prisma + PostgreSQL
 - [x] Sistema de roles básico
@@ -129,26 +129,45 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 - [x] Dashboards por rol
 - [x] Componentes UI con shadcn/ui
 
-### 🔄 En Desarrollo
+### En Desarrollo
 - [ ] Landing page profesional
 - [ ] Sistema de autenticación completo
 - [ ] POS funcional
 - [ ] Gestión de inventario avanzada
 
-### 📋 Planificado
-- [ ] Facturación electrónica SII
+### Planificado
+- [ ] Registro de flujo de dinero
 - [ ] Reportes avanzados
 - [ ] Integración APIs chilenas
 - [ ] Despliegue Google Cloud
 
-## 🇨🇱 Adaptación al Mercado Chileno
+## Funcionalidades del Sistema
+
+### Sistema de Ventas
+- **Registro de Ventas**: Mantiene registro completo del flujo de dinero
+- **Tipos de Pago**: Identifica y registra efectivo, tarjeta de crédito, tarjeta de débito
+- **Control de Transacciones**: Seguimiento detallado de todas las operaciones
+- **Reportes de Flujo**: Análisis del movimiento de dinero del negocio
+
+### Gestión de Inventario
+- **Control de Stock**: Seguimiento de productos y cantidades
+- **Productos Chilenos**: Base de datos con productos locales y códigos de barras
+- **Alertas de Stock**: Notificaciones de productos con stock bajo
+- **Categorización**: Organización eficiente de productos
+
+### Sistema de Pagos
+- **Transbank**: Integración para pago de suscripción de la plataforma
+- **Métodos Locales**: Soporte para métodos de pago chilenos
+- **Procesamiento Seguro**: Manejo seguro de transacciones
+
+## Adaptación al Mercado Chileno
 
 - **Productos Locales**: Base de datos con productos chilenos y códigos de barras
 - **Moneda**: Pesos chilenos (CLP) con formateo local
-- **Facturación**: Preparado para integración con SII
 - **Regulaciones**: Cumplimiento normativas comerciales chilenas
+- **Flujo de Dinero**: Registro detallado adaptado a necesidades locales
 
-## 📚 Documentación
+## Documentación
 
 - [Roadmap del Proyecto](./ROADMAP.md)
 - [Plan Fase 1](./FASE-1-PLAN.md)
@@ -156,7 +175,7 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 - [Configuración Google Cloud](./GOOGLE-CLOUD-SETUP.md)
 - [Documentación API](./docs/api.md)
 
-## 🤝 Contribución
+## Contribución
 
 Este es un proyecto académico de tesis. Para contribuciones:
 
@@ -166,23 +185,23 @@ Este es un proyecto académico de tesis. Para contribuciones:
 4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
 5. Abrir Pull Request
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
 
-## 👨‍💻 Autor
+## Autor
 
 **Proyecto de Tesis - CRTLPyme**
 - Plataforma POS SaaS para PYMEs Chilenas
 - Universidad: [Nombre Universidad]
-- Año: 2024
+- Año: 2025
 
-## 📞 Contacto
+## Contacto
 
 Para consultas sobre el proyecto:
-- Email: [tu-email@universidad.cl]
-- LinkedIn: [tu-perfil-linkedin]
+- Email: hernan.c249@gmail.com
+- LinkedIn: https://www.linkedin.com/in/hfcabezas/
 
 ---
 
-**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 🚀
+**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología
