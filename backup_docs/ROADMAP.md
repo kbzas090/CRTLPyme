@@ -1,16 +1,16 @@
 
-# Roadmap CRTLPyme - Sistema de Control para PYMEs Chilenas
+# Roadmap CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
 
-## Cronograma General del Proyecto Académico
+## Cronograma General del Proyecto
 
-**Duración Total**: 6-9 semanas
+**Duración Total**: 12-16 semanas
 **Inicio**: Septiembre 2024
-**Objetivo**: Tesis de titulación - Sistema de control básico para PYMEs chilenas
+**Objetivo**: Tesis de titulación - Plataforma POS SaaS completa
 
 ---
 
 ## Fase 1: Landing Page + Roles Básicos
-**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: Completado
+**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: En Planificación
 
 ### Objetivos de la Fase 1
 - Establecer presencia web profesional
@@ -45,66 +45,65 @@ Semana 3 (Buffer):
 
 ---
 
-## Fase 2: Sistema de Control + Inventario
-**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: Completado
+## Fase 2: POS + Inventario Core
+**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: Planificado
 
 ### Objetivos de la Fase 2
-- Desarrollar sistema de control de ventas funcional
+- Desarrollar sistema POS funcional completo
 - Integrar productos chilenos con códigos de barras
 - Crear sistema de reportes básicos
-- Completar funcionalidades core del proyecto académico
 
 ### Entregables Principales
-- Interface de control de ventas completa y funcional
-- Gestión básica de productos e inventario
-- Sistema de transacciones básicas
-- Reportes básicos de operaciones
+- Interface POS completa y funcional
+- Gestión de productos e inventario
+- Sistema de ventas y transacciones
+- Reportes básicos de ventas
 - Integración códigos de barras chilenos
 
 ### Cronograma Detallado Fase 2
 ```
-Semana 1-2: Sistema de Control de Ventas
+Semana 1-2: Sistema POS
 ├── Días 1-4: Interface de venta (carrito, productos)
-├── Días 5-8: Procesamiento de transacciones básicas
+├── Días 5-8: Procesamiento de transacciones
 ├── Días 9-10: Métodos de pago básicos
-└── Días 11-14: Testing y refinamiento
+└── Días 11-14: Testing y refinamiento POS
 
 Semana 3-4: Gestión de Inventario
 ├── Días 1-4: CRUD productos básico
-├── Días 5-8: Control de stock básico
+├── Días 5-8: Control de stock y alertas
 ├── Días 9-10: Categorías y proveedores
 └── Días 11-14: Integración productos chilenos
 
-Semana 5-6: Reportes y Finalización
-├── Días 1-4: Reportes básicos de operaciones
-├── Días 5-8: Dashboard con métricas básicas
-├── Días 9-10: Testing integral
-└── Días 11-14: Documentación final del proyecto
+Semana 5-6: Reportes y Optimización
+├── Días 1-4: Reportes de ventas básicos
+├── Días 5-8: Dashboard con métricas
+├── Días 9-10: Optimización de rendimiento
+└── Días 11-14: Testing integral y documentación
 ```
 
 ---
 
-## Métricas de Éxito del Proyecto Académico
+## Métricas de Éxito por Fase
 
-### Fase 1 - Métricas Alcanzadas
-- [x] Landing page con tiempo de carga < 3s
-- [x] Sistema de autenticación funcional
-- [x] 5 roles implementados y funcionales
-- [x] Dashboards responsive en todos los dispositivos
+### Fase 1 - Métricas
+- [ ] Landing page con tiempo de carga < 3s
+- [ ] Sistema de auth con 99.9% uptime
+- [ ] 5 roles implementados y funcionales
+- [ ] Dashboards responsive en todos los dispositivos
 
-### Fase 2 - Métricas Alcanzadas
-- [x] Sistema de control procesa transacciones básicas
-- [x] Inventario maneja productos chilenos
-- [x] Reportes básicos generados correctamente
-- [x] Integración exitosa con códigos de barras
+### Fase 2 - Métricas
+- [ ] POS procesa transacciones en < 2s
+- [ ] Inventario maneja +10,000 productos
+- [ ] Reportes generados en < 5s
+- [ ] 99% precisión en códigos de barras
 
-## Hitos del Proyecto Académico
+## Hitos Críticos
 
 | Fecha | Hito | Descripción |
 |-------|------|-------------|
-| Semana 3 | **Completado Fase 1** | Landing page + autenticación + roles |
-| Semana 9 | **Completado Fase 2** | Sistema de control + inventario funcional |
-| Semana 10 | **Entrega Final** | Proyecto académico completo para tesis |
+| Semana 3 | **Demo Fase 1** | Presentación landing + auth + roles |
+| Semana 9 | **Demo Fase 2** | Presentación POS + inventario funcional |
+| Semana 18 | **Entrega Final** | Tesis completa + aplicación en producción |
 
 ---
 
@@ -141,21 +140,21 @@ Semana 5-6: Reportes y Finalización
 | Scope creep | Media | Medio | Definición clara de MVP por fase |
 
 ---
+### Esta Semana (Semana 1)
+1. Configurar repositorio GitHub
+2. Crear documentación base
+3. Iniciar desarrollo landing page
+4. Configurar entorno Google Cloud
 
-## Conclusión del Proyecto Académico
-
-Este proyecto académico de tesis ha completado exitosamente las dos fases planificadas:
-
-1. **Fase 1**: Implementación de landing page profesional, sistema de autenticación y roles básicos
-2. **Fase 2**: Desarrollo de sistema de control de ventas, gestión de inventario y reportes básicos
-
-El sistema CRTLPyme representa una solución funcional y académicamente sólida para el control básico de operaciones en PYMEs chilenas, cumpliendo con los objetivos establecidos para la tesis de titulación.
-
----
-
-**Proyecto completado**: Septiembre 2024
-**Estado**: Finalizado para presentación de tesis
+1. Completar landing page
+2. Implementar sistema de autenticación
+3. Comenzar desarrollo de roles
+4. Preparar demo Fase 1
 
 ---
 
-*Este documento representa el roadmap completo del proyecto académico CRTLPyme.*
+**Última actualización**: Septiembre 12, 2024
+
+---
+
+*Este roadmap es un documento vivo que se actualiza semanalmente basado en el progreso real del proyecto.*

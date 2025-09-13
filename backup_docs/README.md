@@ -1,7 +1,7 @@
 
-# CRTLPyme - Sistema de Control para PYMEs Chilenas
+# CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
 
-![CRTLPyme Logo](https://img.shields.io/badge/CRTLPyme-Control%20PYMEs-blue)
+![CRTLPyme Logo](https://img.shields.io/badge/CRTLPyme-POS%20SaaS-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
@@ -9,17 +9,18 @@
 
 ## Descripción del Proyecto
 
-CRTLPyme es un sistema de control y gestión diseñado específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto académico forma parte de una tesis de titulación y se enfoca en proporcionar una solución de gestión comercial básica adaptada al mercado chileno, implementada en dos fases principales.
+CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto forma parte de una tesis de titulación y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
 
 ## Objetivos del Proyecto
 
-- **Objetivo Principal**: Desarrollar un sistema de control básico para PYMEs chilenas
+- **Objetivo Principal**: Desarrollar una plataforma POS SaaS completa para PYMEs chilenas
 - **Objetivos Específicos**:
 - Implementar sistema de roles multi-usuario (5 roles)
 - Integrar productos chilenos con códigos de barras
 - Crear dashboards personalizados por rol
-- Desarrollar sistema básico de inventario y ventas
-- Establecer base sólida para gestión comercial
+- Desarrollar sistema de inventario y ventas
+- Implementar facturación electrónica (SII Chile)
+- Desplegar en Google Cloud Platform
 
 ## Arquitectura Técnica
 
@@ -56,7 +57,7 @@ CRTLPyme/
 4. **Vendedor**: Operaciones de venta
 5. **Cajero**: Operaciones de caja
 
-## Fases de Desarrollo del Proyecto Académico
+## Fases de Desarrollo
 
 ### Fase 1: Landing Page + Roles Básicos (2-3 semanas)
 - Landing page profesional
@@ -64,13 +65,11 @@ CRTLPyme/
 - Roles básicos y permisos
 - Dashboard inicial por rol
 
-### Fase 2: Sistema de Control + Inventario (4-6 semanas)
-- Sistema de control de ventas
-- Gestión básica de inventario
+### Fase 2: POS + Inventario Core (4-6 semanas)
+- Sistema POS completo
+- Gestión de inventario
 - Productos chilenos integrados
-- Reportes básicos de operaciones
-
-**Nota**: Este proyecto académico se limita a estas dos fases como alcance completo de la tesis de titulación.
+- Reportes básicos
 
 ## Instalación y Configuración
 
@@ -116,28 +115,32 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 
 ## Características Principales
 
-### Fase 1 - Completado
+### Implementado
 - [x] Estructura base Next.js 14
 - [x] Configuración Prisma + PostgreSQL
 - [x] Sistema de roles básico
-- [x] Landing page profesional
-- [x] Sistema de autenticación completo
+- [x] Productos chilenos con códigos de barras
 - [x] Dashboards por rol
 - [x] Componentes UI con shadcn/ui
 
-### Fase 2 - Completado
-- [x] Sistema de control de ventas
-- [x] Gestión básica de inventario
-- [x] Productos chilenos con códigos de barras
-- [x] Reportes básicos de operaciones
+### En Desarrollo
+- [ ] Landing page profesional
+- [ ] Sistema de autenticación completo
+- [ ] POS funcional
+
+### Planificado
+- [ ] Facturación electrónica SII
+- [ ] Integración APIs chilenas
+- [ ] Despliegue Google Cloud
 
 ## Adaptación al Mercado Chileno
 
 - **Productos Locales**: Base de datos con productos chilenos y códigos de barras
 - **Moneda**: Pesos chilenos (CLP) con formateo local
-- **Regulaciones**: Cumplimiento normativas comerciales chilenas básicas
+- **Facturación**: Preparado para integración con SII
+- **Regulaciones**: Cumplimiento normativas comerciales chilenas
 
-## Documentación del Proyecto
+## Documentación
 
 - [Roadmap del Proyecto](./ROADMAP.md)
 - [Plan Fase 1](./FASE-1-PLAN.md)
@@ -174,4 +177,4 @@ Para consultas sobre el proyecto:
 
 ---
 
-**CRTLPyme** - Sistema de Control para PYMEs Chilenas - Proyecto de Titulación 2024
+**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 
