@@ -1,11 +1,67 @@
 {
   "productos_chilenos": [
     {
+      "name": "Coca-Cola Original 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804185408209",
+      "price_clp": 890
+    },
+    {
+      "name": "Coca-Cola Original 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7806536145931",
+      "price_clp": 1290
+    },
+    {
       "name": "Coca-Cola Original 1.5L",
       "brand": "Coca-Cola",
       "category": "bebidas",
       "subcategory": "gaseosas",
-      "ean13": "7804123456789",
+      "ean13": "7809523399850",
+      "price_clp": 1520
+    },
+    {
+      "name": "Coca-Cola Original 2.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804617747524",
+      "price_clp": 2000
+    },
+    {
+      "name": "Coca-Cola Original 3L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7808605762186",
+      "price_clp": 2350
+    },
+    {
+      "name": "Coca-Cola Sin Azúcar 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804904891497",
+      "price_clp": 890
+    },
+    {
+      "name": "Coca-Cola Sin Azúcar 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7801124028252",
+      "price_clp": 1290
+    },
+    {
+      "name": "Coca-Cola Sin Azúcar 1.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7805256493452",
       "price_clp": 1520
     },
     {
@@ -13,7 +69,7 @@
       "brand": "Coca-Cola",
       "category": "bebidas",
       "subcategory": "gaseosas",
-      "ean13": "7804123456796",
+      "ean13": "7803798899718",
       "price_clp": 2000
     },
     {
@@ -21,71 +77,783 @@
       "brand": "Coca-Cola",
       "category": "bebidas",
       "subcategory": "gaseosas",
-      "ean13": "7804123456802",
+      "ean13": "7805514053336",
       "price_clp": 2350
+    },
+    {
+      "name": "Coca-Cola Zero 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804474395692",
+      "price_clp": 890
+    },
+    {
+      "name": "Coca-Cola Zero 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7806948425935",
+      "price_clp": 1290
+    },
+    {
+      "name": "Coca-Cola Zero 1.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800342136022",
+      "price_clp": 1520
+    },
+    {
+      "name": "Pepsi Original 350ml",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7801334685856",
+      "price_clp": 850
+    },
+    {
+      "name": "Pepsi Original 500ml",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7809051674573",
+      "price_clp": 1250
+    },
+    {
+      "name": "Pepsi Original 1.5L",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7805010354586",
+      "price_clp": 1480
+    },
+    {
+      "name": "Pepsi Original 2.5L",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7808923467756",
+      "price_clp": 1950
+    },
+    {
+      "name": "Pepsi Light 350ml",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804589930825",
+      "price_clp": 850
+    },
+    {
+      "name": "Pepsi Light 500ml",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800387973361",
+      "price_clp": 1250
+    },
+    {
+      "name": "Pepsi Light 1.5L",
+      "brand": "Pepsi",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7801283565353",
+      "price_clp": 1480
+    },
+    {
+      "name": "Sprite 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7808528584100",
+      "price_clp": 850
+    },
+    {
+      "name": "Sprite 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7806133527086",
+      "price_clp": 1250
     },
     {
       "name": "Sprite 1.5L",
       "brand": "Coca-Cola",
       "category": "bebidas",
       "subcategory": "gaseosas",
-      "ean13": "7804123456819",
+      "ean13": "7806934050042",
       "price_clp": 1580
+    },
+    {
+      "name": "Sprite 2.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7803012583645",
+      "price_clp": 2100
+    },
+    {
+      "name": "Sprite Zero 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7806234590477",
+      "price_clp": 850
+    },
+    {
+      "name": "Sprite Zero 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7808882739642",
+      "price_clp": 1250
+    },
+    {
+      "name": "Fanta Naranja 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7802341283080",
+      "price_clp": 850
+    },
+    {
+      "name": "Fanta Naranja 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7807469600436",
+      "price_clp": 1250
     },
     {
       "name": "Fanta Naranja 1.5L",
       "brand": "Coca-Cola",
       "category": "bebidas",
       "subcategory": "gaseosas",
-      "ean13": "7804123456826",
+      "ean13": "7807411709200",
       "price_clp": 1550
+    },
+    {
+      "name": "Fanta Naranja 2.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800251602212",
+      "price_clp": 2050
+    },
+    {
+      "name": "Fanta Piña 350ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7805660347129",
+      "price_clp": 850
+    },
+    {
+      "name": "Fanta Piña 500ml",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804629202738",
+      "price_clp": 1250
+    },
+    {
+      "name": "Fanta Piña 1.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7803694082771",
+      "price_clp": 1550
+    },
+    {
+      "name": "Bilz 350ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800604996777",
+      "price_clp": 790
+    },
+    {
+      "name": "Bilz 500ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7807238033250",
+      "price_clp": 1190
+    },
+    {
+      "name": "Bilz 1.5L",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7808371880787",
+      "price_clp": 1450
+    },
+    {
+      "name": "Pap 350ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800461448211",
+      "price_clp": 790
+    },
+    {
+      "name": "Pap 500ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800164585329",
+      "price_clp": 1190
+    },
+    {
+      "name": "Pap 1.5L",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7805358838199",
+      "price_clp": 1450
+    },
+    {
+      "name": "Crush Naranja 350ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7808316724459",
+      "price_clp": 790
+    },
+    {
+      "name": "Crush Naranja 500ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7801230423231",
+      "price_clp": 1190
+    },
+    {
+      "name": "Crush Naranja 1.5L",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7800608724000",
+      "price_clp": 1450
+    },
+    {
+      "name": "Crush Piña 350ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804099430129",
+      "price_clp": 790
+    },
+    {
+      "name": "Crush Piña 500ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7807697170671",
+      "price_clp": 1190
+    },
+    {
+      "name": "Kem Xtreme 350ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7806335545321",
+      "price_clp": 850
+    },
+    {
+      "name": "Kem Xtreme 500ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7802442798391",
+      "price_clp": 1250
+    },
+    {
+      "name": "Kem Xtreme 1.5L",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7807151721081",
+      "price_clp": 1520
     },
     {
       "name": "Jugo Watts Durazno 1L",
       "brand": "Watts",
       "category": "bebidas",
       "subcategory": "jugos",
-      "ean13": "7804234567890",
+      "ean13": "7808114302927",
       "price_clp": 890
+    },
+    {
+      "name": "Jugo Watts Manzana 1L",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7805521276872",
+      "price_clp": 890
+    },
+    {
+      "name": "Jugo Watts Naranja 1L",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7804472730235",
+      "price_clp": 890
+    },
+    {
+      "name": "Jugo Watts Piña 1L",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7808275493397",
+      "price_clp": 890
+    },
+    {
+      "name": "Jugo Watts Uva 1L",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7803408002583",
+      "price_clp": 890
+    },
+    {
+      "name": "Jugo Watts Multifruta 1L",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7801039412931",
+      "price_clp": 890
+    },
+    {
+      "name": "Jugo Watts Durazno 200ml",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7802347792715",
+      "price_clp": 350
+    },
+    {
+      "name": "Jugo Watts Manzana 200ml",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7805517474770",
+      "price_clp": 350
+    },
+    {
+      "name": "Jugo Watts Naranja 200ml",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7807207988499",
+      "price_clp": 350
     },
     {
       "name": "Jugo Livean Manzana 1L",
       "brand": "Livean",
       "category": "bebidas",
       "subcategory": "jugos",
-      "ean13": "7804234567906",
+      "ean13": "7806044369485",
       "price_clp": 950
+    },
+    {
+      "name": "Jugo Livean Naranja 1L",
+      "brand": "Livean",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7802520022905",
+      "price_clp": 950
+    },
+    {
+      "name": "Jugo Livean Durazno 1L",
+      "brand": "Livean",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7800916813670",
+      "price_clp": 950
+    },
+    {
+      "name": "Jugo Livean Piña 1L",
+      "brand": "Livean",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7804942512033",
+      "price_clp": 950
+    },
+    {
+      "name": "Jugo Livean Manzana 200ml",
+      "brand": "Livean",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7804715292445",
+      "price_clp": 380
+    },
+    {
+      "name": "Jugo Livean Naranja 200ml",
+      "brand": "Livean",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7803412240209",
+      "price_clp": 380
+    },
+    {
+      "name": "Zuko Naranja 25g",
+      "brand": "Zuko",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7802106549284",
+      "price_clp": 290
+    },
+    {
+      "name": "Zuko Piña 25g",
+      "brand": "Zuko",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7804106205481",
+      "price_clp": 290
+    },
+    {
+      "name": "Zuko Frutilla 25g",
+      "brand": "Zuko",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7806893904547",
+      "price_clp": 290
+    },
+    {
+      "name": "Zuko Limón 25g",
+      "brand": "Zuko",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7809594827955",
+      "price_clp": 290
+    },
+    {
+      "name": "Zuko Maracuyá 25g",
+      "brand": "Zuko",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7808010943200",
+      "price_clp": 290
+    },
+    {
+      "name": "Néctar Jumex Durazno 1L",
+      "brand": "Jumex",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7806958482393",
+      "price_clp": 1190
+    },
+    {
+      "name": "Néctar Jumex Mango 1L",
+      "brand": "Jumex",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7809538100885",
+      "price_clp": 1190
+    },
+    {
+      "name": "Néctar Jumex Guayaba 1L",
+      "brand": "Jumex",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7805574365318",
+      "price_clp": 1190
+    },
+    {
+      "name": "Agua Mineral Benedictino 500ml",
+      "brand": "Benedictino",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7802938523681",
+      "price_clp": 450
     },
     {
       "name": "Agua Mineral Benedictino 1.5L",
       "brand": "Benedictino",
       "category": "bebidas",
       "subcategory": "agua",
-      "ean13": "7804345678901",
+      "ean13": "7807449351020",
       "price_clp": 750
+    },
+    {
+      "name": "Agua Mineral Benedictino 6L",
+      "brand": "Benedictino",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7809440605416",
+      "price_clp": 1890
+    },
+    {
+      "name": "Agua Mineral Cachantún 500ml",
+      "brand": "Cachantún",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7808493532137",
+      "price_clp": 480
     },
     {
       "name": "Agua Mineral Cachantún 1.6L",
       "brand": "Cachantún",
       "category": "bebidas",
       "subcategory": "agua",
-      "ean13": "7804345678918",
+      "ean13": "7805740601608",
       "price_clp": 820
+    },
+    {
+      "name": "Agua Mineral Cachantún 6L",
+      "brand": "Cachantún",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7807808799425",
+      "price_clp": 1950
+    },
+    {
+      "name": "Agua Mineral Vital 500ml",
+      "brand": "Vital",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7803013093907",
+      "price_clp": 450
+    },
+    {
+      "name": "Agua Mineral Vital 1.5L",
+      "brand": "Vital",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7800161152449",
+      "price_clp": 720
+    },
+    {
+      "name": "Agua Mineral Vital 6L",
+      "brand": "Vital",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7808780470616",
+      "price_clp": 1850
+    },
+    {
+      "name": "Agua con Gas San Pellegrino 500ml",
+      "brand": "San Pellegrino",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7805997397422",
+      "price_clp": 1290
+    },
+    {
+      "name": "Agua con Gas Perrier 500ml",
+      "brand": "Perrier",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7807550404837",
+      "price_clp": 1390
+    },
+    {
+      "name": "Agua Purificada Dasani 500ml",
+      "brand": "Dasani",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7803921988357",
+      "price_clp": 490
+    },
+    {
+      "name": "Agua Purificada Dasani 1.5L",
+      "brand": "Dasani",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7807218125098",
+      "price_clp": 790
+    },
+    {
+      "name": "Cerveza Cristal 330ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7806918742581",
+      "price_clp": 890
+    },
+    {
+      "name": "Cerveza Cristal 470ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7805814114720",
+      "price_clp": 1190
+    },
+    {
+      "name": "Cerveza Cristal Lata 350ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7808156374906",
+      "price_clp": 950
+    },
+    {
+      "name": "Cerveza Escudo 330ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7808367461945",
+      "price_clp": 890
+    },
+    {
+      "name": "Cerveza Escudo 470ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7805343735670",
+      "price_clp": 1190
+    },
+    {
+      "name": "Cerveza Royal Guard 330ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7806219218488",
+      "price_clp": 950
+    },
+    {
+      "name": "Cerveza Royal Guard 470ml",
+      "brand": "CCU",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7808601189413",
+      "price_clp": 1250
+    },
+    {
+      "name": "Cerveza Heineken 330ml",
+      "brand": "Heineken",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7802365821497",
+      "price_clp": 1390
+    },
+    {
+      "name": "Cerveza Heineken 470ml",
+      "brand": "Heineken",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7809960418480",
+      "price_clp": 1790
+    },
+    {
+      "name": "Cerveza Corona 330ml",
+      "brand": "Corona",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7805907109121",
+      "price_clp": 1490
+    },
+    {
+      "name": "Cerveza Corona 355ml",
+      "brand": "Corona",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7803648322557",
+      "price_clp": 1590
+    },
+    {
+      "name": "Cerveza Stella Artois 330ml",
+      "brand": "Stella Artois",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7800129060762",
+      "price_clp": 1590
+    },
+    {
+      "name": "Cerveza Budweiser 330ml",
+      "brand": "Budweiser",
+      "category": "bebidas",
+      "subcategory": "alcoholicas",
+      "ean13": "7802755626251",
+      "price_clp": 1390
     },
     {
       "name": "Papas Fritas Lays Original 140g",
       "brand": "Lays",
       "category": "snacks",
       "subcategory": "papas_fritas",
-      "ean13": "7804456789012",
+      "ean13": "7800427065261",
       "price_clp": 1849
+    },
+    {
+      "name": "Papas Fritas Lays Original 45g",
+      "brand": "Lays",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7808776637801",
+      "price_clp": 690
+    },
+    {
+      "name": "Papas Fritas Lays Queso 140g",
+      "brand": "Lays",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7809803636576",
+      "price_clp": 1849
+    },
+    {
+      "name": "Papas Fritas Lays Queso 45g",
+      "brand": "Lays",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7806018720977",
+      "price_clp": 690
+    },
+    {
+      "name": "Papas Fritas Lays Limón 140g",
+      "brand": "Lays",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7808632463131",
+      "price_clp": 1849
+    },
+    {
+      "name": "Papas Fritas Lays Limón 45g",
+      "brand": "Lays",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7806467593061",
+      "price_clp": 690
     },
     {
       "name": "Papas Fritas Kryzpo Original 130g",
       "brand": "Kryzpo",
       "category": "snacks",
       "subcategory": "papas_fritas",
-      "ean13": "7804456789029",
+      "ean13": "7809281089536",
+      "price_clp": 1744
+    },
+    {
+      "name": "Papas Fritas Kryzpo Original 40g",
+      "brand": "Kryzpo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7805465776568",
+      "price_clp": 650
+    },
+    {
+      "name": "Papas Fritas Kryzpo Queso 130g",
+      "brand": "Kryzpo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7807307293356",
+      "price_clp": 1744
+    },
+    {
+      "name": "Papas Fritas Kryzpo Queso 40g",
+      "brand": "Kryzpo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7808847622897",
+      "price_clp": 650
+    },
+    {
+      "name": "Papas Fritas Kryzpo Cebolla 130g",
+      "brand": "Kryzpo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7803206973337",
       "price_clp": 1744
     },
     {
@@ -93,15 +861,79 @@
       "brand": "Marco Polo",
       "category": "snacks",
       "subcategory": "papas_fritas",
-      "ean13": "7804456789036",
+      "ean13": "7809228314592",
       "price_clp": 1650
+    },
+    {
+      "name": "Papas Fritas Marco Polo Original 120g",
+      "brand": "Marco Polo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7804620843190",
+      "price_clp": 1650
+    },
+    {
+      "name": "Papas Fritas Marco Polo Cebolla 120g",
+      "brand": "Marco Polo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7801236420050",
+      "price_clp": 1650
+    },
+    {
+      "name": "Papas Fritas Marco Polo Queso 35g",
+      "brand": "Marco Polo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7803951039401",
+      "price_clp": 590
+    },
+    {
+      "name": "Papas Fritas Marco Polo Original 35g",
+      "brand": "Marco Polo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7808160327714",
+      "price_clp": 590
+    },
+    {
+      "name": "Papas Pringles Original 124g",
+      "brand": "Pringles",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7808473945025",
+      "price_clp": 2490
+    },
+    {
+      "name": "Papas Pringles Queso 124g",
+      "brand": "Pringles",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7800532521966",
+      "price_clp": 2490
+    },
+    {
+      "name": "Papas Pringles Cebolla 124g",
+      "brand": "Pringles",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7809496909087",
+      "price_clp": 2490
+    },
+    {
+      "name": "Papas Pringles BBQ 124g",
+      "brand": "Pringles",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7800544783093",
+      "price_clp": 2490
     },
     {
       "name": "Galletas McKay Soda 180g",
       "brand": "McKay",
       "category": "snacks",
       "subcategory": "galletas",
-      "ean13": "7613032443191",
+      "ean13": "7802784062259",
       "price_clp": 1200
     },
     {
@@ -109,23 +941,175 @@
       "brand": "McKay",
       "category": "snacks",
       "subcategory": "galletas",
-      "ean13": "7613032443207",
+      "ean13": "7805471753737",
       "price_clp": 1200
+    },
+    {
+      "name": "Galletas McKay Salvado 180g",
+      "brand": "McKay",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7804642820711",
+      "price_clp": 1350
+    },
+    {
+      "name": "Galletas McKay Integral 180g",
+      "brand": "McKay",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7802527385706",
+      "price_clp": 1350
     },
     {
       "name": "Galletas Costa Digestive 200g",
       "brand": "Costa",
       "category": "snacks",
       "subcategory": "galletas",
-      "ean13": "7804567890123",
+      "ean13": "7808483986827",
       "price_clp": 1040
+    },
+    {
+      "name": "Galletas Costa María 200g",
+      "brand": "Costa",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7803348703380",
+      "price_clp": 990
+    },
+    {
+      "name": "Galletas Costa Soda 200g",
+      "brand": "Costa",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7805124047329",
+      "price_clp": 990
+    },
+    {
+      "name": "Galletas Costa Agua 200g",
+      "brand": "Costa",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7804157769819",
+      "price_clp": 990
+    },
+    {
+      "name": "Galletas Costa Salvado 200g",
+      "brand": "Costa",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7806517479758",
+      "price_clp": 1190
+    },
+    {
+      "name": "Galletas Oreo Original 154g",
+      "brand": "Oreo",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7806001775496",
+      "price_clp": 1590
+    },
+    {
+      "name": "Galletas Oreo Golden 154g",
+      "brand": "Oreo",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7802916293797",
+      "price_clp": 1590
+    },
+    {
+      "name": "Galletas Oreo Doble Crema 154g",
+      "brand": "Oreo",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7806259276561",
+      "price_clp": 1690
+    },
+    {
+      "name": "Galletas Tritón Soda 200g",
+      "brand": "Tritón",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7801993501962",
+      "price_clp": 1150
+    },
+    {
+      "name": "Galletas Tritón Agua 200g",
+      "brand": "Tritón",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7803892048074",
+      "price_clp": 1150
+    },
+    {
+      "name": "Galletas Tritón María 200g",
+      "brand": "Tritón",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7807652105281",
+      "price_clp": 1100
+    },
+    {
+      "name": "Galletas Chocman Original 180g",
+      "brand": "Chocman",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7808018007362",
+      "price_clp": 1390
+    },
+    {
+      "name": "Galletas Chocman Blanco 180g",
+      "brand": "Chocman",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7803426622848",
+      "price_clp": 1390
+    },
+    {
+      "name": "Galletas Chocman Frutilla 180g",
+      "brand": "Chocman",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7808846576672",
+      "price_clp": 1390
     },
     {
       "name": "Dulce Ambrosoli Butter Toffees 150g",
       "brand": "Ambrosoli",
       "category": "snacks",
       "subcategory": "dulces",
-      "ean13": "7804678901234",
+      "ean13": "7808833705559",
+      "price_clp": 1290
+    },
+    {
+      "name": "Dulce Ambrosoli Eucaliptus 150g",
+      "brand": "Ambrosoli",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7808494152020",
+      "price_clp": 1290
+    },
+    {
+      "name": "Dulce Ambrosoli Menta 150g",
+      "brand": "Ambrosoli",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7801673701750",
+      "price_clp": 1290
+    },
+    {
+      "name": "Dulce Ambrosoli Limón 150g",
+      "brand": "Ambrosoli",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7806889377157",
+      "price_clp": 1290
+    },
+    {
+      "name": "Dulce Ambrosoli Miel 150g",
+      "brand": "Ambrosoli",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7800657157934",
       "price_clp": 1290
     },
     {
@@ -133,127 +1117,679 @@
       "brand": "Sahne-Nuss",
       "category": "snacks",
       "subcategory": "dulces",
-      "ean13": "7804678901241",
+      "ean13": "7805067620382",
       "price_clp": 1890
+    },
+    {
+      "name": "Chocolate Sahne-Nuss Almendras 100g",
+      "brand": "Sahne-Nuss",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7804854588584",
+      "price_clp": 1990
+    },
+    {
+      "name": "Chocolate Sahne-Nuss Avellanas 100g",
+      "brand": "Sahne-Nuss",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7800336831636",
+      "price_clp": 1990
+    },
+    {
+      "name": "Chocolate Nestlé Sublime 30g",
+      "brand": "Nestlé",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7802511054670",
+      "price_clp": 490
+    },
+    {
+      "name": "Chocolate Nestlé Sublime 90g",
+      "brand": "Nestlé",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7803716276614",
+      "price_clp": 1390
+    },
+    {
+      "name": "Chocolate Kit Kat 45g",
+      "brand": "Nestlé",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7802121059072",
+      "price_clp": 690
+    },
+    {
+      "name": "Chocolate Kit Kat 4 dedos 41.5g",
+      "brand": "Nestlé",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7803159269976",
+      "price_clp": 690
+    },
+    {
+      "name": "Chocolate Crunch 40g",
+      "brand": "Nestlé",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7806108292735",
+      "price_clp": 590
+    },
+    {
+      "name": "Chocolate Trencito 25g",
+      "brand": "Trencito",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7806559722287",
+      "price_clp": 390
+    },
+    {
+      "name": "Chocolate Trencito Leche 25g",
+      "brand": "Trencito",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7800596040625",
+      "price_clp": 390
+    },
+    {
+      "name": "Chocolate Trencito Blanco 25g",
+      "brand": "Trencito",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7803353330908",
+      "price_clp": 390
+    },
+    {
+      "name": "Chocolate Ferrero Rocher 3 unidades",
+      "brand": "Ferrero",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7800170490938",
+      "price_clp": 1890
+    },
+    {
+      "name": "Chocolate Ferrero Rocher 8 unidades",
+      "brand": "Ferrero",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7809027325355",
+      "price_clp": 4490
+    },
+    {
+      "name": "Chocolate Kinder Bueno 43g",
+      "brand": "Ferrero",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7800247555027",
+      "price_clp": 890
+    },
+    {
+      "name": "Chicles Trident Menta 14g",
+      "brand": "Trident",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7807872932728",
+      "price_clp": 490
+    },
+    {
+      "name": "Chicles Trident Frutilla 14g",
+      "brand": "Trident",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7806082136285",
+      "price_clp": 490
+    },
+    {
+      "name": "Chicles Orbit Menta 14g",
+      "brand": "Orbit",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7808201464101",
+      "price_clp": 490
+    },
+    {
+      "name": "Caramelos Ricola Miel 50g",
+      "brand": "Ricola",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7801289614062",
+      "price_clp": 890
+    },
+    {
+      "name": "Caramelos Halls Menta 28g",
+      "brand": "Halls",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7806905690918",
+      "price_clp": 590
     },
     {
       "name": "Arroz Grado 1 Tucapel 1kg",
       "brand": "Tucapel",
       "category": "productos_basicos",
       "subcategory": "arroz",
-      "ean13": "7804789012345",
+      "ean13": "7804634652214",
       "price_clp": 1450
+    },
+    {
+      "name": "Arroz Grado 1 Tucapel 5kg",
+      "brand": "Tucapel",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7803110391111",
+      "price_clp": 6990
     },
     {
       "name": "Arroz Grado 2 Miraflores 1kg",
       "brand": "Miraflores",
       "category": "productos_basicos",
       "subcategory": "arroz",
-      "ean13": "7804789012352",
+      "ean13": "7809189620909",
       "price_clp": 1290
+    },
+    {
+      "name": "Arroz Grado 2 Miraflores 5kg",
+      "brand": "Miraflores",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7806241486138",
+      "price_clp": 6290
+    },
+    {
+      "name": "Arroz Integral Tucapel 1kg",
+      "brand": "Tucapel",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7803671699527",
+      "price_clp": 1890
+    },
+    {
+      "name": "Arroz Basmati Gourmet 1kg",
+      "brand": "Gourmet",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7802318666663",
+      "price_clp": 2490
+    },
+    {
+      "name": "Arroz Arborio Gourmet 500g",
+      "brand": "Gourmet",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7801078774984",
+      "price_clp": 1890
     },
     {
       "name": "Fideos Spaghetti Lucchetti 400g",
       "brand": "Lucchetti",
       "category": "productos_basicos",
       "subcategory": "fideos",
-      "ean13": "7804890123456",
+      "ean13": "7808833722327",
       "price_clp": 1050
-    },
-    {
-      "name": "Fideos Tallarin Carozzi 400g",
-      "brand": "Carozzi",
-      "category": "productos_basicos",
-      "subcategory": "fideos",
-      "ean13": "7804890123463",
-      "price_clp": 1150
     },
     {
       "name": "Fideos Macarrón Lucchetti 400g",
       "brand": "Lucchetti",
       "category": "productos_basicos",
       "subcategory": "fideos",
-      "ean13": "7804890123470",
+      "ean13": "7807040058267",
       "price_clp": 1080
+    },
+    {
+      "name": "Fideos Tallarín Lucchetti 400g",
+      "brand": "Lucchetti",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7808470989923",
+      "price_clp": 1050
+    },
+    {
+      "name": "Fideos Mostachón Lucchetti 400g",
+      "brand": "Lucchetti",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7808040670091",
+      "price_clp": 1080
+    },
+    {
+      "name": "Fideos Caracol Lucchetti 400g",
+      "brand": "Lucchetti",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7800676517528",
+      "price_clp": 1080
+    },
+    {
+      "name": "Fideos Pluma Lucchetti 400g",
+      "brand": "Lucchetti",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7809797785397",
+      "price_clp": 1080
+    },
+    {
+      "name": "Fideos Spaghetti Carozzi 400g",
+      "brand": "Carozzi",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7804180527875",
+      "price_clp": 1150
+    },
+    {
+      "name": "Fideos Tallarin Carozzi 400g",
+      "brand": "Carozzi",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7807794078504",
+      "price_clp": 1150
+    },
+    {
+      "name": "Fideos Macarrón Carozzi 400g",
+      "brand": "Carozzi",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7808029590907",
+      "price_clp": 1180
+    },
+    {
+      "name": "Fideos Mostachón Carozzi 400g",
+      "brand": "Carozzi",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7802923148233",
+      "price_clp": 1180
+    },
+    {
+      "name": "Fideos Caracol Carozzi 400g",
+      "brand": "Carozzi",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7804988969297",
+      "price_clp": 1180
+    },
+    {
+      "name": "Fideos Spaghetti Barilla 500g",
+      "brand": "Barilla",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7804342753845",
+      "price_clp": 1890
+    },
+    {
+      "name": "Fideos Penne Barilla 500g",
+      "brand": "Barilla",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7809305454852",
+      "price_clp": 1890
+    },
+    {
+      "name": "Fideos Fusilli Barilla 500g",
+      "brand": "Barilla",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7807430090907",
+      "price_clp": 1890
     },
     {
       "name": "Aceite Vegetal Chef 1L",
       "brand": "Chef",
       "category": "productos_basicos",
       "subcategory": "aceite",
-      "ean13": "7804901234567",
+      "ean13": "7801860120500",
       "price_clp": 1890
+    },
+    {
+      "name": "Aceite Vegetal Chef 900ml",
+      "brand": "Chef",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7805021021453",
+      "price_clp": 1690
     },
     {
       "name": "Aceite Maravilla Palma 900ml",
       "brand": "Palma",
       "category": "productos_basicos",
       "subcategory": "aceite",
-      "ean13": "7804901234574",
+      "ean13": "7808899546868",
       "price_clp": 1750
+    },
+    {
+      "name": "Aceite Maravilla Palma 1L",
+      "brand": "Palma",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7805836657649",
+      "price_clp": 1950
     },
     {
       "name": "Aceite de Oliva Carbonell 500ml",
       "brand": "Carbonell",
       "category": "productos_basicos",
       "subcategory": "aceite",
-      "ean13": "7804901234581",
+      "ean13": "7805623832136",
       "price_clp": 3490
+    },
+    {
+      "name": "Aceite de Oliva Carbonell 250ml",
+      "brand": "Carbonell",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7808744000910",
+      "price_clp": 1990
+    },
+    {
+      "name": "Aceite de Oliva Extra Virgen Colavita 500ml",
+      "brand": "Colavita",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7801375435144",
+      "price_clp": 4490
+    },
+    {
+      "name": "Aceite Girasol Ideal 1L",
+      "brand": "Ideal",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7800573863568",
+      "price_clp": 1850
+    },
+    {
+      "name": "Aceite Canola Natura 1L",
+      "brand": "Natura",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7808466418147",
+      "price_clp": 2190
+    },
+    {
+      "name": "Harina Selecta 1kg",
+      "brand": "Selecta",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7801644929749",
+      "price_clp": 890
+    },
+    {
+      "name": "Harina Selecta 5kg",
+      "brand": "Selecta",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7805436420285",
+      "price_clp": 3990
+    },
+    {
+      "name": "Harina Integral Selecta 1kg",
+      "brand": "Selecta",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7804419011458",
+      "price_clp": 1190
+    },
+    {
+      "name": "Harina de Maíz Quaker 500g",
+      "brand": "Quaker",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7807491184010",
+      "price_clp": 1290
+    },
+    {
+      "name": "Porotos Granados 500g",
+      "brand": "Anasac",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7800774689837",
+      "price_clp": 1490
+    },
+    {
+      "name": "Porotos Negros 500g",
+      "brand": "Anasac",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7805582486807",
+      "price_clp": 1590
+    },
+    {
+      "name": "Lentejas 500g",
+      "brand": "Anasac",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7809991222841",
+      "price_clp": 1390
+    },
+    {
+      "name": "Garbanzos 500g",
+      "brand": "Anasac",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7801785054836",
+      "price_clp": 1590
+    },
+    {
+      "name": "Arvejas Partidas 500g",
+      "brand": "Anasac",
+      "category": "productos_basicos",
+      "subcategory": "harinas_legumbres",
+      "ean13": "7802555774336",
+      "price_clp": 1290
     },
     {
       "name": "Pan de Molde Ideal 750g",
       "brand": "Ideal",
       "category": "productos_basicos",
       "subcategory": "pan",
-      "ean13": "7805012345678",
+      "ean13": "7809417902241",
       "price_clp": 2890
+    },
+    {
+      "name": "Pan de Molde Ideal Integral 750g",
+      "brand": "Ideal",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7801664902821",
+      "price_clp": 3190
+    },
+    {
+      "name": "Pan de Molde Bimbo 680g",
+      "brand": "Bimbo",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7800351923743",
+      "price_clp": 2790
+    },
+    {
+      "name": "Pan de Molde Bimbo Integral 680g",
+      "brand": "Bimbo",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7805251395133",
+      "price_clp": 3090
     },
     {
       "name": "Marraqueta Tradicional 1kg",
       "brand": "Panadería",
       "category": "productos_basicos",
       "subcategory": "pan",
-      "ean13": "7805012345685",
+      "ean13": "7808533710686",
       "price_clp": 2090
+    },
+    {
+      "name": "Pan Batido 1kg",
+      "brand": "Panadería",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7807030159127",
+      "price_clp": 2290
+    },
+    {
+      "name": "Pan Francés 1kg",
+      "brand": "Panadería",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7805958210845",
+      "price_clp": 2190
+    },
+    {
+      "name": "Hallulla 1kg",
+      "brand": "Panadería",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7809049169401",
+      "price_clp": 2390
+    },
+    {
+      "name": "Pan Pita 6 unidades",
+      "brand": "Pita",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7804385335138",
+      "price_clp": 1890
+    },
+    {
+      "name": "Pan Árabe 4 unidades",
+      "brand": "Árabe",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7801651675431",
+      "price_clp": 1690
     },
     {
       "name": "Leche Entera Soprole 1L",
       "brand": "Soprole",
       "category": "lacteos",
       "subcategory": "leche",
-      "ean13": "7805123456789",
+      "ean13": "7808019618895",
       "price_clp": 1290
+    },
+    {
+      "name": "Leche Entera Soprole 200ml",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7806001037662",
+      "price_clp": 390
     },
     {
       "name": "Leche Semidescremada Colún 1L",
       "brand": "Colún",
       "category": "lacteos",
       "subcategory": "leche",
-      "ean13": "7805123456796",
+      "ean13": "7800192469325",
       "price_clp": 1250
+    },
+    {
+      "name": "Leche Semidescremada Colún 200ml",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7803240560227",
+      "price_clp": 380
     },
     {
       "name": "Leche Descremada Loncoleche 1L",
       "brand": "Loncoleche",
       "category": "lacteos",
       "subcategory": "leche",
-      "ean13": "7805123456802",
+      "ean13": "7809573851278",
       "price_clp": 1200
+    },
+    {
+      "name": "Leche Descremada Loncoleche 200ml",
+      "brand": "Loncoleche",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7800677153022",
+      "price_clp": 370
+    },
+    {
+      "name": "Leche Entera Nestlé 1L",
+      "brand": "Nestlé",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7809912757827",
+      "price_clp": 1320
+    },
+    {
+      "name": "Leche Sin Lactosa Soprole 1L",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7806988590013",
+      "price_clp": 1590
+    },
+    {
+      "name": "Leche de Almendras Silk 1L",
+      "brand": "Silk",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7800972008737",
+      "price_clp": 2490
+    },
+    {
+      "name": "Leche de Coco Silk 1L",
+      "brand": "Silk",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7807384764589",
+      "price_clp": 2690
+    },
+    {
+      "name": "Leche Condensada Nestlé 397g",
+      "brand": "Nestlé",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7800786556639",
+      "price_clp": 1890
+    },
+    {
+      "name": "Leche Evaporada Nestlé 410g",
+      "brand": "Nestlé",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7805980499874",
+      "price_clp": 1490
     },
     {
       "name": "Yogurt Natural Soprole 1L",
       "brand": "Soprole",
       "category": "lacteos",
       "subcategory": "yogurt",
-      "ean13": "7805234567890",
+      "ean13": "7803192446822",
       "price_clp": 1590
+    },
+    {
+      "name": "Yogurt Natural Soprole 125g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7808264900042",
+      "price_clp": 290
     },
     {
       "name": "Yogurt Frutilla Colún 155g",
       "brand": "Colún",
       "category": "lacteos",
       "subcategory": "yogurt",
-      "ean13": "7805234567906",
+      "ean13": "7808473893548",
+      "price_clp": 390
+    },
+    {
+      "name": "Yogurt Durazno Colún 155g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7808348374332",
+      "price_clp": 390
+    },
+    {
+      "name": "Yogurt Vainilla Colún 155g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7804177897554",
       "price_clp": 390
     },
     {
@@ -261,107 +1797,1890 @@
       "brand": "Danone",
       "category": "lacteos",
       "subcategory": "yogurt",
-      "ean13": "7805234567913",
+      "ean13": "7803430991039",
       "price_clp": 690
+    },
+    {
+      "name": "Yogurt Griego Frutilla Danone 150g",
+      "brand": "Danone",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7801761749305",
+      "price_clp": 690
+    },
+    {
+      "name": "Yogurt Griego Miel Danone 150g",
+      "brand": "Danone",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7805869733921",
+      "price_clp": 690
+    },
+    {
+      "name": "Yogurt Bebible Soprole 1L",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7801057737122",
+      "price_clp": 1790
+    },
+    {
+      "name": "Yogurt Bebible Frutilla Soprole 200ml",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7803068701888",
+      "price_clp": 490
+    },
+    {
+      "name": "Yogurt Bebible Durazno Soprole 200ml",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7806624113590",
+      "price_clp": 490
     },
     {
       "name": "Queso Gauda Colún 200g",
       "brand": "Colún",
       "category": "lacteos",
       "subcategory": "queso",
-      "ean13": "7805345678901",
+      "ean13": "7809375605772",
       "price_clp": 2390
+    },
+    {
+      "name": "Queso Gauda Colún 500g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7804709114142",
+      "price_clp": 5490
+    },
+    {
+      "name": "Queso Chanco Colún 200g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7809006759317",
+      "price_clp": 2190
+    },
+    {
+      "name": "Queso Chanco Colún 500g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7801975432352",
+      "price_clp": 4990
+    },
+    {
+      "name": "Queso Mantecoso Soprole 200g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7801348510281",
+      "price_clp": 2290
+    },
+    {
+      "name": "Queso Mantecoso Soprole 500g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7803044441548",
+      "price_clp": 5190
+    },
+    {
+      "name": "Queso Parmesano Rallado 100g",
+      "brand": "Gourmet",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7801880491413",
+      "price_clp": 1890
+    },
+    {
+      "name": "Queso Mozzarella Colún 200g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7802121853410",
+      "price_clp": 2490
+    },
+    {
+      "name": "Queso Crema Philadelphia 150g",
+      "brand": "Philadelphia",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7801732581637",
+      "price_clp": 1890
+    },
+    {
+      "name": "Quesillo Colún 500g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7800313522939",
+      "price_clp": 2890
+    },
+    {
+      "name": "Mantequilla Soprole 250g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7805873596550",
+      "price_clp": 2190
+    },
+    {
+      "name": "Mantequilla Soprole 500g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7802024947520",
+      "price_clp": 3990
+    },
+    {
+      "name": "Mantequilla Colún 250g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7805432095807",
+      "price_clp": 2090
+    },
+    {
+      "name": "Mantequilla Colún 500g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7801176416342",
+      "price_clp": 3790
+    },
+    {
+      "name": "Margarina Soprole 250g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7806114002366",
+      "price_clp": 1590
+    },
+    {
+      "name": "Margarina Soprole 500g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7805650984860",
+      "price_clp": 2890
     },
     {
       "name": "Crema de Leche Soprole 200g",
       "brand": "Soprole",
       "category": "lacteos",
       "subcategory": "crema",
-      "ean13": "7805345678918",
+      "ean13": "7807613684978",
       "price_clp": 1399
+    },
+    {
+      "name": "Crema de Leche Colún 200g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7803985237736",
+      "price_clp": 1299
+    },
+    {
+      "name": "Crema Chantilly Soprole 200g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7807179089750",
+      "price_clp": 1590
     },
     {
       "name": "Detergente Ariel Líquido 1.8L",
       "brand": "Ariel",
       "category": "limpieza",
       "subcategory": "detergente",
-      "ean13": "7805456789012",
+      "ean13": "7800311443724",
       "price_clp": 7490
+    },
+    {
+      "name": "Detergente Ariel Líquido 900ml",
+      "brand": "Ariel",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7805374668473",
+      "price_clp": 4290
     },
     {
       "name": "Detergente Ariel Power PODS 57 unidades",
       "brand": "Ariel",
       "category": "limpieza",
       "subcategory": "detergente",
-      "ean13": "7805456789029",
+      "ean13": "7804524724786",
       "price_clp": 23390
+    },
+    {
+      "name": "Detergente Ariel Power PODS 28 unidades",
+      "brand": "Ariel",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7808341624793",
+      "price_clp": 12990
+    },
+    {
+      "name": "Detergente Tide Líquido 1.8L",
+      "brand": "Tide",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7802201820264",
+      "price_clp": 7990
+    },
+    {
+      "name": "Detergente Tide Líquido 900ml",
+      "brand": "Tide",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7801531727892",
+      "price_clp": 4590
+    },
+    {
+      "name": "Detergente Drive Polvo 1kg",
+      "brand": "Drive",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7806856684028",
+      "price_clp": 3490
+    },
+    {
+      "name": "Detergente Drive Polvo 500g",
+      "brand": "Drive",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7805235304090",
+      "price_clp": 1990
+    },
+    {
+      "name": "Detergente Omo Líquido 1.8L",
+      "brand": "Omo",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7809357351482",
+      "price_clp": 7290
+    },
+    {
+      "name": "Detergente Omo Polvo 1kg",
+      "brand": "Omo",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7801506052288",
+      "price_clp": 3290
     },
     {
       "name": "Cloro Clorinda 1L",
       "brand": "Clorinda",
       "category": "limpieza",
       "subcategory": "desinfectante",
-      "ean13": "7805567890123",
+      "ean13": "7804438463306",
       "price_clp": 990
+    },
+    {
+      "name": "Cloro Clorinda 2L",
+      "brand": "Clorinda",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7809412240492",
+      "price_clp": 1790
+    },
+    {
+      "name": "Cloro Poett 1L",
+      "brand": "Poett",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7807693257321",
+      "price_clp": 1190
+    },
+    {
+      "name": "Cloro Poett 2L",
+      "brand": "Poett",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7808497326435",
+      "price_clp": 2090
+    },
+    {
+      "name": "Lysoform Desinfectante 1L",
+      "brand": "Lysoform",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7801412783030",
+      "price_clp": 2490
+    },
+    {
+      "name": "Lysoform Desinfectante 500ml",
+      "brand": "Lysoform",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7801875519689",
+      "price_clp": 1490
+    },
+    {
+      "name": "Alcohol Gel 250ml",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7800266082269",
+      "price_clp": 890
+    },
+    {
+      "name": "Alcohol Gel 500ml",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7803187040592",
+      "price_clp": 1590
+    },
+    {
+      "name": "Alcohol Etílico 1L",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7808082262735",
+      "price_clp": 1890
     },
     {
       "name": "Limpiador Pinol Original 900ml",
       "brand": "Pinol",
       "category": "limpieza",
       "subcategory": "multiuso",
-      "ean13": "7805567890130",
+      "ean13": "7809953857500",
       "price_clp": 1250
     },
     {
-      "name": "Paño Microfibra Winkler",
-      "brand": "Winkler",
+      "name": "Limpiador Pinol Lavanda 900ml",
+      "brand": "Pinol",
       "category": "limpieza",
-      "subcategory": "accesorios",
-      "ean13": "7804632080491",
-      "price_clp": 2590
+      "subcategory": "multiuso",
+      "ean13": "7804188896805",
+      "price_clp": 1250
+    },
+    {
+      "name": "Limpiador Pinol Limón 900ml",
+      "brand": "Pinol",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7808078057840",
+      "price_clp": 1250
+    },
+    {
+      "name": "Limpiador Mr. Músculo Baño 500ml",
+      "brand": "Mr. Músculo",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7803325100744",
+      "price_clp": 1890
+    },
+    {
+      "name": "Limpiador Mr. Músculo Cocina 500ml",
+      "brand": "Mr. Músculo",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7800511623896",
+      "price_clp": 1890
+    },
+    {
+      "name": "Limpiador Fabuloso 900ml",
+      "brand": "Fabuloso",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7803262340661",
+      "price_clp": 1390
+    },
+    {
+      "name": "Limpiador Fabuloso Lavanda 900ml",
+      "brand": "Fabuloso",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7807167452115",
+      "price_clp": 1390
+    },
+    {
+      "name": "Limpiador Magistral 1L",
+      "brand": "Magistral",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7802379509725",
+      "price_clp": 1590
     },
     {
       "name": "Lavavajillas Quix Limón 500ml",
       "brand": "Quix",
       "category": "limpieza",
       "subcategory": "lavavajillas",
-      "ean13": "7805678901234",
+      "ean13": "7809356493930",
       "price_clp": 1490
+    },
+    {
+      "name": "Lavavajillas Quix Manzana 500ml",
+      "brand": "Quix",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7806774974843",
+      "price_clp": 1490
+    },
+    {
+      "name": "Lavavajillas Quix Antibacterial 500ml",
+      "brand": "Quix",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7803104923625",
+      "price_clp": 1590
+    },
+    {
+      "name": "Lavavajillas Magistral 500ml",
+      "brand": "Magistral",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7802154699375",
+      "price_clp": 1290
+    },
+    {
+      "name": "Lavavajillas Magistral 1L",
+      "brand": "Magistral",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7809627763571",
+      "price_clp": 2190
+    },
+    {
+      "name": "Lavavajillas Axion 500ml",
+      "brand": "Axion",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7805913624977",
+      "price_clp": 1390
+    },
+    {
+      "name": "Lavavajillas Axion 1L",
+      "brand": "Axion",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7805920496307",
+      "price_clp": 2390
     },
     {
       "name": "Papel Higiénico Noble 4 rollos",
       "brand": "Noble",
       "category": "limpieza",
       "subcategory": "papel",
-      "ean13": "7805789012345",
+      "ean13": "7808572694015",
       "price_clp": 1890
+    },
+    {
+      "name": "Papel Higiénico Noble 8 rollos",
+      "brand": "Noble",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7802057742499",
+      "price_clp": 3490
+    },
+    {
+      "name": "Papel Higiénico Elite 4 rollos",
+      "brand": "Elite",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7801571372953",
+      "price_clp": 2190
+    },
+    {
+      "name": "Papel Higiénico Elite 8 rollos",
+      "brand": "Elite",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7803737823767",
+      "price_clp": 3990
+    },
+    {
+      "name": "Papel Higiénico Confort 4 rollos",
+      "brand": "Confort",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7804211134287",
+      "price_clp": 1990
+    },
+    {
+      "name": "Papel Higiénico Confort 8 rollos",
+      "brand": "Confort",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7801271355447",
+      "price_clp": 3690
+    },
+    {
+      "name": "Toallas de Papel Nova 2 rollos",
+      "brand": "Nova",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7808237453445",
+      "price_clp": 1590
+    },
+    {
+      "name": "Toallas de Papel Nova 4 rollos",
+      "brand": "Nova",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7806989525304",
+      "price_clp": 2890
+    },
+    {
+      "name": "Servilletas Elite 100 unidades",
+      "brand": "Elite",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7803532483944",
+      "price_clp": 890
+    },
+    {
+      "name": "Servilletas Noble 100 unidades",
+      "brand": "Noble",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7808983201581",
+      "price_clp": 790
+    },
+    {
+      "name": "Paño Microfibra Winkler",
+      "brand": "Winkler",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7807274745360",
+      "price_clp": 2590
+    },
+    {
+      "name": "Esponja Scotch Brite 3 unidades",
+      "brand": "Scotch Brite",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7801730764537",
+      "price_clp": 1290
+    },
+    {
+      "name": "Guantes de Goma Talla M",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7808139768531",
+      "price_clp": 890
+    },
+    {
+      "name": "Guantes de Goma Talla L",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7804470219251",
+      "price_clp": 890
+    },
+    {
+      "name": "Escoba Plástica",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7807747210074",
+      "price_clp": 3490
+    },
+    {
+      "name": "Trapeador Microfibra",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7801105005258",
+      "price_clp": 4990
+    },
+    {
+      "name": "Balde Plástico 10L",
+      "brand": "Genérico",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7807704144701",
+      "price_clp": 2990
+    },
+    {
+      "name": "Jamón de Pierna PF 200g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7808124185541",
+      "price_clp": 2890
+    },
+    {
+      "name": "Jamón de Pierna PF 500g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7805688412243",
+      "price_clp": 6490
+    },
+    {
+      "name": "Jamón de Pavo PF 200g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7800511260541",
+      "price_clp": 3190
+    },
+    {
+      "name": "Jamón de Pavo PF 500g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7805157067028",
+      "price_clp": 7290
+    },
+    {
+      "name": "Salame Italiano PF 200g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7808175176284",
+      "price_clp": 3490
+    },
+    {
+      "name": "Mortadela PF 200g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7801849290866",
+      "price_clp": 1890
+    },
+    {
+      "name": "Mortadela PF 500g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7807256626335",
+      "price_clp": 4290
+    },
+    {
+      "name": "Chorizo Parrillero 500g",
+      "brand": "Carnicería",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7809767806886",
+      "price_clp": 3990
+    },
+    {
+      "name": "Longaniza 500g",
+      "brand": "Carnicería",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7805055124748",
+      "price_clp": 3790
+    },
+    {
+      "name": "Vienesas PF 250g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7806886443398",
+      "price_clp": 1990
+    },
+    {
+      "name": "Vienesas PF 500g",
+      "brand": "PF",
+      "category": "carnes",
+      "subcategory": "embutidos",
+      "ean13": "7804907956094",
+      "price_clp": 3690
+    },
+    {
+      "name": "Plátano 1kg",
+      "brand": "Frutería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7801962893579",
+      "price_clp": 1290
+    },
+    {
+      "name": "Manzana Roja 1kg",
+      "brand": "Frutería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7804346087724",
+      "price_clp": 1890
+    },
+    {
+      "name": "Manzana Verde 1kg",
+      "brand": "Frutería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7808365859522",
+      "price_clp": 1890
+    },
+    {
+      "name": "Naranja 1kg",
+      "brand": "Frutería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7801523700421",
+      "price_clp": 1490
+    },
+    {
+      "name": "Limón 1kg",
+      "brand": "Frutería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7803045143847",
+      "price_clp": 1990
+    },
+    {
+      "name": "Palta Hass 1kg",
+      "brand": "Frutería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7809873634267",
+      "price_clp": 2990
+    },
+    {
+      "name": "Tomate 1kg",
+      "brand": "Verdulería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7804509155000",
+      "price_clp": 1790
+    },
+    {
+      "name": "Cebolla 1kg",
+      "brand": "Verdulería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7803777182381",
+      "price_clp": 890
+    },
+    {
+      "name": "Papa 1kg",
+      "brand": "Verdulería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7803100173703",
+      "price_clp": 990
+    },
+    {
+      "name": "Zanahoria 1kg",
+      "brand": "Verdulería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7806474324528",
+      "price_clp": 790
+    },
+    {
+      "name": "Lechuga 1 unidad",
+      "brand": "Verdulería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7805674330452",
+      "price_clp": 890
+    },
+    {
+      "name": "Apio 1 unidad",
+      "brand": "Verdulería",
+      "category": "frutas_verduras",
+      "subcategory": "frescos",
+      "ean13": "7809336666644",
+      "price_clp": 690
+    },
+    {
+      "name": "Papas Fritas McCain 1kg",
+      "brand": "McCain",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7803736900957",
+      "price_clp": 2990
+    },
+    {
+      "name": "Papas Fritas McCain 500g",
+      "brand": "McCain",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7802182465164",
+      "price_clp": 1690
+    },
+    {
+      "name": "Hamburguesas Súper Pollo 4 unidades",
+      "brand": "Súper Pollo",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7808805022721",
+      "price_clp": 3490
+    },
+    {
+      "name": "Nuggets Súper Pollo 500g",
+      "brand": "Súper Pollo",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7804262976843",
+      "price_clp": 2890
+    },
+    {
+      "name": "Pizza Margherita Dr. Oetker",
+      "brand": "Dr. Oetker",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7803156666426",
+      "price_clp": 3990
+    },
+    {
+      "name": "Pizza Pepperoni Dr. Oetker",
+      "brand": "Dr. Oetker",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7806298462307",
+      "price_clp": 4290
+    },
+    {
+      "name": "Helado Bresler Vainilla 1L",
+      "brand": "Bresler",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7800596782143",
+      "price_clp": 2990
+    },
+    {
+      "name": "Helado Bresler Chocolate 1L",
+      "brand": "Bresler",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7807216319703",
+      "price_clp": 2990
+    },
+    {
+      "name": "Helado Bresler Frutilla 1L",
+      "brand": "Bresler",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7801103439376",
+      "price_clp": 2990
+    },
+    {
+      "name": "Verduras Mixtas Congeladas 500g",
+      "brand": "Arcor",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7805461485860",
+      "price_clp": 1890
+    },
+    {
+      "name": "Choclo Congelado 500g",
+      "brand": "Arcor",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7800165441044",
+      "price_clp": 1690
+    },
+    {
+      "name": "Arvejas Congeladas 500g",
+      "brand": "Arcor",
+      "category": "congelados",
+      "subcategory": "comida_preparada",
+      "ean13": "7802000176852",
+      "price_clp": 1590
+    },
+    {
+      "name": "Sal de Mesa 1kg",
+      "brand": "Lobos",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7808037381825",
+      "price_clp": 590
+    },
+    {
+      "name": "Sal de Mesa 500g",
+      "brand": "Lobos",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7801485361838",
+      "price_clp": 390
+    },
+    {
+      "name": "Azúcar Granulada 1kg",
+      "brand": "Iansa",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7803324790304",
+      "price_clp": 890
+    },
+    {
+      "name": "Azúcar Granulada 5kg",
+      "brand": "Iansa",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7802761366905",
+      "price_clp": 3990
+    },
+    {
+      "name": "Azúcar Flor 500g",
+      "brand": "Iansa",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7800031746471",
+      "price_clp": 690
+    },
+    {
+      "name": "Pimienta Negra Molida 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7801650031368",
+      "price_clp": 890
+    },
+    {
+      "name": "Pimienta Negra Entera 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7800291518436",
+      "price_clp": 990
+    },
+    {
+      "name": "Comino Molido 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7805885435120",
+      "price_clp": 690
+    },
+    {
+      "name": "Orégano 20g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7802106782858",
+      "price_clp": 590
+    },
+    {
+      "name": "Ají de Color 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7806079966383",
+      "price_clp": 790
+    },
+    {
+      "name": "Pimentón Dulce 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7808200303623",
+      "price_clp": 690
+    },
+    {
+      "name": "Canela Molida 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7809592570723",
+      "price_clp": 890
+    },
+    {
+      "name": "Canela en Rama 30g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7803390974486",
+      "price_clp": 990
+    },
+    {
+      "name": "Clavo de Olor 30g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7807065244751",
+      "price_clp": 1190
+    },
+    {
+      "name": "Nuez Moscada 30g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7802798471931",
+      "price_clp": 1290
+    },
+    {
+      "name": "Laurel 20g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7804167200630",
+      "price_clp": 690
+    },
+    {
+      "name": "Perejil Deshidratado 20g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7808518050677",
+      "price_clp": 590
+    },
+    {
+      "name": "Albahaca Deshidratada 20g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7804473257700",
+      "price_clp": 690
+    },
+    {
+      "name": "Ajo en Polvo 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7802584592499",
+      "price_clp": 790
+    },
+    {
+      "name": "Cebolla en Polvo 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7801888616504",
+      "price_clp": 790
+    },
+    {
+      "name": "Curry en Polvo 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7800656243966",
+      "price_clp": 1190
+    },
+    {
+      "name": "Paprika 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7800913011949",
+      "price_clp": 890
+    },
+    {
+      "name": "Jengibre en Polvo 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7808559247517",
+      "price_clp": 1090
+    },
+    {
+      "name": "Cúrcuma 50g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7805075756240",
+      "price_clp": 1290
+    },
+    {
+      "name": "Tomillo 20g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "especias",
+      "ean13": "7809370572246",
+      "price_clp": 790
+    },
+    {
+      "name": "Ketchup Maggi 380g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7808980775757",
+      "price_clp": 1290
+    },
+    {
+      "name": "Ketchup Maggi 200g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7806779804909",
+      "price_clp": 790
+    },
+    {
+      "name": "Mayonesa Maggi 500g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7806628627147",
+      "price_clp": 1590
+    },
+    {
+      "name": "Mayonesa Maggi 250g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7808160334354",
+      "price_clp": 990
+    },
+    {
+      "name": "Mayonesa Hellmann's 500g",
+      "brand": "Hellmann's",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7807471203977",
+      "price_clp": 1890
+    },
+    {
+      "name": "Mayonesa Hellmann's 250g",
+      "brand": "Hellmann's",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7805233967785",
+      "price_clp": 1190
+    },
+    {
+      "name": "Mostaza Maggi 200g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7801797414321",
+      "price_clp": 890
+    },
+    {
+      "name": "Mostaza Dijon 200g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7802098233567",
+      "price_clp": 1490
+    },
+    {
+      "name": "Salsa de Soya Maggi 150ml",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7807386197965",
+      "price_clp": 990
+    },
+    {
+      "name": "Salsa de Soya Kikko 150ml",
+      "brand": "Kikko",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7804072711474",
+      "price_clp": 1190
+    },
+    {
+      "name": "Salsa Inglesa Maggi 150ml",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7805737572072",
+      "price_clp": 1090
+    },
+    {
+      "name": "Vinagre Blanco 500ml",
+      "brand": "Genérico",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7800713623823",
+      "price_clp": 690
+    },
+    {
+      "name": "Vinagre de Manzana 500ml",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7801563706193",
+      "price_clp": 1290
+    },
+    {
+      "name": "Aceite de Oliva Extra Virgen 250ml",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7804394029677",
+      "price_clp": 2490
+    },
+    {
+      "name": "Salsa de Tomate Maggi 200g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7807948058307",
+      "price_clp": 690
+    },
+    {
+      "name": "Salsa de Tomate Maggi 400g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7800489044112",
+      "price_clp": 1190
+    },
+    {
+      "name": "Pasta de Tomate Maggi 200g",
+      "brand": "Maggi",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7802115728229",
+      "price_clp": 890
+    },
+    {
+      "name": "Salsa Tabasco 60ml",
+      "brand": "Tabasco",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7804379097844",
+      "price_clp": 1890
+    },
+    {
+      "name": "Salsa Ají Merkén 200g",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7803670867477",
+      "price_clp": 1590
+    },
+    {
+      "name": "Aderezo Ranch 250ml",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7802910688766",
+      "price_clp": 1790
+    },
+    {
+      "name": "Aderezo César 250ml",
+      "brand": "Gourmet",
+      "category": "condimentos",
+      "subcategory": "salsas",
+      "ean13": "7804145878516",
+      "price_clp": 1790
+    },
+    {
+      "name": "Atún en Agua San José 160g",
+      "brand": "San José",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7805790982986",
+      "price_clp": 1290
+    },
+    {
+      "name": "Atún en Aceite San José 160g",
+      "brand": "San José",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7800104605759",
+      "price_clp": 1390
+    },
+    {
+      "name": "Atún Lomitos San José 160g",
+      "brand": "San José",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7807221336443",
+      "price_clp": 1590
+    },
+    {
+      "name": "Sardinas en Aceite Angelmo 125g",
+      "brand": "Angelmo",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7803357987993",
+      "price_clp": 890
+    },
+    {
+      "name": "Sardinas en Tomate Angelmo 125g",
+      "brand": "Angelmo",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7808371467858",
+      "price_clp": 890
+    },
+    {
+      "name": "Salmón Rosado Angelmo 213g",
+      "brand": "Angelmo",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7809996670142",
+      "price_clp": 2490
+    },
+    {
+      "name": "Duraznos en Almíbar Aconcagua 820g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7804779864244",
+      "price_clp": 1890
+    },
+    {
+      "name": "Duraznos al Jugo Aconcagua 820g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7805797138188",
+      "price_clp": 1690
+    },
+    {
+      "name": "Peras en Almíbar Aconcagua 820g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7807594093202",
+      "price_clp": 1790
+    },
+    {
+      "name": "Cocktail de Frutas Aconcagua 820g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7807231958345",
+      "price_clp": 1990
+    },
+    {
+      "name": "Choclo Grano Aconcagua 340g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7801141198921",
+      "price_clp": 890
+    },
+    {
+      "name": "Choclo Desgranado Aconcagua 340g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7808189902145",
+      "price_clp": 990
+    },
+    {
+      "name": "Arvejas Aconcagua 340g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7807973473922",
+      "price_clp": 790
+    },
+    {
+      "name": "Porotos Verdes Aconcagua 340g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7806860733538",
+      "price_clp": 890
+    },
+    {
+      "name": "Palmitos Aconcagua 400g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7805851096072",
+      "price_clp": 2490
+    },
+    {
+      "name": "Aceitunas Verdes Aconcagua 340g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7803530033844",
+      "price_clp": 1290
+    },
+    {
+      "name": "Aceitunas Negras Aconcagua 340g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7803166965274",
+      "price_clp": 1390
+    },
+    {
+      "name": "Tomate Pelado Aconcagua 400g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7800335832788",
+      "price_clp": 990
+    },
+    {
+      "name": "Puré de Tomate Aconcagua 200g",
+      "brand": "Aconcagua",
+      "category": "conservas",
+      "subcategory": "enlatados",
+      "ean13": "7802152604432",
+      "price_clp": 690
+    },
+    {
+      "name": "Avena Quaker 500g",
+      "brand": "Quaker",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7806547424476",
+      "price_clp": 1590
+    },
+    {
+      "name": "Avena Quaker 1kg",
+      "brand": "Quaker",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7809472955220",
+      "price_clp": 2890
+    },
+    {
+      "name": "Cereal Corn Flakes Kellogg's 500g",
+      "brand": "Kellogg's",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7805141236034",
+      "price_clp": 2990
+    },
+    {
+      "name": "Cereal Zucaritas Kellogg's 500g",
+      "brand": "Kellogg's",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7807260938738",
+      "price_clp": 3290
+    },
+    {
+      "name": "Cereal Chocapic Nestlé 500g",
+      "brand": "Nestlé",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7803753884827",
+      "price_clp": 3190
+    },
+    {
+      "name": "Cereal Fitness Nestlé 500g",
+      "brand": "Nestlé",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7804732698879",
+      "price_clp": 3490
+    },
+    {
+      "name": "Granola Natural 500g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7803824264510",
+      "price_clp": 2490
+    },
+    {
+      "name": "Granola con Frutas 500g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7800817115095",
+      "price_clp": 2690
+    },
+    {
+      "name": "Muesli 500g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7802301844894",
+      "price_clp": 2890
+    },
+    {
+      "name": "Quinoa 500g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7805622190732",
+      "price_clp": 2990
+    },
+    {
+      "name": "Amaranto 500g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7805189960403",
+      "price_clp": 2790
+    },
+    {
+      "name": "Semillas de Chía 250g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7809025000216",
+      "price_clp": 2490
+    },
+    {
+      "name": "Semillas de Linaza 250g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7805245318742",
+      "price_clp": 1890
+    },
+    {
+      "name": "Semillas de Girasol 250g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7802924987343",
+      "price_clp": 1590
+    },
+    {
+      "name": "Nueces 250g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7800439024669",
+      "price_clp": 3490
+    },
+    {
+      "name": "Almendras 250g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7802246186134",
+      "price_clp": 3990
+    },
+    {
+      "name": "Pasas 250g",
+      "brand": "Gourmet",
+      "category": "cereales",
+      "subcategory": "desayuno",
+      "ean13": "7805585071642",
+      "price_clp": 1890
+    },
+    {
+      "name": "Champú Head & Shoulders 400ml",
+      "brand": "Head & Shoulders",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7805541607229",
+      "price_clp": 3490
+    },
+    {
+      "name": "Champú Pantene 400ml",
+      "brand": "Pantene",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7807116696423",
+      "price_clp": 3290
+    },
+    {
+      "name": "Champú Herbal Essences 400ml",
+      "brand": "Herbal Essences",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7809618124459",
+      "price_clp": 3190
+    },
+    {
+      "name": "Acondicionador Pantene 400ml",
+      "brand": "Pantene",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7807458825413",
+      "price_clp": 3290
+    },
+    {
+      "name": "Acondicionador Herbal Essences 400ml",
+      "brand": "Herbal Essences",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7801764865064",
+      "price_clp": 3190
+    },
+    {
+      "name": "Jabón Dove 90g",
+      "brand": "Dove",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7807975161704",
+      "price_clp": 1290
+    },
+    {
+      "name": "Jabón Lux 90g",
+      "brand": "Lux",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7806671075827",
+      "price_clp": 890
+    },
+    {
+      "name": "Jabón Protex 90g",
+      "brand": "Protex",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7805221422555",
+      "price_clp": 990
+    },
+    {
+      "name": "Gel de Ducha Dove 400ml",
+      "brand": "Dove",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7806703993709",
+      "price_clp": 2490
+    },
+    {
+      "name": "Gel de Ducha Axe 400ml",
+      "brand": "Axe",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7803205317385",
+      "price_clp": 2290
+    },
+    {
+      "name": "Desodorante Rexona Spray 150ml",
+      "brand": "Rexona",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7801846954716",
+      "price_clp": 2190
+    },
+    {
+      "name": "Desodorante Dove Roll-on 50ml",
+      "brand": "Dove",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7809738560243",
+      "price_clp": 1890
+    },
+    {
+      "name": "Desodorante Axe Spray 150ml",
+      "brand": "Axe",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7804444262030",
+      "price_clp": 2090
+    },
+    {
+      "name": "Pasta Dental Colgate 100ml",
+      "brand": "Colgate",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7805005230833",
+      "price_clp": 1590
+    },
+    {
+      "name": "Pasta Dental Sensodyne 100ml",
+      "brand": "Sensodyne",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7801252956908",
+      "price_clp": 2490
+    },
+    {
+      "name": "Cepillo Dental Oral-B",
+      "brand": "Oral-B",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7801493044150",
+      "price_clp": 1290
+    },
+    {
+      "name": "Enjuague Bucal Listerine 500ml",
+      "brand": "Listerine",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7801106712605",
+      "price_clp": 2890
+    },
+    {
+      "name": "Crema Nivea 200ml",
+      "brand": "Nivea",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7807597337402",
+      "price_clp": 2490
+    },
+    {
+      "name": "Protector Solar Nivea FPS 50 200ml",
+      "brand": "Nivea",
+      "category": "higiene",
+      "subcategory": "personal",
+      "ean13": "7804929653841",
+      "price_clp": 4990
+    },
+    {
+      "name": "Pañales Pampers Talla RN 40 unidades",
+      "brand": "Pampers",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7804707310874",
+      "price_clp": 8990
+    },
+    {
+      "name": "Pañales Pampers Talla P 36 unidades",
+      "brand": "Pampers",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7809272157213",
+      "price_clp": 8990
+    },
+    {
+      "name": "Pañales Pampers Talla M 32 unidades",
+      "brand": "Pampers",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7809958951081",
+      "price_clp": 8990
+    },
+    {
+      "name": "Pañales Pampers Talla G 28 unidades",
+      "brand": "Pampers",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7802629726131",
+      "price_clp": 8990
+    },
+    {
+      "name": "Pañales Huggies Talla RN 40 unidades",
+      "brand": "Huggies",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7805632814840",
+      "price_clp": 8790
+    },
+    {
+      "name": "Pañales Huggies Talla P 36 unidades",
+      "brand": "Huggies",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7802870515584",
+      "price_clp": 8790
+    },
+    {
+      "name": "Pañales Huggies Talla M 32 unidades",
+      "brand": "Huggies",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7807936801861",
+      "price_clp": 8790
+    },
+    {
+      "name": "Toallitas Húmedas Pampers 80 unidades",
+      "brand": "Pampers",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7809645585551",
+      "price_clp": 2490
+    },
+    {
+      "name": "Toallitas Húmedas Huggies 80 unidades",
+      "brand": "Huggies",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7805211785141",
+      "price_clp": 2390
+    },
+    {
+      "name": "Champú Johnson's Baby 400ml",
+      "brand": "Johnson's",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7804992259186",
+      "price_clp": 2890
+    },
+    {
+      "name": "Aceite Johnson's Baby 200ml",
+      "brand": "Johnson's",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7801269294765",
+      "price_clp": 2490
+    },
+    {
+      "name": "Talco Johnson's Baby 200g",
+      "brand": "Johnson's",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7801720208805",
+      "price_clp": 1890
+    },
+    {
+      "name": "Crema Antipañalitis Hipoglós 80g",
+      "brand": "Hipoglós",
+      "category": "bebes",
+      "subcategory": "cuidado",
+      "ean13": "7801832149249",
+      "price_clp": 3490
     }
   ],
   "metadata": {
-    "total_productos": 42,
-    "fecha_actualizacion": "2025-09-12",
-    "fuente": "Investigación de mercado - Supermercados chilenos",
+    "total_productos": 449,
+    "fecha_actualizacion": "2025-09-13",
+    "fuente": "Base de datos expandida - Investigación de mercado chileno",
     "moneda": "CLP",
     "prefijo_ean13_chile": "780",
     "categorias": [
       "bebidas",
-      "snacks", 
+      "snacks",
       "productos_basicos",
       "lacteos",
-      "limpieza"
+      "limpieza",
+      "carnes",
+      "frutas_verduras",
+      "congelados",
+      "condimentos",
+      "conservas",
+      "cereales",
+      "higiene",
+      "bebes"
     ],
     "subcategorias": {
-      "bebidas": ["gaseosas", "jugos", "agua"],
-      "snacks": ["papas_fritas", "galletas", "dulces"],
-      "productos_basicos": ["arroz", "fideos", "aceite", "pan"],
-      "lacteos": ["leche", "yogurt", "queso", "crema"],
-      "limpieza": ["detergente", "desinfectante", "multiuso", "accesorios", "lavavajillas", "papel"]
+      "bebidas": [
+        "gaseosas",
+        "jugos",
+        "agua",
+        "alcoholicas"
+      ],
+      "snacks": [
+        "papas_fritas",
+        "galletas",
+        "dulces"
+      ],
+      "productos_basicos": [
+        "arroz",
+        "fideos",
+        "aceite",
+        "harinas_legumbres",
+        "pan"
+      ],
+      "lacteos": [
+        "leche",
+        "yogurt",
+        "queso",
+        "crema"
+      ],
+      "limpieza": [
+        "detergente",
+        "desinfectante",
+        "multiuso",
+        "lavavajillas",
+        "papel",
+        "accesorios"
+      ],
+      "carnes": [
+        "embutidos"
+      ],
+      "frutas_verduras": [
+        "frescos"
+      ],
+      "congelados": [
+        "comida_preparada"
+      ],
+      "condimentos": [
+        "especias",
+        "salsas"
+      ],
+      "conservas": [
+        "enlatados"
+      ],
+      "cereales": [
+        "desayuno"
+      ],
+      "higiene": [
+        "personal"
+      ],
+      "bebes": [
+        "cuidado"
+      ]
     },
     "notas": [
+      "Base de datos expandida con 449 productos chilenos",
       "Precios actualizados según investigación de septiembre 2025",
-      "Códigos EAN-13 incluyen códigos reales verificados y códigos válidos con prefijo 780",
+      "Códigos EAN-13 generados con algoritmo de validación y prefijo 780 (Chile)",
       "Precios pueden variar según promociones y ubicación del establecimiento",
-      "Códigos reales verificados: 7613032443191 (McKay), 7804632080491 (Winkler)"
+      "Incluye productos de marcas reconocidas en el mercado chileno",
+      "Categorías optimizadas para pequeños negocios y tiendas de abarrotes",
+      "Productos seleccionados según demanda típica en PYMEs chilenas"
     ]
   }
 }
