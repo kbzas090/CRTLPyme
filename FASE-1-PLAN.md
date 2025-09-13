@@ -1,413 +1,209 @@
+# Fase 1: Fundamentos y Landing Page
 
-# 📋 Plan Detallado Fase 1: Landing Page + Roles Básicos
+## Descripción General
 
-**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: 🔄 En Ejecución
+La primera fase del proyecto CRTLPyme establece los fundamentos técnicos y arquitectónicos del sistema, implementando la infraestructura base y desarrollando una landing page profesional que presente la propuesta de valor del sistema POS-SaaS para PYMEs chilenas.
 
----
-
-## 🎯 Objetivos de la Fase 1
+## Objetivos de la Fase
 
 ### Objetivo Principal
-Establecer la base sólida de CRTLPyme con una presencia web profesional y sistema de usuarios robusto.
+Establecer la base tecnológica del proyecto y crear una presencia web profesional que comunique efectivamente la propuesta de valor de CRTLPyme.
 
 ### Objetivos Específicos
-1. **Landing Page Profesional**: Crear una página de aterrizaje que comunique efectivamente el valor de CRTLPyme
-2. **Sistema de Autenticación**: Implementar registro, login y gestión de sesiones segura
-3. **Roles y Permisos**: Configurar 5 roles de usuario con permisos diferenciados
-4. **Dashboards Básicos**: Crear interfaces iniciales personalizadas por rol
-5. **Navegación Base**: Establecer estructura de navegación y layout responsive
+- Configurar la infraestructura de desarrollo y producción
+- Implementar la arquitectura base del sistema multi-tenant
+- Desarrollar una landing page responsive y profesional
+- Establecer el sistema de autenticación y autorización básico
+- Configurar las herramientas de desarrollo y despliegue continuo
 
----
+## Arquitectura Técnica
 
-## 📅 Cronograma Detallado
+### Stack Tecnológico Implementado
+- **Framework Frontend**: Next.js 14 con App Router
+- **Lenguaje**: TypeScript para type safety
+- **Estilos**: Tailwind CSS para diseño responsive
+- **Base de Datos**: PostgreSQL con Prisma ORM
+- **Autenticación**: NextAuth.js con múltiples proveedores
+- **Despliegue**: Vercel para frontend, Google Cloud para backend
 
-### Semana 1: Landing Page y Autenticación
+### Estructura del Proyecto
 ```
-Lunes (Día 1-2): Landing Page Design & Desarrollo
-├── Diseño wireframes y mockups
-├── Desarrollo componentes hero section
-├── Sección de características principales
-├── Testimonios y casos de uso
-├── Footer con información de contacto
-└── Optimización responsive
-
-Miércoles (Día 3-4): Sistema de Autenticación
-├── Configuración NextAuth.js
-├── Páginas de login y registro
-├── Validación de formularios
-├── Manejo de errores de auth
-├── Recuperación de contraseña
-└── Testing de flujos de autenticación
-
-Viernes (Día 5-7): Refinamiento y Testing
-├── Testing de landing page en dispositivos
-├── Optimización de performance
-├── SEO básico y meta tags
-├── Testing de autenticación
-└── Corrección de bugs encontrados
-```
-
-### Semana 2: Roles y Dashboards
-```
-Lunes (Día 1-3): Sistema de Roles y Permisos
-├── Definición de roles en base de datos
-├── Middleware de autorización
-├── Componente de protección de rutas
-├── Asignación de roles por defecto
-├── Testing de permisos por rol
-└── Documentación de roles
-
-Miércoles (Día 4-5): Dashboards por Rol
-├── Layout base para dashboards
-├── Dashboard Super Admin
-├── Dashboard Admin Empresa
-├── Dashboard Gerente
-├── Dashboard Vendedor
-├── Dashboard Cajero
-└── Navegación lateral personalizada
-
-Viernes (Día 6-7): Integración y Testing
-├── Testing integral de roles
-├── Flujo completo: registro → login → dashboard
-├── Testing de permisos y restricciones
-├── Refinamiento de UI/UX
-└── Preparación demo Fase 1
+src/
+├── app/
+│   ├── (auth)/              # Rutas de autenticación
+│   ├── (dashboard)/         # Rutas del dashboard
+│   ├── api/                 # API routes
+│   └── globals.css          # Estilos globales
+├── components/
+│   ├── ui/                  # Componentes base
+│   ├── landing/             # Componentes de landing page
+│   └── auth/                # Componentes de autenticación
+├── lib/
+│   ├── auth.ts              # Configuración de autenticación
+│   ├── db.ts                # Configuración de base de datos
+│   └── utils.ts             # Utilidades generales
+└── types/
+    └── index.ts             # Definiciones de tipos
 ```
 
-### Semana 3: Buffer y Optimización
-```
-Lunes (Día 1-3): Refinamiento y Optimización
-├── Optimización de performance
-├── Mejoras de accesibilidad
-├── Refinamiento de estilos
-├── Testing en múltiples navegadores
-└── Corrección de bugs menores
+## Tareas Técnicas Detalladas
 
-Miércoles (Día 4-5): Documentación y Deployment
-├── Documentación técnica
-├── Guías de usuario básicas
-├── Preparación para deployment
-├── Testing en entorno de staging
-└── Configuración de variables de entorno
+### 1. Configuración del Entorno de Desarrollo
 
-Viernes (Día 6-7): Preparación Fase 2
-├── Demo y presentación Fase 1
-├── Recolección de feedback
-├── Planificación detallada Fase 2
-├── Setup inicial para desarrollo POS
-└── Documentación de lecciones aprendidas
-```
+#### Inicialización del Proyecto
+- Configuración de Next.js 14 con TypeScript
+- Instalación y configuración de Tailwind CSS
+- Configuración de ESLint y Prettier para calidad de código
+- Configuración de Husky para pre-commit hooks
 
----
+#### Configuración de Base de Datos
+- Instalación y configuración de Prisma ORM
+- Diseño del esquema inicial de base de datos
+- Configuración de migraciones automáticas
+- Implementación de seeders para datos iniciales
 
-## 🏗️ Tareas Específicas por Componente
+### 2. Desarrollo de la Landing Page
 
-### 1. Landing Page Profesional
+#### Diseño y Estructura
+- Header con navegación responsive
+- Sección hero con propuesta de valor clara
+- Sección de características principales del sistema
+- Testimonios y casos de uso para PYMEs chilenas
+- Sección de precios y planes
+- Footer con información de contacto
 
-#### 1.1 Hero Section
-- [ ] **Título Principal**: "CRTLPyme - POS SaaS para PYMEs Chilenas"
-- [ ] **Subtítulo**: Descripción clara del valor propuesto
-- [ ] **CTA Principal**: "Comenzar Prueba Gratuita" / "Ver Demo"
-- [ ] **Imagen/Video**: Mockup del sistema POS en acción
-- [ ] **Estadísticas**: Números impactantes sobre PYMEs chilenas
+#### Funcionalidades Implementadas
+- Formulario de contacto con validación
+- Newsletter signup
+- Responsive design para todos los dispositivos
+- Optimización SEO básica
+- Integración con Google Analytics
 
-#### 1.2 Sección de Características
-- [ ] **POS Completo**: Venta rápida y eficiente
-- [ ] **Inventario Inteligente**: Control de stock automatizado
-- [ ] **Reportes en Tiempo Real**: Analytics para tomar decisiones
-- [ ] **Facturación SII**: Cumplimiento tributario automático
-- [ ] **Multi-usuario**: 5 roles para equipos organizados
-- [ ] **Productos Chilenos**: Base de datos local integrada
+### 3. Sistema de Autenticación Base
 
-#### 1.3 Sección "¿Por qué CRTLPyme?"
-- [ ] **Adaptado a Chile**: Productos, moneda, regulaciones
-- [ ] **Fácil de Usar**: Interface intuitiva para cualquier usuario
-- [ ] **Escalable**: Crece con tu negocio
-- [ ] **Soporte Local**: Atención en español, horario chileno
-- [ ] **Precio Justo**: Planes accesibles para PYMEs
+#### Configuración de NextAuth.js
+- Configuración de proveedores de autenticación (Google, GitHub)
+- Implementación de autenticación por email/password
+- Configuración de sesiones y tokens JWT
+- Middleware de protección de rutas
 
-#### 1.4 Testimonios y Casos de Uso
-- [ ] **Testimonios**: 3-4 testimonios ficticios pero realistas
-- [ ] **Casos de Uso**: Minimarket, restaurant, tienda de ropa
-- [ ] **Antes/Después**: Problemas comunes vs solución CRTLPyme
+#### Gestión de Usuarios
+- Modelo de usuario en base de datos
+- Registro de nuevos usuarios
+- Verificación de email
+- Recuperación de contraseña
 
-#### 1.5 Pricing y CTA Final
-- [ ] **Planes de Precio**: Básico, Profesional, Empresarial
-- [ ] **Prueba Gratuita**: 30 días sin compromiso
-- [ ] **CTA Final**: Formulario de registro o contacto
-- [ ] **Garantía**: Satisfacción garantizada
+### 4. Arquitectura Multi-tenant Base
 
-### 2. Sistema de Autenticación
+#### Modelo de Datos
+```sql
+-- Tabla de tenants (empresas)
+CREATE TABLE tenants (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  slug VARCHAR(100) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
 
-#### 2.1 Configuración NextAuth.js
-- [ ] **Providers**: Email/Password, Google (opcional)
-- [ ] **Database Adapter**: Prisma adapter configurado
-- [ ] **Session Strategy**: JWT con refresh tokens
-- [ ] **Callbacks**: Personalización de sesión y JWT
-- [ ] **Pages**: Custom login, register, error pages
-
-#### 2.2 Páginas de Autenticación
-- [ ] **Login Page**: 
-  - Formulario email/password
-  - "Recordarme" checkbox
-  - Link a "Olvidé mi contraseña"
-  - Link a registro
-  - Validación client-side y server-side
-- [ ] **Register Page**:
-  - Formulario completo (nombre, email, password, empresa)
-  - Validación de password strength
-  - Términos y condiciones
-  - Confirmación de email (opcional)
-- [ ] **Forgot Password**:
-  - Formulario de email
-  - Envío de email de recuperación
-  - Página de reset password
-
-#### 2.3 Validación y Seguridad
-- [ ] **Validación de Formularios**: Zod schemas
-- [ ] **Rate Limiting**: Prevención de ataques de fuerza bruta
-- [ ] **CSRF Protection**: Tokens CSRF en formularios
-- [ ] **Password Hashing**: bcrypt para passwords
-- [ ] **Session Security**: Secure cookies, HTTPS only
-
-### 3. Sistema de Roles y Permisos
-
-#### 3.1 Definición de Roles
-```typescript
-enum UserRole {
-  SUPER_ADMIN = "SUPER_ADMIN",
-  ADMIN_EMPRESA = "ADMIN_EMPRESA", 
-  GERENTE = "GERENTE",
-  VENDEDOR = "VENDEDOR",
-  CAJERO = "CAJERO"
-}
+-- Tabla de usuarios con relación a tenant
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255),
+  tenant_id UUID REFERENCES tenants(id),
+  role VARCHAR(50) DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
-#### 3.2 Permisos por Rol
-- [ ] **Super Admin**:
-  - Gestión completa del sistema
-  - Crear/editar/eliminar empresas
-  - Acceso a todos los datos
-  - Configuración global del sistema
-  
-- [ ] **Admin Empresa**:
-  - Gestión completa de su empresa
-  - Crear/editar usuarios de la empresa
-  - Acceso a todos los reportes de la empresa
-  - Configuración de la empresa
-  
-- [ ] **Gerente**:
-  - Supervisión operacional
-  - Reportes y analytics
-  - Gestión de inventario
-  - Supervisión de ventas
-  
-- [ ] **Vendedor**:
-  - Operaciones de venta
-  - Consulta de productos
-  - Reportes básicos de sus ventas
-  - Gestión de clientes
-  
-- [ ] **Cajero**:
-  - Operaciones de caja
-  - Procesamiento de pagos
-  - Consulta básica de productos
-  - Reportes de caja
+#### Middleware de Tenant
+- Identificación automática de tenant por subdominio
+- Filtrado automático de datos por tenant
+- Configuración de contexto de tenant en la aplicación
 
-#### 3.3 Middleware de Autorización
-- [ ] **Route Protection**: Middleware para proteger rutas
-- [ ] **Component Protection**: HOC para proteger componentes
-- [ ] **API Protection**: Middleware para APIs
-- [ ] **Permission Checks**: Funciones helper para verificar permisos
+## Entregables de la Fase
 
-### 4. Dashboards por Rol
+### 1. Infraestructura Técnica
+- Repositorio configurado con estructura de proyecto
+- Pipeline de CI/CD configurado
+- Entornos de desarrollo y staging operativos
+- Base de datos configurada con esquema inicial
 
-#### 4.1 Layout Base
-- [ ] **Sidebar Navigation**: Menú lateral responsive
-- [ ] **Header**: Usuario logueado, notificaciones, logout
-- [ ] **Breadcrumbs**: Navegación contextual
-- [ ] **Main Content Area**: Área principal de contenido
-- [ ] **Footer**: Información básica y links
+### 2. Landing Page Funcional
+- Sitio web responsive completamente funcional
+- Formularios de contacto operativos
+- Integración con herramientas de analytics
+- Optimización básica de SEO
 
-#### 4.2 Dashboard Super Admin
-- [ ] **Métricas Globales**: Total empresas, usuarios, transacciones
-- [ ] **Empresas Activas**: Lista de empresas registradas
-- [ ] **Usuarios Recientes**: Últimos usuarios registrados
-- [ ] **Sistema Health**: Estado de servicios y base de datos
-- [ ] **Logs de Actividad**: Actividad reciente del sistema
+### 3. Sistema de Autenticación
+- Registro e inicio de sesión funcional
+- Gestión de sesiones implementada
+- Protección de rutas configurada
+- Recuperación de contraseña operativa
 
-#### 4.3 Dashboard Admin Empresa
-- [ ] **Métricas de Empresa**: Ventas, productos, usuarios
-- [ ] **Equipo**: Lista de usuarios de la empresa
-- [ ] **Ventas Recientes**: Últimas transacciones
-- [ ] **Productos Top**: Productos más vendidos
-- [ ] **Alertas**: Stock bajo, tareas pendientes
+### 4. Documentación Técnica
+- Documentación de arquitectura
+- Guías de instalación y configuración
+- Documentación de API básica
+- Guías de contribución al proyecto
 
-#### 4.4 Dashboard Gerente
-- [ ] **KPIs Operacionales**: Ventas del día, semana, mes
-- [ ] **Performance del Equipo**: Ventas por vendedor
-- [ ] **Inventario**: Estado de stock, productos críticos
-- [ ] **Reportes Rápidos**: Acceso a reportes principales
-- [ ] **Calendario**: Eventos y tareas importantes
+## Criterios de Aceptación
 
-#### 4.5 Dashboard Vendedor
-- [ ] **Mis Ventas**: Ventas del día, objetivos
-- [ ] **Productos**: Acceso rápido a catálogo
-- [ ] **Clientes**: Mis clientes frecuentes
-- [ ] **Comisiones**: Cálculo de comisiones (si aplica)
-- [ ] **Tareas**: Seguimientos y pendientes
+### Funcionales
+- La landing page debe cargar en menos de 3 segundos
+- El formulario de contacto debe enviar emails correctamente
+- El sistema de autenticación debe funcionar sin errores
+- La aplicación debe ser completamente responsive
 
-#### 4.6 Dashboard Cajero
-- [ ] **Estado de Caja**: Dinero en caja, transacciones del día
-- [ ] **Ventas Rápidas**: Acceso directo al POS
-- [ ] **Métodos de Pago**: Resumen por método de pago
-- [ ] **Turnos**: Inicio/fin de turno, arqueo de caja
-- [ ] **Ayuda Rápida**: Guías para operaciones comunes
+### Técnicos
+- Cobertura de tests unitarios mínima del 70%
+- Cumplimiento de estándares de accesibilidad WCAG 2.1 AA
+- Optimización de Core Web Vitals
+- Configuración de monitoreo y logging básico
 
----
-
-## 🛠️ Stack Técnico Específico
-
-### Frontend
-- **Next.js 14**: App Router, Server Components
-- **TypeScript**: Tipado estricto
-- **Tailwind CSS**: Styling utility-first
-- **shadcn/ui**: Componentes base
-- **React Hook Form**: Manejo de formularios
-- **Zod**: Validación de schemas
-
-### Backend
-- **Next.js API Routes**: Endpoints RESTful
-- **NextAuth.js**: Autenticación y sesiones
-- **Prisma**: ORM y migraciones
-- **PostgreSQL**: Base de datos principal
-- **bcrypt**: Hashing de passwords
-
-### Herramientas de Desarrollo
-- **ESLint + Prettier**: Code quality
-- **Husky**: Git hooks
-- **Jest**: Unit testing
-- **Cypress**: E2E testing
-
----
-
-## 📊 Criterios de Aceptación
-
-### Landing Page
-- [ ] Tiempo de carga < 3 segundos
-- [ ] Responsive en móvil, tablet, desktop
-- [ ] SEO score > 90 en Lighthouse
-- [ ] Accesibilidad AA compliant
-- [ ] CTAs claros y funcionales
-
-### Autenticación
-- [ ] Registro de usuario funcional
-- [ ] Login/logout sin errores
-- [ ] Validación de formularios client/server
-- [ ] Recuperación de contraseña operativa
-- [ ] Sesiones seguras y persistentes
-
-### Roles y Permisos
-- [ ] 5 roles implementados correctamente
-- [ ] Permisos diferenciados por rol
-- [ ] Rutas protegidas funcionando
-- [ ] Middleware de autorización activo
-- [ ] Asignación de roles automática
-
-### Dashboards
-- [ ] Dashboard específico por cada rol
-- [ ] Navegación intuitiva y responsive
-- [ ] Datos mock realistas mostrados
-- [ ] Performance < 2s para cargar dashboard
-- [ ] UI consistente con design system
-
----
-
-## 🧪 Plan de Testing
-
-### Testing Manual
-- [ ] **Flujo Completo**: Landing → Registro → Login → Dashboard
-- [ ] **Roles**: Verificar permisos y restricciones por rol
-- [ ] **Responsive**: Testing en móvil, tablet, desktop
-- [ ] **Navegadores**: Chrome, Firefox, Safari, Edge
-- [ ] **Performance**: Lighthouse audit completo
-
-### Testing Automatizado
-- [ ] **Unit Tests**: Componentes críticos
-- [ ] **Integration Tests**: Flujos de autenticación
-- [ ] **E2E Tests**: Cypress para flujos principales
-- [ ] **API Tests**: Endpoints de autenticación y roles
-
----
-
-## 📈 Métricas de Éxito
-
-### Métricas Técnicas
-- [ ] **Performance**: Lighthouse score > 90
-- [ ] **Accessibility**: WCAG AA compliance
-- [ ] **SEO**: Meta tags y estructura correcta
-- [ ] **Security**: Vulnerabilidades = 0
-- [ ] **Code Quality**: ESLint warnings = 0
-
-### Métricas de Usuario
-- [ ] **Usabilidad**: Flujo de registro < 2 minutos
-- [ ] **Navegación**: Encontrar funciones < 3 clics
-- [ ] **Responsive**: Funcional en todos los dispositivos
-- [ ] **Claridad**: Roles y permisos evidentes
-- [ ] **Profesionalismo**: Landing page transmite confianza
-
----
-
-## 🚨 Riesgos y Mitigaciones
+## Riesgos y Mitigaciones
 
 ### Riesgos Técnicos
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Problemas con NextAuth | Media | Alto | Documentación detallada, testing exhaustivo |
-| Performance de landing | Baja | Medio | Optimización de imágenes, lazy loading |
-| Complejidad de roles | Media | Alto | Diseño simple, testing por rol |
+- **Complejidad de configuración multi-tenant**: Mitigado con documentación detallada y tests exhaustivos
+- **Problemas de rendimiento**: Mitigado con optimizaciones de Next.js y caching estratégico
+- **Seguridad de autenticación**: Mitigado con uso de librerías probadas y auditorías de seguridad
 
-### Riesgos de Tiempo
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Retraso en diseño | Media | Medio | Templates base, iteración rápida |
-| Testing toma más tiempo | Alta | Medio | Testing paralelo al desarrollo |
-| Scope creep | Media | Alto | Definición clara de MVP |
+### Riesgos de Proyecto
+- **Retrasos en diseño**: Mitigado con uso de componentes pre-diseñados y templates
+- **Problemas de integración**: Mitigado con desarrollo incremental y testing continuo
 
----
+## Metodología de Desarrollo
 
-## 📋 Checklist Final Fase 1
+### Flujo de Trabajo
+1. **Planificación**: Definición detallada de tareas en GitHub Issues
+2. **Desarrollo**: Implementación en ramas feature con pull requests
+3. **Testing**: Tests automatizados y revisión manual
+4. **Despliegue**: Despliegue automático a staging para validación
+5. **Validación**: Pruebas de aceptación y feedback
 
-### Pre-Demo
-- [ ] Landing page completamente funcional
-- [ ] Sistema de autenticación sin bugs
-- [ ] 5 roles implementados y testeados
-- [ ] Dashboards básicos por cada rol
-- [ ] Testing completo realizado
-- [ ] Documentación actualizada
-- [ ] Deploy en staging environment
+### Herramientas de Gestión
+- GitHub Projects para seguimiento de tareas
+- GitHub Actions para CI/CD
+- Vercel para despliegues automáticos
+- Sentry para monitoreo de errores
 
-### Demo Preparation
-- [ ] Presentación preparada (10-15 min)
-- [ ] Datos de demo realistas cargados
-- [ ] Flujo de demo practicado
-- [ ] Backup plan si hay problemas técnicos
-- [ ] Feedback form preparado
+## Consideraciones Específicas para PYMEs Chilenas
 
-### Post-Demo
-- [ ] Feedback recolectado y analizado
-- [ ] Issues identificados documentados
-- [ ] Plan de correcciones definido
-- [ ] Preparación Fase 2 iniciada
-- [ ] Lecciones aprendidas documentadas
+### Localización
+- Textos en español chileno
+- Formatos de fecha y moneda locales
+- Consideración de horarios comerciales chilenos
+- Integración con servicios locales (RUT, SII)
 
----
+### Propuesta de Valor
+- Enfoque en simplicidad y facilidad de uso
+- Precios accesibles para pequeños comercios
+- Soporte técnico en español
+- Casos de uso específicos del mercado chileno
 
-**Fecha de inicio**: Septiembre 12, 2024
-**Fecha objetivo de finalización**: Octubre 3, 2024
-**Responsable**: [Tu nombre]
-**Próxima revisión**: Septiembre 19, 2024
+## Próximos Pasos
 
----
+Al completar esta fase, el proyecto contará con una base sólida para el desarrollo de las funcionalidades core del sistema POS. La siguiente fase se enfocará en la implementación del sistema de punto de venta y gestión básica de inventario.
 
-*Este plan se actualiza semanalmente basado en el progreso real y feedback recibido.*
+La transición a la Fase 2 estará marcada por la validación completa de todos los entregables y la aprobación de los criterios de aceptación establecidos.

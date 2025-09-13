@@ -1,614 +1,342 @@
+# Fase 2: Sistema POS y Gestión de Inventario
 
-# 🛒 Plan Detallado Fase 2: POS + Inventario Core
+## Descripción General
 
-**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: 📋 Planificado
+La segunda fase del proyecto CRTLPyme se centra en el desarrollo del núcleo funcional del sistema: el punto de venta (POS) y la gestión integral de inventario. Esta fase implementa las funcionalidades esenciales que permiten a las PYMEs chilenas realizar operaciones comerciales completas, desde la venta hasta el control de stock.
 
----
-
-## 🎯 Objetivos de la Fase 2
+## Objetivos de la Fase
 
 ### Objetivo Principal
-Desarrollar el corazón funcional de CRTLPyme: un sistema POS completo y gestión de inventario robusta que permita a las PYMEs chilenas operar eficientemente.
+Desarrollar un sistema de punto de venta completo y un módulo de gestión de inventario que permita a las PYMEs realizar operaciones comerciales eficientes y mantener control preciso de su stock.
 
 ### Objetivos Específicos
-1. **Sistema POS Completo**: Interface de venta intuitiva y rápida
-2. **Gestión de Inventario**: Control de stock, productos y categorías
-3. **Integración Productos Chilenos**: Base de datos con códigos de barras locales
-4. **Sistema de Transacciones**: Procesamiento de ventas y métodos de pago
-5. **Reportes Básicos**: Analytics esenciales para toma de decisiones
+- Implementar interfaz de punto de venta intuitiva y eficiente
+- Desarrollar sistema completo de gestión de inventario
+- Integrar lectores de códigos de barras y códigos EAN-13
+- Implementar sistema de facturación electrónica básica
+- Crear reportes operacionales y de ventas
+- Establecer integración con métodos de pago chilenos
 
----
+## Arquitectura del Sistema POS
 
-## 📅 Cronograma Detallado
+### Componentes Principales
 
-### Semana 1-2: Sistema POS Core
-```
-Semana 1: Interface POS Base
-├── Días 1-2: Diseño y layout POS
-│   ├── Interface de venta principal
-│   ├── Carrito de compras dinámico
-│   ├── Búsqueda de productos
-│   └── Calculadora de totales
-├── Días 3-4: Funcionalidad de productos
-│   ├── Catálogo de productos
-│   ├── Búsqueda por código de barras
-│   ├── Búsqueda por nombre/categoría
-│   └── Información detallada de productos
-└── Días 5-7: Carrito y cálculos
-    ├── Agregar/quitar productos
-    ├── Modificar cantidades
-    ├── Aplicar descuentos
-    ├── Cálculo de impuestos (IVA)
-    └── Total final con desglose
-
-Semana 2: Procesamiento de Ventas
-├── Días 1-2: Métodos de pago
-│   ├── Efectivo con cálculo de vuelto
-│   ├── Tarjeta de débito/crédito
-│   ├── Transferencia bancaria
-│   └── Pago mixto (múltiples métodos)
-├── Días 3-4: Finalización de ventas
-│   ├── Confirmación de venta
-│   ├── Generación de recibo
-│   ├── Actualización de inventario
-│   └── Registro en historial
-└── Días 5-7: Testing y optimización
-    ├── Testing de flujos completos
-    ├── Optimización de performance
-    ├── Manejo de errores
-    └── Validaciones de negocio
+#### 1. Interfaz de Punto de Venta
+```typescript
+interface POSInterface {
+  productSearch: ProductSearchComponent;
+  cart: ShoppingCartComponent;
+  payment: PaymentProcessorComponent;
+  receipt: ReceiptGeneratorComponent;
+  customer: CustomerManagementComponent;
+}
 ```
 
-### Semana 3-4: Gestión de Inventario
-```
-Semana 3: CRUD Productos Avanzado
-├── Días 1-2: Gestión de productos
-│   ├── Crear productos con detalles completos
-│   ├── Editar información de productos
-│   ├── Eliminar productos (soft delete)
-│   └── Importar productos masivamente
-├── Días 3-4: Categorías y organización
-│   ├── Sistema de categorías jerárquico
-│   ├── Etiquetas y filtros
-│   ├── Búsqueda avanzada
-│   └── Organización por proveedor
-└── Días 5-7: Códigos de barras
-    ├── Generación de códigos de barras
-    ├── Lectura de códigos existentes
-    ├── Validación de códigos únicos
-    └── Integración con productos chilenos
+#### 2. Motor de Transacciones
+- Procesamiento de ventas en tiempo real
+- Cálculo automático de impuestos (IVA 19%)
+- Aplicación de descuentos y promociones
+- Gestión de múltiples métodos de pago
 
-Semana 4: Control de Stock
-├── Días 1-2: Gestión de stock
-│   ├── Control de cantidades
-│   ├── Stock mínimo y máximo
-│   ├── Alertas de stock bajo
-│   └── Historial de movimientos
-├── Días 3-4: Proveedores y compras
-│   ├── Gestión de proveedores
-│   ├── Órdenes de compra básicas
-│   ├── Recepción de mercadería
-│   └── Actualización de costos
-└── Días 5-7: Integración productos chilenos
-    ├── Base de datos productos locales
-    ├── Importación automática
-    ├── Validación de códigos chilenos
-    └── Actualización de precios
-```
+#### 3. Sistema de Inventario
+- Control de stock en tiempo real
+- Alertas de inventario bajo
+- Gestión de proveedores
+- Trazabilidad de productos
 
-### Semana 5-6: Reportes y Optimización
-```
-Semana 5: Sistema de Reportes
-├── Días 1-2: Reportes de ventas
-│   ├── Ventas por día/semana/mes
-│   ├── Productos más vendidos
-│   ├── Ventas por vendedor
-│   └── Comparativas de períodos
-├── Días 3-4: Reportes de inventario
-│   ├── Estado actual de stock
-│   ├── Productos con stock bajo
-│   ├── Rotación de inventario
-│   └── Valorización de inventario
-└── Días 5-7: Dashboard con métricas
-    ├── KPIs principales en tiempo real
-    ├── Gráficos interactivos
-    ├── Alertas y notificaciones
-    └── Exportación de reportes
+## Funcionalidades Detalladas
 
-Semana 6: Testing y Optimización Final
-├── Días 1-2: Testing integral
-│   ├── Testing de todos los flujos
-│   ├── Testing de performance
-│   ├── Testing de concurrencia
-│   └── Testing de datos reales
-├── Días 3-4: Optimización
-│   ├── Optimización de consultas DB
-│   ├── Caching de datos frecuentes
-│   ├── Optimización de UI/UX
-│   └── Performance tuning
-└── Días 5-7: Documentación y demo
-    ├── Documentación técnica
-    ├── Guías de usuario
-    ├── Preparación demo Fase 2
-    └── Planificación Fase 3
+### Sistema de Punto de Venta
+
+#### Interfaz de Usuario
+- **Búsqueda de Productos**: Búsqueda por nombre, código de barras o categoría
+- **Carrito de Compras**: Gestión dinámica de productos seleccionados
+- **Calculadora Integrada**: Para cálculos rápidos y cambio
+- **Métodos de Pago**: Efectivo, tarjetas, transferencias
+- **Impresión de Boletas**: Generación automática de comprobantes
+
+#### Funcionalidades Avanzadas
+- **Ventas Rápidas**: Productos favoritos y accesos directos
+- **Gestión de Clientes**: Registro básico y historial de compras
+- **Descuentos**: Aplicación de descuentos por producto o venta total
+- **Devoluciones**: Procesamiento de devoluciones y notas de crédito
+
+### Gestión de Inventario
+
+#### Control de Stock
+```sql
+-- Modelo de productos
+CREATE TABLE products (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id UUID REFERENCES tenants(id),
+  name VARCHAR(255) NOT NULL,
+  ean_code VARCHAR(13),
+  sku VARCHAR(100),
+  category_id UUID REFERENCES categories(id),
+  cost_price DECIMAL(10,2),
+  sale_price DECIMAL(10,2),
+  stock_quantity INTEGER DEFAULT 0,
+  min_stock_level INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Movimientos de inventario
+CREATE TABLE inventory_movements (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  product_id UUID REFERENCES products(id),
+  movement_type VARCHAR(20), -- 'IN', 'OUT', 'ADJUSTMENT'
+  quantity INTEGER,
+  reference_id UUID, -- ID de venta, compra, etc.
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
----
+#### Funcionalidades de Inventario
+- **Ingreso de Productos**: Registro manual y por lotes
+- **Ajustes de Stock**: Correcciones y ajustes de inventario
+- **Alertas Automáticas**: Notificaciones de stock bajo
+- **Reportes de Movimientos**: Historial completo de movimientos
 
-## 🏗️ Arquitectura Técnica Detallada
+### Base de Datos de Productos Chilenos
 
-### Base de Datos - Esquemas Principales
+#### Catálogo Preconfigurado
+- **Productos de Consumo Masivo**: Alimentos, bebidas, productos de limpieza
+- **Códigos EAN-13**: Base de datos con códigos de barras reales
+- **Categorización**: Organización por categorías relevantes para PYMEs
+- **Precios Referenciales**: Precios base actualizables por el usuario
 
-#### Productos
-```prisma
-model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  sku         String   @unique
-  barcode     String?  @unique
-  price       Decimal
-  cost        Decimal?
-  stock       Int      @default(0)
-  minStock    Int      @default(0)
-  maxStock    Int?
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
-  supplierId  String?
-  supplier    Supplier? @relation(fields: [supplierId], references: [id])
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+#### Estructura de Categorías
+```
+Alimentación y Bebidas/
+├── Lácteos y Derivados
+├── Carnes y Embutidos
+├── Panadería y Pastelería
+├── Bebidas Alcohólicas
+└── Bebidas No Alcohólicas
+
+Productos de Limpieza/
+├── Detergentes
+├── Desinfectantes
+└── Productos de Aseo Personal
+
+Otros/
+├── Cigarrillos
+├── Productos de Farmacia
+└── Artículos Varios
+```
+
+### Integración con Códigos de Barras
+
+#### Soporte de Lectores
+- **Lectores USB**: Compatibilidad con lectores estándar
+- **Lectores Bluetooth**: Soporte para dispositivos móviles
+- **Cámara del Dispositivo**: Lectura mediante cámara web o móvil
+
+#### Procesamiento de Códigos
+```typescript
+interface BarcodeProcessor {
+  scanCode(code: string): Promise<Product | null>;
+  validateEAN13(code: string): boolean;
+  searchProduct(code: string): Promise<Product>;
+  addNewProduct(code: string): Promise<void>;
+}
+```
+
+### Sistema de Facturación
+
+#### Tipos de Documentos
+- **Boleta Electrónica**: Para consumidores finales
+- **Factura Electrónica**: Para empresas (implementación básica)
+- **Nota de Crédito**: Para devoluciones y anulaciones
+- **Nota de Débito**: Para cargos adicionales
+
+#### Integración con SII (Preparación)
+- Estructura de datos compatible con formato SII
+- Numeración correlativa de documentos
+- Almacenamiento seguro de documentos tributarios
+- Preparación para integración futura con SII
+
+### Reportes y Analytics
+
+#### Reportes de Ventas
+- **Ventas Diarias**: Resumen de ventas por día
+- **Productos Más Vendidos**: Ranking de productos
+- **Ventas por Categoría**: Análisis por categorías
+- **Comparativos Mensuales**: Evolución de ventas
+
+#### Reportes de Inventario
+- **Stock Actual**: Estado actual del inventario
+- **Productos con Stock Bajo**: Alertas de reposición
+- **Movimientos de Inventario**: Historial detallado
+- **Valorización de Inventario**: Valor total del stock
+
+## Tareas Técnicas Específicas
+
+### 1. Desarrollo del POS
+
+#### Frontend Components
+```typescript
+// Componente principal del POS
+export default function POSInterface() {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   
-  // Relaciones
-  saleItems   SaleItem[]
-  stockMovements StockMovement[]
+  return (
+    <div className="pos-interface">
+      <ProductSearch onProductSelect={addToCart} />
+      <ShoppingCart items={cart} onUpdateCart={setCart} />
+      <PaymentProcessor 
+        total={calculateTotal(cart)}
+        method={paymentMethod}
+        onPaymentComplete={processSale}
+      />
+    </div>
+  );
 }
 ```
 
-#### Ventas
-```prisma
-model Sale {
-  id          String   @id @default(cuid())
-  saleNumber  String   @unique
-  total       Decimal
-  subtotal    Decimal
-  tax         Decimal
-  discount    Decimal  @default(0)
-  paymentMethod String
-  status      SaleStatus @default(COMPLETED)
-  customerId  String?
-  customer    Customer? @relation(fields: [customerId], references: [id])
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
-  createdAt   DateTime @default(now())
-  
-  // Relaciones
-  items       SaleItem[]
-  payments    Payment[]
-}
-```
-
-#### Items de Venta
-```prisma
-model SaleItem {
-  id        String  @id @default(cuid())
-  quantity  Int
-  unitPrice Decimal
-  total     Decimal
-  discount  Decimal @default(0)
-  saleId    String
-  sale      Sale    @relation(fields: [saleId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-}
-```
-
-### APIs Principales
-
-#### POS APIs
-- `POST /api/pos/search-product` - Búsqueda de productos
-- `POST /api/pos/add-to-cart` - Agregar al carrito
-- `PUT /api/pos/update-cart-item` - Actualizar item del carrito
-- `DELETE /api/pos/remove-from-cart` - Remover del carrito
-- `POST /api/pos/process-sale` - Procesar venta completa
-- `GET /api/pos/payment-methods` - Métodos de pago disponibles
-
-#### Inventario APIs
-- `GET /api/inventory/products` - Listar productos con paginación
-- `POST /api/inventory/products` - Crear producto
-- `PUT /api/inventory/products/:id` - Actualizar producto
-- `DELETE /api/inventory/products/:id` - Eliminar producto
-- `POST /api/inventory/import` - Importación masiva
-- `GET /api/inventory/stock-alerts` - Alertas de stock bajo
-
-#### Reportes APIs
-- `GET /api/reports/sales-summary` - Resumen de ventas
-- `GET /api/reports/top-products` - Productos más vendidos
-- `GET /api/reports/inventory-status` - Estado de inventario
-- `GET /api/reports/sales-by-period` - Ventas por período
-
----
-
-## 🛠️ Componentes Frontend Principales
-
-### 1. Sistema POS
-
-#### 1.1 Componente POS Principal
+#### Backend API Endpoints
 ```typescript
-// components/pos/POSInterface.tsx
-interface POSInterfaceProps {
-  user: User;
-  company: Company;
-}
-
-const POSInterface = ({ user, company }: POSInterfaceProps) => {
-  // Estado del carrito, productos, etc.
-  // Lógica de búsqueda y selección
-  // Procesamiento de pagos
-  // Generación de recibos
-}
-```
-
-#### 1.2 Carrito de Compras
-```typescript
-// components/pos/ShoppingCart.tsx
-interface CartItem {
-  product: Product;
-  quantity: number;
-  unitPrice: number;
-  discount: number;
-  total: number;
-}
-
-const ShoppingCart = ({ items, onUpdateItem, onRemoveItem }: CartProps) => {
-  // Renderizado de items
-  // Cálculos de totales
-  // Aplicación de descuentos
-}
-```
-
-#### 1.3 Búsqueda de Productos
-```typescript
-// components/pos/ProductSearch.tsx
-const ProductSearch = ({ onProductSelect }: ProductSearchProps) => {
-  // Búsqueda por nombre, SKU, código de barras
-  // Filtros por categoría
-  // Resultados en tiempo real
-  // Selección rápida
-}
-```
-
-#### 1.4 Procesamiento de Pagos
-```typescript
-// components/pos/PaymentProcessor.tsx
-const PaymentProcessor = ({ total, onPaymentComplete }: PaymentProps) => {
-  // Selección de método de pago
-  // Cálculo de vuelto para efectivo
-  // Validación de montos
-  // Confirmación de pago
-}
+// API routes para POS
+app.post('/api/sales', createSale);
+app.get('/api/products/search', searchProducts);
+app.post('/api/products/barcode', getProductByBarcode);
+app.put('/api/inventory/adjust', adjustInventory);
+app.get('/api/reports/sales', getSalesReport);
 ```
 
 ### 2. Gestión de Inventario
 
-#### 2.1 Lista de Productos
+#### Componentes de Inventario
+- **ProductList**: Lista paginada de productos
+- **ProductForm**: Formulario de creación/edición
+- **StockAdjustment**: Ajustes de inventario
+- **InventoryAlerts**: Alertas de stock bajo
+
+#### Funcionalidades Avanzadas
+- **Importación Masiva**: Carga de productos desde CSV/Excel
+- **Códigos de Barras Personalizados**: Generación de códigos internos
+- **Gestión de Proveedores**: Registro y gestión de proveedores
+- **Órdenes de Compra**: Sistema básico de reposición
+
+### 3. Integración de Pagos
+
+#### Métodos de Pago Soportados
+- **Efectivo**: Cálculo automático de vuelto
+- **Tarjetas**: Preparación para integración con Transbank
+- **Transferencias**: Registro manual de transferencias
+- **Mixto**: Combinación de métodos de pago
+
+#### Preparación Transbank
 ```typescript
-// components/inventory/ProductList.tsx
-const ProductList = ({ filters, onProductEdit }: ProductListProps) => {
-  // Tabla con paginación
-  // Filtros y búsqueda
-  // Acciones rápidas (editar, eliminar)
-  // Indicadores de stock
+interface TransbankConfig {
+  commerceCode: string;
+  apiKey: string;
+  environment: 'sandbox' | 'production';
+}
+
+class TransbankService {
+  async createTransaction(amount: number): Promise<TransactionResponse>;
+  async confirmTransaction(token: string): Promise<ConfirmationResponse>;
+  async refundTransaction(transactionId: string): Promise<RefundResponse>;
 }
 ```
 
-#### 2.2 Formulario de Producto
-```typescript
-// components/inventory/ProductForm.tsx
-const ProductForm = ({ product, onSave }: ProductFormProps) => {
-  // Formulario completo de producto
-  // Validaciones
-  // Subida de imágenes
-  // Generación de códigos de barras
-}
-```
+## Entregables de la Fase
 
-#### 2.3 Gestión de Categorías
-```typescript
-// components/inventory/CategoryManager.tsx
-const CategoryManager = ({ categories, onCategoryChange }: CategoryProps) => {
-  // Árbol de categorías
-  // CRUD de categorías
-  // Drag & drop para reorganizar
-}
-```
+### 1. Sistema POS Funcional
+- Interfaz de punto de venta completamente operativa
+- Procesamiento de ventas con múltiples métodos de pago
+- Generación automática de boletas y comprobantes
+- Integración con lectores de códigos de barras
 
-### 3. Sistema de Reportes
+### 2. Módulo de Inventario
+- Gestión completa de productos y categorías
+- Control de stock en tiempo real
+- Sistema de alertas de inventario bajo
+- Reportes de movimientos de inventario
 
-#### 3.1 Dashboard de Métricas
-```typescript
-// components/reports/MetricsDashboard.tsx
-const MetricsDashboard = ({ dateRange }: DashboardProps) => {
-  // KPIs principales
-  // Gráficos interactivos
-  // Comparativas de períodos
-  // Alertas y notificaciones
-}
-```
+### 3. Base de Datos de Productos
+- Catálogo de productos chilenos con códigos EAN-13
+- Sistema de categorización adaptado al mercado local
+- Funcionalidad de búsqueda avanzada
+- Importación y exportación de datos
 
-#### 3.2 Reportes de Ventas
-```typescript
-// components/reports/SalesReports.tsx
-const SalesReports = ({ filters }: SalesReportsProps) => {
-  // Tabla de ventas
-  // Filtros avanzados
-  // Exportación a Excel/PDF
-  // Gráficos de tendencias
-}
-```
+### 4. Sistema de Reportes
+- Dashboard con métricas clave de negocio
+- Reportes de ventas diarios, semanales y mensuales
+- Análisis de productos más vendidos
+- Reportes de inventario y valorización
 
----
+## Criterios de Aceptación
 
-## 📊 Funcionalidades Específicas
+### Funcionales
+- El sistema POS debe procesar una venta completa en menos de 30 segundos
+- La búsqueda de productos debe retornar resultados en menos de 2 segundos
+- Los reportes deben generarse en menos de 5 segundos
+- El sistema debe mantener consistencia de datos en operaciones concurrentes
 
-### 1. Sistema POS Completo
+### Técnicos
+- Soporte para al menos 10,000 productos por tenant
+- Capacidad de procesamiento de 100 ventas simultáneas
+- Backup automático de datos cada 24 horas
+- Tiempo de respuesta de API menor a 500ms
 
-#### 1.1 Interface de Venta
-- [ ] **Layout Intuitivo**: Diseño optimizado para uso rápido
-- [ ] **Búsqueda Rápida**: Por nombre, SKU, código de barras
-- [ ] **Carrito Dinámico**: Agregar/quitar productos fácilmente
-- [ ] **Cálculos Automáticos**: Subtotal, impuestos, descuentos, total
-- [ ] **Shortcuts de Teclado**: Navegación rápida con teclado
+### Usabilidad
+- Interfaz intuitiva que requiera menos de 30 minutos de capacitación
+- Soporte para dispositivos táctiles y teclado/mouse
+- Funcionalidad offline básica para ventas
+- Accesibilidad para usuarios con discapacidades visuales
 
-#### 1.2 Gestión de Productos en POS
-- [ ] **Catálogo Visual**: Imágenes de productos
-- [ ] **Información Detallada**: Precio, stock, descripción
-- [ ] **Filtros Rápidos**: Por categoría, precio, disponibilidad
-- [ ] **Productos Favoritos**: Acceso rápido a productos frecuentes
-- [ ] **Sugerencias**: Productos relacionados o complementarios
+## Consideraciones Específicas para PYMEs Chilenas
 
-#### 1.3 Procesamiento de Ventas
-- [ ] **Múltiples Métodos de Pago**: Efectivo, tarjeta, transferencia
-- [ ] **Pago Mixto**: Combinación de métodos de pago
-- [ ] **Cálculo de Vuelto**: Automático para pagos en efectivo
-- [ ] **Validaciones**: Verificación de stock, precios, descuentos
-- [ ] **Confirmación**: Resumen antes de finalizar venta
+### Adaptación Local
+- **Moneda**: Pesos chilenos con formato local ($1.234.567)
+- **Impuestos**: Cálculo automático de IVA 19%
+- **Documentos**: Formato compatible con normativa chilena
+- **Horarios**: Configuración de horarios comerciales locales
 
-#### 1.4 Generación de Recibos
-- [ ] **Recibo Digital**: PDF generado automáticamente
-- [ ] **Recibo Impreso**: Compatible con impresoras térmicas
-- [ ] **Información Completa**: Productos, precios, impuestos, total
-- [ ] **Branding**: Logo y datos de la empresa
-- [ ] **Numeración**: Correlativo automático de recibos
+### Casos de Uso Típicos
+- **Almacén de Barrio**: Venta rápida de productos básicos
+- **Minimarket**: Gestión de inventario diversificado
+- **Farmacia**: Control estricto de stock y vencimientos
+- **Panadería**: Productos con precios variables
 
-### 2. Gestión de Inventario Avanzada
+### Integración con Servicios Locales
+- **Verificación de RUT**: Validación de RUT de clientes empresariales
+- **Consulta SII**: Preparación para consultas de contribuyentes
+- **Bancos Locales**: Preparación para integración con bancos chilenos
 
-#### 2.1 CRUD de Productos
-- [ ] **Crear Productos**: Formulario completo con validaciones
-- [ ] **Editar Productos**: Actualización de información y precios
-- [ ] **Eliminar Productos**: Soft delete para mantener historial
-- [ ] **Duplicar Productos**: Crear productos similares rápidamente
-- [ ] **Importación Masiva**: Excel/CSV para carga de productos
-
-#### 2.2 Información de Productos
-- [ ] **Datos Básicos**: Nombre, descripción, SKU, código de barras
-- [ ] **Precios**: Precio de venta, costo, margen de ganancia
-- [ ] **Stock**: Cantidad actual, mínimo, máximo
-- [ ] **Categorización**: Categorías, subcategorías, etiquetas
-- [ ] **Proveedor**: Información del proveedor principal
-
-#### 2.3 Control de Stock
-- [ ] **Seguimiento en Tiempo Real**: Actualización automática con ventas
-- [ ] **Alertas de Stock Bajo**: Notificaciones cuando stock < mínimo
-- [ ] **Historial de Movimientos**: Log de entradas y salidas
-- [ ] **Ajustes de Inventario**: Correcciones manuales con justificación
-- [ ] **Valorización**: Cálculo del valor total del inventario
-
-#### 2.4 Categorías y Organización
-- [ ] **Sistema Jerárquico**: Categorías y subcategorías
-- [ ] **Filtros Avanzados**: Múltiples criterios de búsqueda
-- [ ] **Etiquetas**: Sistema de tags para organización flexible
-- [ ] **Búsqueda Inteligente**: Búsqueda por múltiples campos
-- [ ] **Ordenamiento**: Por nombre, precio, stock, ventas
-
-### 3. Integración Productos Chilenos
-
-#### 3.1 Base de Datos Local
-- [ ] **Productos Comunes**: Base de datos con productos chilenos típicos
-- [ ] **Códigos de Barras**: Códigos EAN-13 válidos para Chile
-- [ ] **Precios Referenciales**: Precios promedio del mercado chileno
-- [ ] **Categorías Locales**: Categorización adaptada al mercado local
-- [ ] **Proveedores**: Base de datos de proveedores chilenos
-
-#### 3.2 Importación Automática
-- [ ] **Búsqueda por Código**: Buscar producto por código de barras
-- [ ] **Importación Rápida**: Un clic para agregar producto conocido
-- [ ] **Actualización de Precios**: Sincronización con precios de mercado
-- [ ] **Validación de Códigos**: Verificación de códigos de barras válidos
-- [ ] **Sugerencias**: Productos similares o relacionados
-
-### 4. Sistema de Reportes Básicos
-
-#### 4.1 Reportes de Ventas
-- [ ] **Ventas por Período**: Día, semana, mes, año
-- [ ] **Ventas por Producto**: Productos más y menos vendidos
-- [ ] **Ventas por Vendedor**: Performance individual del equipo
-- [ ] **Ventas por Método de Pago**: Distribución de métodos de pago
-- [ ] **Comparativas**: Comparación entre períodos
-
-#### 4.2 Reportes de Inventario
-- [ ] **Estado de Stock**: Productos con stock bajo, alto, sin stock
-- [ ] **Rotación de Inventario**: Productos de alta y baja rotación
-- [ ] **Valorización**: Valor total del inventario por categoría
-- [ ] **Movimientos**: Historial de entradas y salidas
-- [ ] **Productos Inactivos**: Productos sin movimiento
-
-#### 4.3 Dashboard Ejecutivo
-- [ ] **KPIs Principales**: Ventas del día, semana, mes
-- [ ] **Gráficos Interactivos**: Tendencias de ventas y stock
-- [ ] **Alertas**: Stock bajo, metas no cumplidas
-- [ ] **Resumen Financiero**: Ingresos, costos, márgenes
-- [ ] **Métricas de Equipo**: Performance de vendedores
-
----
-
-## 🧪 Plan de Testing Fase 2
-
-### Testing Funcional
-
-#### POS Testing
-- [ ] **Flujo Completo de Venta**: Desde búsqueda hasta recibo
-- [ ] **Métodos de Pago**: Cada método individualmente y combinados
-- [ ] **Cálculos**: Verificar precisión en totales, impuestos, descuentos
-- [ ] **Stock**: Verificar actualización correcta después de ventas
-- [ ] **Errores**: Manejo de productos sin stock, precios inválidos
-
-#### Inventario Testing
-- [ ] **CRUD Productos**: Crear, leer, actualizar, eliminar productos
-- [ ] **Importación**: Carga masiva de productos desde Excel/CSV
-- [ ] **Búsquedas**: Verificar filtros y búsquedas avanzadas
-- [ ] **Categorías**: Gestión de categorías y subcategorías
-- [ ] **Stock**: Alertas de stock bajo, ajustes de inventario
-
-#### Reportes Testing
-- [ ] **Precisión de Datos**: Verificar que los reportes reflejen datos reales
-- [ ] **Filtros**: Testing de filtros por fecha, producto, vendedor
-- [ ] **Exportación**: Verificar exportación a Excel/PDF
-- [ ] **Performance**: Tiempo de generación de reportes grandes
-- [ ] **Visualización**: Gráficos y tablas se muestran correctamente
-
-### Testing de Performance
-
-#### Carga de Datos
-- [ ] **1,000 Productos**: Performance con catálogo mediano
-- [ ] **10,000 Productos**: Performance con catálogo grande
-- [ ] **100 Ventas Simultáneas**: Testing de concurrencia
-- [ ] **Reportes Grandes**: Reportes con miles de registros
-- [ ] **Búsquedas**: Tiempo de respuesta en búsquedas complejas
-
-#### Optimización
-- [ ] **Consultas DB**: Optimización de queries complejas
-- [ ] **Caching**: Implementar cache para datos frecuentes
-- [ ] **Paginación**: Implementar paginación eficiente
-- [ ] **Lazy Loading**: Carga diferida de componentes pesados
-- [ ] **Compresión**: Compresión de respuestas API
-
-### Testing de Integración
-
-#### Base de Datos
-- [ ] **Transacciones**: Verificar integridad en operaciones complejas
-- [ ] **Relaciones**: Verificar integridad referencial
-- [ ] **Migraciones**: Testing de migraciones de esquema
-- [ ] **Backup/Restore**: Verificar procesos de respaldo
-- [ ] **Concurrencia**: Testing de acceso simultáneo
-
-#### APIs
-- [ ] **Endpoints**: Testing de todos los endpoints
-- [ ] **Validaciones**: Verificar validaciones server-side
-- [ ] **Errores**: Manejo correcto de errores y excepciones
-- [ ] **Autenticación**: Verificar permisos por rol
-- [ ] **Rate Limiting**: Testing de límites de requests
-
----
-
-## 📈 Métricas de Éxito Fase 2
-
-### Métricas Técnicas
-- [ ] **Performance POS**: Procesamiento de venta < 2 segundos
-- [ ] **Búsqueda Productos**: Resultados en < 500ms
-- [ ] **Carga de Inventario**: Lista de 1000 productos < 1 segundo
-- [ ] **Generación Reportes**: Reportes básicos < 3 segundos
-- [ ] **Uptime**: 99.9% disponibilidad durante testing
-
-### Métricas de Negocio
-- [ ] **Precisión de Stock**: 100% precisión en cálculos de stock
-- [ ] **Integridad de Ventas**: 0 discrepancias en totales de ventas
-- [ ] **Completitud de Datos**: 100% de campos requeridos validados
-- [ ] **Usabilidad POS**: Venta completa en < 1 minuto
-- [ ] **Reportes Precisos**: 100% precisión en reportes vs datos reales
-
-### Métricas de Usuario
-- [ ] **Facilidad de Uso**: POS intuitivo para usuarios no técnicos
-- [ ] **Tiempo de Aprendizaje**: Usuario nuevo operativo en < 30 minutos
-- [ ] **Eficiencia**: Reducción 50% tiempo vs proceso manual
-- [ ] **Satisfacción**: Feedback positivo en usabilidad
-- [ ] **Adopción**: 100% de funciones core utilizadas
-
----
-
-## 🚨 Riesgos y Mitigaciones Fase 2
+## Riesgos y Mitigaciones
 
 ### Riesgos Técnicos
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Performance con muchos productos | Alta | Alto | Paginación, indexación DB, caching |
-| Concurrencia en ventas | Media | Alto | Transacciones DB, locking optimista |
-| Precisión en cálculos | Baja | Crítico | Testing exhaustivo, validaciones múltiples |
-| Integración códigos de barras | Media | Medio | Base de datos robusta, validaciones |
+- **Rendimiento con Gran Volumen de Datos**: Mitigado con indexación optimizada y paginación
+- **Concurrencia en Ventas**: Mitigado con transacciones atómicas y locks optimistas
+- **Integridad de Inventario**: Mitigado con validaciones estrictas y auditoría de cambios
 
 ### Riesgos de Negocio
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Complejidad del POS | Media | Alto | Diseño simple, testing con usuarios reales |
-| Datos de productos chilenos | Alta | Medio | Investigación de mercado, validación con PYMEs |
-| Reportes no útiles | Media | Medio | Feedback temprano, iteración rápida |
-| Curva de aprendizaje | Media | Medio | Documentación clara, tutoriales |
+- **Complejidad de Uso**: Mitigado con diseño UX centrado en el usuario
+- **Resistencia al Cambio**: Mitigado con capacitación y soporte técnico
+- **Competencia**: Mitigado con enfoque en características específicas para PYMEs chilenas
 
-### Riesgos de Tiempo
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Subestimación de complejidad POS | Alta | Alto | Buffer time, desarrollo iterativo |
-| Testing toma más tiempo | Alta | Medio | Testing paralelo, automatización |
-| Integración productos chilenos | Media | Medio | Comenzar temprano, datos mock iniciales |
+## Metodología de Testing
 
----
+### Testing Funcional
+- **Unit Tests**: Cobertura mínima del 80% en lógica de negocio
+- **Integration Tests**: Pruebas de flujos completos de venta
+- **E2E Tests**: Simulación de operaciones reales de usuario
+- **Performance Tests**: Pruebas de carga y estrés
 
-## 📋 Checklist Final Fase 2
+### Testing de Usuario
+- **Usability Testing**: Pruebas con usuarios reales de PYMEs
+- **A/B Testing**: Optimización de interfaces críticas
+- **Accessibility Testing**: Cumplimiento de estándares WCAG
 
-### Pre-Demo Técnico
-- [ ] Sistema POS completamente funcional
-- [ ] Gestión de inventario operativa
-- [ ] Reportes básicos generándose correctamente
-- [ ] Base de datos con productos chilenos cargada
-- [ ] Testing completo realizado sin errores críticos
-- [ ] Performance optimizada según métricas
-- [ ] Documentación técnica actualizada
+## Próximos Pasos
 
-### Pre-Demo Negocio
-- [ ] Datos de demo realistas cargados
-- [ ] Flujos de negocio validados
-- [ ] Casos de uso típicos de PYMEs probados
-- [ ] Reportes con datos significativos
-- [ ] Feedback de usuarios beta incorporado
-- [ ] Comparación con competencia documentada
+Al completar esta fase, el sistema CRTLPyme contará con las funcionalidades core necesarias para operar como un POS completo. La siguiente fase se enfocará en funcionalidades avanzadas, integraciones externas y optimizaciones de rendimiento.
 
-### Demo Preparation
-- [ ] Presentación de 20-30 minutos preparada
-- [ ] Demo script con casos de uso reales
-- [ ] Datos de prueba representativos
-- [ ] Backup plan para problemas técnicos
-- [ ] Métricas de performance documentadas
-- [ ] Feedback form para evaluadores
-
-### Post-Demo
-- [ ] Feedback recolectado y categorizado
-- [ ] Issues críticos identificados y priorizados
-- [ ] Plan de correcciones pre-Fase 3 definido
-- [ ] Lecciones aprendidas documentadas
-- [ ] Preparación Fase 3 iniciada
-- [ ] Celebración del hito alcanzado 🎉
-
----
-
-**Fecha de inicio objetivo**: Octubre 4, 2024
-**Fecha objetivo de finalización**: Noviembre 15, 2024
-**Responsable**: [Tu nombre]
-**Stakeholders**: Profesor guía, evaluadores de tesis
-**Próxima revisión**: Octubre 11, 2024
-
----
-
-*Este plan detallado será la guía principal para el desarrollo de la funcionalidad core de CRTLPyme. Se actualiza semanalmente basado en progreso real y feedback recibido.*
+La validación de esta fase incluirá pruebas exhaustivas con usuarios reales en entornos de PYME, asegurando que el sistema cumple con las expectativas y necesidades del mercado objetivo.

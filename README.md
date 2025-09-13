@@ -1,188 +1,232 @@
+# CRTLPyme - Sistema de Control para PYMEs Chilenas
 
-# CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
+## Descripción del Proyecto
 
-![CRTLPyme Logo](https://img.shields.io/badge/CRTLPyme-POS%20SaaS-blue)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Prisma](https://img.shields.io/badge/Prisma-5-green)
+CRTLPyme es un sistema integral de punto de venta (POS) desarrollado como Software as a Service (SaaS) específicamente diseñado para pequeñas y medianas empresas chilenas. Este proyecto constituye el trabajo de titulación para la carrera de Ingeniería Informática, enfocándose en proporcionar una solución tecnológica accesible y eficiente para la gestión comercial de PYMEs.
 
-## 📋 Descripción del Proyecto
+## Objetivos del Proyecto
 
-CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto forma parte de una tesis de titulación y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
+### Objetivo General
+Desarrollar un sistema POS-SaaS que permita a las PYMEs chilenas gestionar eficientemente sus operaciones de venta, inventario y administración, proporcionando herramientas tecnológicas modernas y accesibles.
 
-## 🎯 Objetivos del Proyecto
+### Objetivos Específicos
+- Implementar un sistema de punto de venta completo con funcionalidades de facturación y control de inventario
+- Desarrollar una arquitectura multi-tenant que permita el uso simultáneo por múltiples empresas
+- Integrar sistemas de pago locales chilenos, específicamente Transbank
+- Crear una base de datos de productos chilenos con códigos EAN-13
+- Establecer un sistema de roles y permisos adaptado a las necesidades organizacionales de PYMEs
 
-- **Objetivo Principal**: Desarrollar una plataforma POS SaaS completa para PYMEs chilenas
-- **Objetivos Específicos**:
-  - Implementar sistema de roles multi-usuario (5 roles)
-  - Integrar productos chilenos con códigos de barras
-  - Crear dashboards personalizados por rol
-  - Desarrollar sistema de inventario y ventas
-  - Implementar facturación electrónica (SII Chile)
-  - Desplegar en Google Cloud Platform
-
-## 🏗️ Arquitectura Técnica
+## Arquitectura Técnica
 
 ### Stack Tecnológico
 - **Frontend**: Next.js 14 con TypeScript
-- **Backend**: Next.js API Routes
-- **Base de Datos**: PostgreSQL 15
-- **ORM**: Prisma 5
+- **Base de Datos**: PostgreSQL con Prisma ORM
 - **Autenticación**: NextAuth.js
-- **UI/UX**: Tailwind CSS + shadcn/ui
+- **Servicios en la Nube**: Firebase para almacenamiento y notificaciones
+- **Pagos**: Integración con Transbank (ambiente sandbox)
 - **Despliegue**: Google Cloud Platform
 
-### Estructura del Proyecto
-```
-CRTLPyme/
-├── app/                    # Next.js App Router
-│   ├── (auth)/            # Rutas de autenticación
-│   ├── dashboard/         # Dashboards por rol
-│   ├── api/               # API Routes
-│   └── globals.css        # Estilos globales
-├── components/            # Componentes reutilizables
-├── lib/                   # Utilidades y configuraciones
-├── prisma/               # Esquemas de base de datos
-├── hooks/                # Custom React hooks
-├── docs/                 # Documentación del proyecto
-└── scripts/              # Scripts de automatización
-```
+### Arquitectura del Sistema
+El sistema implementa una arquitectura multi-tenant con separación lógica de datos, permitiendo que múltiples empresas utilicen la misma instancia de la aplicación manteniendo la privacidad y seguridad de sus datos.
 
-## 👥 Sistema de Roles
+## Sistema de Roles
 
-1. **Super Admin**: Gestión completa del sistema
-2. **Admin Empresa**: Administración de empresa específica
-3. **Gerente**: Supervisión operacional
-4. **Vendedor**: Operaciones de venta
-5. **Cajero**: Operaciones de caja
+El sistema contempla cinco roles principales:
 
-## 🚀 Fases de Desarrollo
+1. **Administrador SaaS**: Gestión global del sistema y tenants
+2. **Administrador de Tenant**: Gestión completa de la empresa
+3. **Cajero**: Operaciones de venta y facturación
+4. **Encargado de Inventario**: Gestión de productos y stock
+5. **Soporte**: Asistencia técnica y resolución de incidencias
 
-### Fase 1: Landing Page + Roles Básicos (2-3 semanas)
-- Landing page profesional
-- Sistema de autenticación
-- Roles básicos y permisos
-- Dashboard inicial por rol
+## Funcionalidades Principales
 
-### Fase 2: POS + Inventario Core (4-6 semanas)
-- Sistema POS completo
-- Gestión de inventario
-- Productos chilenos integrados
-- Reportes básicos
+### Gestión de Ventas
+- Sistema de punto de venta con interfaz intuitiva
+- Procesamiento de transacciones con múltiples métodos de pago
+- Generación automática de boletas y facturas
+- Integración con lectores de códigos de barras
 
-### Fase 3: Funcionalidades Avanzadas (6-8 semanas)
-- Facturación electrónica SII
-- Reportes avanzados
-- Integración con APIs chilenas
-- Optimizaciones de rendimiento
+### Gestión de Inventario
+- Control de stock en tiempo real
+- Alertas de productos con bajo inventario
+- Gestión de proveedores y compras
+- Reportes de movimientos de inventario
 
-## 🛠️ Instalación y Configuración
+### Administración
+- Dashboard con métricas de negocio
+- Gestión de usuarios y permisos
+- Configuración de empresa y sucursales
+- Reportes financieros y operacionales
+
+## Base de Datos de Productos
+
+El sistema incluye una base de datos preconfigurada con productos comunes en el mercado chileno, cada uno identificado con su respectivo código EAN-13, facilitando la implementación inmediata del sistema en comercios locales.
+
+## Integración de Pagos
+
+La integración con Transbank permite procesar pagos con tarjetas de débito y crédito, adaptándose a los métodos de pago más utilizados en Chile. La implementación inicial utiliza el ambiente sandbox para pruebas y desarrollo.
+
+## Metodología de Desarrollo
+
+El proyecto sigue una metodología ágil con entregas incrementales organizadas en fases bien definidas, permitiendo validación continua y ajustes según los requerimientos identificados.
+
+## Instalación y Configuración
 
 ### Prerrequisitos
-- Node.js 18+
-- PostgreSQL 15+
-- Yarn o npm
-- Cuenta Google Cloud Platform
+- Node.js 18 o superior
+- PostgreSQL 14 o superior
+- Cuenta de Google Cloud Platform
+- Cuenta de Firebase
 
-### Instalación Local
+### Configuración del Entorno
 ```bash
 # Clonar el repositorio
-git clone https://github.com/[usuario]/CRTLPyme.git
+git clone https://github.com/kbzas090/CRTLPyme.git
 cd CRTLPyme
 
 # Instalar dependencias
-yarn install
+npm install
 
 # Configurar variables de entorno
-cp .env.example .env
-# Editar .env con tus configuraciones
+cp .env.example .env.local
+# Editar .env.local con las configuraciones correspondientes
 
-# Configurar base de datos
-npx prisma generate
-npx prisma db push
+# Ejecutar migraciones de base de datos
+npx prisma migrate dev
 
-# Ejecutar en desarrollo
-yarn dev
+# Iniciar el servidor de desarrollo
+npm run dev
 ```
 
-### Variables de Entorno Requeridas
-```env
-# Base de datos
-DATABASE_URL="postgresql://usuario:password@localhost:5432/crtlpyme"
+## Estructura del Proyecto
 
-# NextAuth
-NEXTAUTH_SECRET="tu-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-
-# Google Cloud (opcional para desarrollo)
-GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
+```
+CRTLPyme/
+├── src/
+│   ├── app/                 # Páginas y rutas de Next.js
+│   ├── components/          # Componentes reutilizables
+│   ├── lib/                 # Utilidades y configuraciones
+│   └── types/               # Definiciones de tipos TypeScript
+├── prisma/                  # Esquemas y migraciones de base de datos
+├── public/                  # Archivos estáticos
+└── docs/                    # Documentación del proyecto
 ```
 
-## 📊 Características Principales
+## Fases de Desarrollo
 
-### ✅ Implementado
-- [x] Estructura base Next.js 14
-- [x] Configuración Prisma + PostgreSQL
-- [x] Sistema de roles básico
-- [x] Productos chilenos con códigos de barras
-- [x] Dashboards por rol
-- [x] Componentes UI con shadcn/ui
+### Fase 1: Fundamentos y Landing Page
+- Configuración de infraestructura técnica
+- Desarrollo de landing page profesional
+- Implementación de sistema de autenticación básico
+- Establecimiento de arquitectura multi-tenant
 
-### 🔄 En Desarrollo
-- [ ] Landing page profesional
-- [ ] Sistema de autenticación completo
-- [ ] POS funcional
-- [ ] Gestión de inventario avanzada
+### Fase 2: Sistema POS y Gestión de Inventario
+- Desarrollo de interfaz de punto de venta
+- Implementación de gestión integral de inventario
+- Integración con códigos de barras EAN-13
+- Sistema de reportes operacionales
 
-### 📋 Planificado
-- [ ] Facturación electrónica SII
-- [ ] Reportes avanzados
-- [ ] Integración APIs chilenas
-- [ ] Despliegue Google Cloud
+### Fase 3: Integraciones y Funcionalidades Avanzadas
+- Integración con Transbank para pagos
+- Sistema de facturación electrónica básica
+- Dashboard avanzado con analytics
+- Optimizaciones de rendimiento
 
-## 🇨🇱 Adaptación al Mercado Chileno
+### Fase 4: Testing, Documentación y Despliegue
+- Testing exhaustivo del sistema
+- Documentación técnica completa
+- Despliegue en producción
+- Validación con usuarios reales
 
-- **Productos Locales**: Base de datos con productos chilenos y códigos de barras
-- **Moneda**: Pesos chilenos (CLP) con formateo local
-- **Facturación**: Preparado para integración con SII
-- **Regulaciones**: Cumplimiento normativas comerciales chilenas
+## Consideraciones para el Mercado Chileno
 
-## 📚 Documentación
+### Adaptaciones Locales
+- Interfaz completamente en español chileno
+- Formatos de moneda y fecha locales (CLP, dd/mm/yyyy)
+- Cálculo automático de IVA (19%)
+- Compatibilidad con normativas tributarias chilenas
 
-- [Roadmap del Proyecto](./ROADMAP.md)
-- [Plan Fase 1](./FASE-1-PLAN.md)
-- [Plan Fase 2](./FASE-2-PLAN.md)
-- [Configuración Google Cloud](./GOOGLE-CLOUD-SETUP.md)
-- [Documentación API](./docs/api.md)
+### Integración con Servicios Locales
+- Validación de RUT chileno
+- Preparación para integración con SII
+- Soporte para métodos de pago locales
+- Base de datos de productos del mercado chileno
 
-## 🤝 Contribución
+## Tecnologías y Herramientas
 
-Este es un proyecto académico de tesis. Para contribuciones:
+### Desarrollo
+- **Lenguajes**: TypeScript, JavaScript
+- **Framework**: Next.js 14 con App Router
+- **Estilos**: Tailwind CSS
+- **Base de Datos**: PostgreSQL con Prisma ORM
+- **Autenticación**: NextAuth.js
 
-1. Fork el proyecto
-2. Crear rama feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit cambios (`git commit -m 'feat: agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abrir Pull Request
+### Infraestructura
+- **Cloud Provider**: Google Cloud Platform
+- **Contenedores**: Docker
+- **CI/CD**: GitHub Actions
+- **Monitoreo**: Google Cloud Monitoring
+- **Storage**: Google Cloud Storage
 
-## 📄 Licencia
+### Testing
+- **Unit Testing**: Jest
+- **Integration Testing**: Cypress
+- **E2E Testing**: Playwright
+- **Performance Testing**: Lighthouse
 
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+## Métricas de Calidad
 
-## 👨‍💻 Autor
+### Objetivos Técnicos
+- Tiempo de respuesta de API menor a 500ms
+- Cobertura de tests superior al 85%
+- Disponibilidad del sistema mayor al 99%
+- Soporte para 1000+ productos por tenant
 
-**Proyecto de Tesis - CRTLPyme**
-- Plataforma POS SaaS para PYMEs Chilenas
-- Universidad: [Nombre Universidad]
-- Año: 2024
+### Objetivos de Usabilidad
+- Tiempo de aprendizaje menor a 30 minutos
+- Interfaz responsive para todos los dispositivos
+- Cumplimiento de estándares de accesibilidad WCAG 2.1
+- Soporte para navegadores modernos
 
-## 📞 Contacto
+## Contribución al Proyecto
 
-Para consultas sobre el proyecto:
-- Email: [tu-email@universidad.cl]
-- LinkedIn: [tu-perfil-linkedin]
+Este proyecto es desarrollado como trabajo de titulación académico. La documentación detallada del proceso de desarrollo, decisiones técnicas y lecciones aprendidas forma parte integral del proyecto educativo.
+
+### Documentación Académica
+- Memoria de titulación detallada
+- Análisis de requerimientos y casos de uso
+- Documentación de arquitectura y diseño
+- Evaluación de resultados y conclusiones
+
+## Estado del Proyecto
+
+**Año de Desarrollo**: 2025  
+**Estado Actual**: En desarrollo activo  
+**Fase Actual**: Planificación y configuración inicial  
+
+### Próximos Hitos
+1. Completar configuración de infraestructura base
+2. Desarrollar landing page y sistema de autenticación
+3. Implementar funcionalidades core del sistema POS
+4. Realizar testing y validación con usuarios reales
+
+## Licencia y Uso Académico
+
+Este proyecto está desarrollado con fines académicos como parte del proceso de titulación en Ingeniería Informática. El código y la documentación están disponibles para fines educativos y de investigación.
+
+## Contacto Académico
+
+**Desarrollador**: [Nombre del Estudiante]  
+**Institución**: [Nombre de la Institución Educativa]  
+**Carrera**: Ingeniería Informática  
+**Año**: 2025  
+**Profesor Guía**: [Nombre del Profesor Guía]  
+
+## Agradecimientos
+
+Agradecimientos especiales a la institución educativa, profesores guías y empresarios locales que han proporcionado insights valiosos sobre las necesidades reales de las PYMEs chilenas, contribuyendo al desarrollo de una solución práctica y aplicable.
 
 ---
 
-**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 🚀
+**Nota**: Este proyecto representa un esfuerzo académico serio orientado a generar impacto real en el sector comercial chileno, combinando rigor técnico con aplicabilidad práctica para beneficio de las pequeñas y medianas empresas del país.
