@@ -1,11 +1,11 @@
 
-# 🛒 Plan Detallado Fase 2: POS + Inventario Core
+#  Plan Detallado Fase 2: POS + Inventario Core
 
-**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: 📋 Planificado
+**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**:  Planificado
 
 ---
 
-## 🎯 Objetivos de la Fase 2
+## Objetivos de la Fase 2
 
 ### Objetivo Principal
 Desarrollar el corazón funcional de CRTLPyme: un sistema POS completo y gestión de inventario robusta que permita a las PYMEs chilenas operar eficientemente.
@@ -19,7 +19,7 @@ Desarrollar el corazón funcional de CRTLPyme: un sistema POS completo y gestió
 
 ---
 
-## 📅 Cronograma Detallado
+## Cronograma Detallado
 
 ### Semana 1-2: Sistema POS Core
 ```
@@ -78,7 +78,7 @@ Semana 3: CRUD Productos Avanzado
     ├── Validación de códigos únicos
     └── Integración con productos chilenos
 
-Semana 4: Control de Stock
+Semana 4: Control de Stock y Poblado de Productos Chilenos
 ├── Días 1-2: Gestión de stock
 │   ├── Control de cantidades
 │   ├── Stock mínimo y máximo
@@ -89,11 +89,11 @@ Semana 4: Control de Stock
 │   ├── Órdenes de compra básicas
 │   ├── Recepción de mercadería
 │   └── Actualización de costos
-└── Días 5-7: Integración productos chilenos
-    ├── Base de datos productos locales
-    ├── Importación automática
-    ├── Validación de códigos chilenos
-    └── Actualización de precios
+└── Días 5-7: Poblado de Base de Datos con Productos Chilenos
+    ├── Implementación script de 414 productos chilenos
+    ├── Carga de códigos EAN-13 válidos (prefijo 780)
+    ├── Configuración de 8 categorías específicas para PYMEs
+    └── Implementación de 3 métodos de carga de datos
 ```
 
 ### Semana 5-6: Reportes y Optimización
@@ -135,7 +135,7 @@ Semana 6: Testing y Optimización Final
 
 ---
 
-## 🏗️ Arquitectura Técnica Detallada
+## Arquitectura Técnica Detallada
 
 ### Base de Datos - Esquemas Principales
 
@@ -232,7 +232,7 @@ model SaleItem {
 
 ---
 
-## 🛠️ Componentes Frontend Principales
+## Componentes Frontend Principales
 
 ### 1. Sistema POS
 
@@ -352,7 +352,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 
 ---
 
-## 📊 Funcionalidades Específicas
+## Funcionalidades Específicas
 
 ### 1. Sistema POS Completo
 
@@ -414,21 +414,49 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 - [ ] **Búsqueda Inteligente**: Búsqueda por múltiples campos
 - [ ] **Ordenamiento**: Por nombre, precio, stock, ventas
 
-### 3. Integración Productos Chilenos
+### 3. Poblado de Base de Datos con Productos Chilenos
 
-#### 3.1 Base de Datos Local
-- [ ] **Productos Comunes**: Base de datos con productos chilenos típicos
-- [ ] **Códigos de Barras**: Códigos EAN-13 válidos para Chile
-- [ ] **Precios Referenciales**: Precios promedio del mercado chileno
-- [ ] **Categorías Locales**: Categorización adaptada al mercado local
-- [ ] **Proveedores**: Base de datos de proveedores chilenos
+#### 3.1 Script Generador de Productos Chilenos
+- [ ] **414 Productos Auténticos**: Base de datos completa con productos reales del mercado chileno
+- [ ] **Códigos EAN-13 Válidos**: Códigos de barras con prefijo 780 (Chile) generados automáticamente
+- [ ] **Precios Actualizados 2025**: Precios realistas en CLP basados en mercado actual
+- [ ] **Marcas Chilenas Auténticas**: Soprole, CCU, Carozzi, Nestlé Chile, Watt's, Lider, Jumbo, Santa Isabel
+- [ ] **8 Categorías Específicas**: Lácteos, Bebidas, Panadería, Carnes, Frutas y Verduras, Abarrotes, Limpieza, Cuidado Personal
 
-#### 3.2 Importación Automática
-- [ ] **Búsqueda por Código**: Buscar producto por código de barras
-- [ ] **Importación Rápida**: Un clic para agregar producto conocido
-- [ ] **Actualización de Precios**: Sincronización con precios de mercado
-- [ ] **Validación de Códigos**: Verificación de códigos de barras válidos
-- [ ] **Sugerencias**: Productos similares o relacionados
+#### 3.2 Archivos de Implementación
+- [ ] **products.json**: Archivo JSON con estructura completa de productos
+- [ ] **products.sql**: Script SQL directo para inserción en PostgreSQL
+- [ ] **productsPrisma.ts**: Script de seed para Prisma ORM
+- [ ] **Documentación**: Guía completa de implementación y uso
+
+#### 3.3 Tres Métodos de Carga de Datos
+- [ ] **Método 1 - SQL Directo**: Ejecución directa del script SQL en la base de datos
+- [ ] **Método 2 - Prisma Seed**: Utilización del sistema de seed de Prisma para carga automática
+- [ ] **Método 3 - Carga Programática**: API endpoint para carga controlada desde la aplicación
+
+#### 3.4 Estructura de Datos de Productos
+- [ ] **Información Básica**: Nombre, descripción, marca, categoría
+- [ ] **Códigos de Identificación**: SKU único, código EAN-13 válido
+- [ ] **Precios y Costos**: Precio de venta, costo de adquisición, margen calculado
+- [ ] **Control de Stock**: Stock inicial, stock mínimo, stock máximo
+- [ ] **Metadatos**: Fecha de creación, estado activo, proveedor asociado
+
+#### 3.5 Categorías Implementadas
+- [ ] **Lácteos y Derivados**: Leches, yogures, quesos, mantequillas (52 productos)
+- [ ] **Bebidas**: Jugos, bebidas gaseosas, aguas, energéticas (58 productos)
+- [ ] **Panadería y Repostería**: Panes, galletas, pasteles, masas (48 productos)
+- [ ] **Carnes y Embutidos**: Carnes frescas, cecinas, embutidos (54 productos)
+- [ ] **Frutas y Verduras**: Productos frescos, congelados, conservas (56 productos)
+- [ ] **Abarrotes**: Arroz, fideos, conservas, condimentos (62 productos)
+- [ ] **Limpieza del Hogar**: Detergentes, desinfectantes, papel (42 productos)
+- [ ] **Cuidado Personal**: Shampoo, jabones, cremas, higiene (42 productos)
+
+#### 3.6 Validaciones y Controles
+- [ ] **Códigos EAN-13 Únicos**: Validación de unicidad en toda la base de datos
+- [ ] **Precios Realistas**: Rangos de precios validados según mercado chileno 2025
+- [ ] **Marcas Auténticas**: Verificación de marcas reales del mercado nacional
+- [ ] **Categorización Consistente**: Asignación correcta de productos a categorías
+- [ ] **Stock Inicial Lógico**: Cantidades iniciales apropiadas por tipo de producto
 
 ### 4. Sistema de Reportes Básicos
 
@@ -514,7 +542,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 
 ---
 
-## 📈 Métricas de Éxito Fase 2
+## Métricas de Éxito Fase 2
 
 ### Métricas Técnicas
 - [ ] **Performance POS**: Procesamiento de venta < 2 segundos
@@ -539,7 +567,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 
 ---
 
-## 🚨 Riesgos y Mitigaciones Fase 2
+## Riesgos y Mitigaciones Fase 2
 
 ### Riesgos Técnicos
 | Riesgo | Probabilidad | Impacto | Mitigación |
@@ -566,7 +594,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 
 ---
 
-## 📋 Checklist Final Fase 2
+## Checklist Final Fase 2
 
 ### Pre-Demo Técnico
 - [ ] Sistema POS completamente funcional
@@ -599,7 +627,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 - [ ] Plan de correcciones pre-Fase 3 definido
 - [ ] Lecciones aprendidas documentadas
 - [ ] Preparación Fase 3 iniciada
-- [ ] Celebración del hito alcanzado 🎉
+- [ ] Celebración del hito alcanzado 
 
 ---
 

@@ -5,7 +5,7 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 
 ## [Unreleased] - En Desarrollo
 
-### 🔄 Fase 2: POS + Inventario Core (Septiembre 2024)
+### Fase 2: POS + Inventario Core (Septiembre 2024)
 - Sistema POS completo con códigos de barras
 - Gestión avanzada de inventario
 - Cálculo de punto de equilibrio
@@ -13,9 +13,9 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 
 ## [1.0.0] - 2024-09-12 - MVP CRTLPyme
 
-### ✅ Fase 1: MVP Completo
+### Fase 1: MVP Completo
 
-#### ➕ Agregado
+#### Agregado
 - **Arquitectura Multi-tenant** con PostgreSQL y Prisma ORM
 - **Sistema de Autenticación** con NextAuth.js
 - **5 Roles de Usuario** diferenciados (Admin SaaS, Admin Cliente, Cajero, Inventario, Soporte)
@@ -26,7 +26,7 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 - **Estructura de Auditoría** con logs completos
 - **Preparación Google Cloud** para despliegue futuro
 
-#### 🏗️ Arquitectura Implementada
+#### Arquitectura Implementada
 - Next.js 14.2 con TypeScript
 - PostgreSQL con multi-tenancy (tenant scoping)
 - Prisma ORM con migraciones
@@ -34,21 +34,21 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 - Radix UI components
 - Chart.js y Recharts para visualizaciones
 
-#### 🇨🇱 Adaptaciones Chile
+#### Adaptaciones Chile
 - Validación RUT chileno
 - Productos con códigos EAN-13 del mercado local
 - Precios en pesos chilenos (CLP)
 - Categorías típicas de tiendas de abarrotes
 - Marcas y productos reconocidos localmente
 
-#### 👥 Roles y Permisos
+#### Roles y Permisos
 - **Admin SaaS**: Control total de la plataforma, métricas globales
 - **Admin Cliente**: Gestión completa de su negocio, dashboard ejecutivo
 - **Cajero**: Operación de punto de venta, arqueo de caja
 - **Inventario**: Gestión de productos y stock
 - **Soporte**: Asistencia técnica a clientes
 
-#### 📊 Dashboards Implementados
+#### Dashboards Implementados
 - **Admin SaaS**: Tenants activos, ingresos simulados, métricas de uso
 - **Admin Cliente**: Ventas, margen, punto de equilibrio, stock valorizado
 - **Cajero**: KPIs diarios, estado de caja, flujo operativo
@@ -57,21 +57,21 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 
 ## [Próximas Versiones]
 
-### 🔄 v1.1.0 - Fase 2: POS Core (Octubre 2024)
+### v1.1.0 - Fase 2: POS Core (Octubre 2024)
 - [ ] Sistema POS con escáner de códigos de barras
 - [ ] Gestión completa de ventas
 - [ ] Control de inventario avanzado
 - [ ] Cálculo automático punto de equilibrio
 - [ ] Reportes PDF/CSV por rol
 
-### 🔄 v1.2.0 - Fase 3: Analytics (Noviembre 2024)
+### v1.2.0 - Fase 3: Analytics (Noviembre 2024)
 - [ ] Dashboards en tiempo real
 - [ ] Pronósticos de ventas
 - [ ] Análisis de cesta de compras
 - [ ] Optimizaciones de rendimiento
 - [ ] PWA para móvil
 
-### 🔄 v1.3.0 - Fase 4: Transbank (Diciembre 2024)
+### v1.3.0 - Fase 4: Transbank (Diciembre 2024)
 - [ ] Integración Transbank sandbox
 - [ ] Facturación automática
 - [ ] Consola del proveedor
@@ -98,4 +98,4 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 
 > **Proyecto Académico**: Tesis Ingeniería en Informática  
 > **Objetivo**: Sistema POS-SaaS para PYMEs chilenas  
-> **Estado**: MVP Completado ✅
+> **Estado**: MVP Completado 

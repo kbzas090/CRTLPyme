@@ -7,11 +7,11 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Prisma](https://img.shields.io/badge/Prisma-5-green)
 
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 
 CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto forma parte de una tesis de titulación y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
 
-## 🎯 Objetivos del Proyecto
+## Objetivos del Proyecto
 
 - **Objetivo Principal**: Desarrollar una plataforma POS SaaS completa para PYMEs chilenas
 - **Objetivos Específicos**:
@@ -22,7 +22,7 @@ CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente p
   - Implementar facturación electrónica (SII Chile)
   - Desplegar en Google Cloud Platform
 
-## 🏗️ Arquitectura Técnica
+## Arquitectura Técnica
 
 ### Stack Tecnológico
 - **Frontend**: Next.js 14 con TypeScript
@@ -49,7 +49,7 @@ CRTLPyme/
 └── scripts/              # Scripts de automatización
 ```
 
-## 👥 Sistema de Roles
+## Sistema de Roles
 
 1. **Super Admin**: Gestión completa del sistema
 2. **Admin Empresa**: Administración de empresa específica
@@ -57,7 +57,7 @@ CRTLPyme/
 4. **Vendedor**: Operaciones de venta
 5. **Cajero**: Operaciones de caja
 
-## 🚀 Fases de Desarrollo
+## Fases de Desarrollo
 
 ### Fase 1: Landing Page + Roles Básicos (2-3 semanas)
 - Landing page profesional
@@ -77,7 +77,7 @@ CRTLPyme/
 - Integración con APIs chilenas
 - Optimizaciones de rendimiento
 
-## 🛠️ Instalación y Configuración
+## Instalación y Configuración
 
 ### Prerrequisitos
 - Node.js 18+
@@ -119,36 +119,42 @@ NEXTAUTH_URL="http://localhost:3000"
 GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 ```
 
-## 📊 Características Principales
+## Características Principales
 
-### ✅ Implementado
+### Implementado
 - [x] Estructura base Next.js 14
 - [x] Configuración Prisma + PostgreSQL
 - [x] Sistema de roles básico
-- [x] Productos chilenos con códigos de barras
+- [x] Script de 414 productos chilenos con códigos EAN-13 válidos
+- [x] 8 categorías específicas para PYMEs chilenas
+- [x] Tres métodos de carga de productos (SQL, Prisma, programático)
 - [x] Dashboards por rol
 - [x] Componentes UI con shadcn/ui
 
-### 🔄 En Desarrollo
+### En Desarrollo
 - [ ] Landing page profesional
 - [ ] Sistema de autenticación completo
 - [ ] POS funcional
 - [ ] Gestión de inventario avanzada
 
-### 📋 Planificado
+### Planificado
 - [ ] Facturación electrónica SII
 - [ ] Reportes avanzados
 - [ ] Integración APIs chilenas
 - [ ] Despliegue Google Cloud
 
-## 🇨🇱 Adaptación al Mercado Chileno
+## Adaptación al Mercado Chileno
 
-- **Productos Locales**: Base de datos con productos chilenos y códigos de barras
+- **414 Productos Chilenos**: Base de datos completa con productos reales del mercado nacional
+- **Códigos EAN-13 Válidos**: Códigos de barras con prefijo 780 específico para Chile
+- **Marcas Auténticas**: Soprole, CCU, Carozzi, Nestlé Chile, Watt's, Lider, Jumbo, Santa Isabel
+- **8 Categorías Específicas**: Lácteos, Bebidas, Panadería, Carnes, Frutas y Verduras, Abarrotes, Limpieza, Cuidado Personal
+- **Precios Actualizados 2025**: Precios realistas en CLP basados en el mercado actual
 - **Moneda**: Pesos chilenos (CLP) con formateo local
 - **Facturación**: Preparado para integración con SII
 - **Regulaciones**: Cumplimiento normativas comerciales chilenas
 
-## 📚 Documentación
+## Documentación
 
 - [Roadmap del Proyecto](./ROADMAP.md)
 - [Plan Fase 1](./FASE-1-PLAN.md)
@@ -156,7 +162,7 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 - [Configuración Google Cloud](./GOOGLE-CLOUD-SETUP.md)
 - [Documentación API](./docs/api.md)
 
-## 🤝 Contribución
+## Contribución
 
 Este es un proyecto académico de tesis. Para contribuciones:
 
@@ -166,18 +172,18 @@ Este es un proyecto académico de tesis. Para contribuciones:
 4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
 5. Abrir Pull Request
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
 
-## 👨‍💻 Autor
+## Autor
 
 **Proyecto de Tesis - CRTLPyme**
 - Plataforma POS SaaS para PYMEs Chilenas
 - Universidad: [Nombre Universidad]
 - Año: 2024
 
-## 📞 Contacto
+## Contacto
 
 Para consultas sobre el proyecto:
 - Email: [tu-email@universidad.cl]
@@ -185,4 +191,4 @@ Para consultas sobre el proyecto:
 
 ---
 
-**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 🚀
+**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 

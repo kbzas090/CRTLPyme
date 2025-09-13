@@ -1,9 +1,9 @@
 
-# 📚 Documentación CRTLPyme
+#  Documentación CRTLPyme
 
 Bienvenido a la documentación completa del proyecto CRTLPyme - Sistema POS SaaS para PYMEs Chilenas.
 
-## 📋 Índice de Documentación
+##  Índice de Documentación
 
 ### 📖 Documentación de Proyecto
 - [README Principal](../README.md) - Descripción general del proyecto
@@ -12,13 +12,13 @@ Bienvenido a la documentación completa del proyecto CRTLPyme - Sistema POS SaaS
 - [Plan Fase 2](../FASE-2-PLAN.md) - POS + inventario core
 - [Configuración Google Cloud](../GOOGLE-CLOUD-SETUP.md) - Guía completa de deployment
 
-### 🏗️ Documentación Técnica
+###  Documentación Técnica
 - [Arquitectura del Sistema](./architecture.md) - Diseño técnico y componentes
 - [API Reference](./api.md) - Documentación de endpoints
 - [Base de Datos](./database.md) - Esquemas y relaciones
 - [Guía de Desarrollo](./development.md) - Setup local y workflows
 
-### 👥 Documentación de Usuario
+###  Documentación de Usuario
 - [Manual de Usuario](./user-manual.md) - Guía completa para usuarios finales
 - [Guía de Roles](./roles-guide.md) - Permisos y funcionalidades por rol
 - [FAQ](./faq.md) - Preguntas frecuentes
@@ -27,7 +27,7 @@ Bienvenido a la documentación completa del proyecto CRTLPyme - Sistema POS SaaS
 - [Plan de Testing](./testing.md) - Estrategias y casos de prueba
 - [Guía de Contribución](./contributing.md) - Estándares de código y PRs
 
-## 🎯 Propósito de la Documentación
+##  Propósito de la Documentación
 
 Esta documentación está diseñada para:
 
@@ -36,7 +36,7 @@ Esta documentación está diseñada para:
 3. **Usuarios Finales**: Aprender a usar el sistema CRTLPyme
 4. **Evaluadores**: Revisar el trabajo técnico y académico
 
-## 🚀 Inicio Rápido
+##  Inicio Rápido
 
 ### Para Desarrolladores
 1. Leer [README Principal](../README.md)
@@ -53,20 +53,20 @@ Esta documentación está diseñada para:
 2. Revisar [Plan de Testing](./testing.md)
 3. Consultar troubleshooting en cada guía
 
-## 📊 Estado de la Documentación
+##  Estado de la Documentación
 
 | Documento | Estado | Última Actualización |
 |-----------|--------|---------------------|
-| README Principal | ✅ Completo | Sep 12, 2024 |
-| Roadmap | ✅ Completo | Sep 12, 2024 |
-| Fase 1 Plan | ✅ Completo | Sep 12, 2024 |
-| Fase 2 Plan | ✅ Completo | Sep 12, 2024 |
-| Google Cloud Setup | ✅ Completo | Sep 12, 2024 |
-| Arquitectura | 🔄 En progreso | - |
-| API Reference | 📋 Planificado | - |
-| Manual de Usuario | 📋 Planificado | - |
+| README Principal |  Completo | Sep 12, 2024 |
+| Roadmap |  Completo | Sep 12, 2024 |
+| Fase 1 Plan |  Completo | Sep 12, 2024 |
+| Fase 2 Plan |  Completo | Sep 12, 2024 |
+| Google Cloud Setup |  Completo | Sep 12, 2024 |
+| Arquitectura |  En progreso | - |
+| API Reference |  Planificado | - |
+| Manual de Usuario |  Planificado | - |
 
-## 🤝 Contribuir a la Documentación
+##  Contribuir a la Documentación
 
 La documentación es un documento vivo que se actualiza constantemente:
 
@@ -75,7 +75,7 @@ La documentación es un documento vivo que se actualiza constantemente:
 3. **Agregar Contenido**: Seguir estructura existente
 4. **Mantener Actualizado**: Revisar semanalmente
 
-## 📞 Contacto y Soporte
+##  Contacto y Soporte
 
 Para consultas sobre la documentación:
 - **Issues**: [GitHub Issues](https://github.com/[usuario]/CRTLPyme/issues)
