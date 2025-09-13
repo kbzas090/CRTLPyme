@@ -7,11 +7,11 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Prisma](https://img.shields.io/badge/Prisma-5-green)
 
-## 📋 Descripción del Proyecto
+##  Descripción del Proyecto
 
 CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto forma parte de una tesis de titulación y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
 
-## 🎯 Objetivos del Proyecto
+##  Objetivos del Proyecto
 
 - **Objetivo Principal**: Desarrollar una plataforma POS SaaS completa para PYMEs chilenas
 - **Objetivos Específicos**:
@@ -22,7 +22,7 @@ CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente p
   - Implementar facturación electrónica (SII Chile)
   - Desplegar en Google Cloud Platform
 
-## 🏗️ Arquitectura Técnica
+##  Arquitectura Técnica
 
 ### Stack Tecnológico
 - **Frontend**: Next.js 14 con TypeScript
@@ -57,7 +57,7 @@ CRTLPyme/
 4. **Vendedor**: Operaciones de venta
 5. **Cajero**: Operaciones de caja
 
-## 🚀 Fases de Desarrollo
+##  Fases de Desarrollo
 
 ### Fase 1: Landing Page + Roles Básicos (2-3 semanas)
 - Landing page profesional
@@ -119,7 +119,7 @@ NEXTAUTH_URL="http://localhost:3000"
 GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 ```
 
-## 📊 Características Principales
+##  Características Principales
 
 ### ✅ Implementado
 - [x] Estructura base Next.js 14
@@ -129,13 +129,13 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 - [x] Dashboards por rol
 - [x] Componentes UI con shadcn/ui
 
-### 🔄 En Desarrollo
+###  En Desarrollo
 - [ ] Landing page profesional
 - [ ] Sistema de autenticación completo
 - [ ] POS funcional
 - [ ] Gestión de inventario avanzada
 
-### 📋 Planificado
+###  Planificado
 - [ ] Facturación electrónica SII
 - [ ] Reportes avanzados
 - [ ] Integración APIs chilenas
@@ -148,7 +148,7 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 - **Facturación**: Preparado para integración con SII
 - **Regulaciones**: Cumplimiento normativas comerciales chilenas
 
-## 📚 Documentación
+##  Documentación
 
 - [Roadmap del Proyecto](./ROADMAP.md)
 - [Plan Fase 1](./FASE-1-PLAN.md)
@@ -170,14 +170,14 @@ Este es un proyecto académico de tesis. Para contribuciones:
 
 Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
 
-## 👨‍💻 Autor
+## 👨‍ Autor
 
 **Proyecto de Tesis - CRTLPyme**
 - Plataforma POS SaaS para PYMEs Chilenas
 - Universidad: [Nombre Universidad]
-- Año: 2024
+- Año: 2025
 
-## 📞 Contacto
+##  Contacto
 
 Para consultas sobre el proyecto:
 - Email: [tu-email@universidad.cl]
@@ -185,4 +185,4 @@ Para consultas sobre el proyecto:
 
 ---
 
-**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 🚀
+**CRTLPyme** - Impulsando el crecimiento de las PYMEs chilenas a través de la tecnología 

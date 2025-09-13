@@ -1,16 +1,16 @@
 
-# 🗺️ Roadmap CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
+#  Roadmap CRTLPyme - Sistema POS SaaS para PYMEs Chilenas
 
-## 📅 Cronograma General del Proyecto
+##  Cronograma General del Proyecto
 
 **Duración Total**: 12-16 semanas
-**Inicio**: Septiembre 2024
+**Inicio**: Enero 2025
 **Objetivo**: Tesis de titulación - Plataforma POS SaaS completa
 
 ---
 
-## 🎯 Fase 1: Landing Page + Roles Básicos
-**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: 🔄 En Planificación
+##  Fase 1: Landing Page + Roles Básicos
+**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**:  En Planificación
 
 ### Objetivos de la Fase 1
 - Establecer presencia web profesional
@@ -45,8 +45,8 @@ Semana 3 (Buffer):
 
 ---
 
-## 🛒 Fase 2: POS + Inventario Core
-**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**: 📋 Planificado
+##  Fase 2: POS + Inventario Core
+**Duración**: 4-6 semanas | **Prioridad**: Alta | **Estado**:  Planificado
 
 ### Objetivos de la Fase 2
 - Desarrollar sistema POS funcional completo
@@ -84,8 +84,8 @@ Semana 5-6: Reportes y Optimización
 
 ---
 
-## 🚀 Fase 3: Funcionalidades Avanzadas
-**Duración**: 6-8 semanas | **Prioridad**: Media | **Estado**: 📝 Conceptual
+##  Fase 3: Funcionalidades Avanzadas
+**Duración**: 6-8 semanas | **Prioridad**: Media | **Estado**:  Conceptual
 
 ### Objetivos de la Fase 3
 - Implementar facturación electrónica SII
@@ -129,8 +129,8 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🏗️ Fase 4: Despliegue y Producción
-**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**: 📝 Conceptual
+##  Fase 4: Despliegue y Producción
+**Duración**: 2-3 semanas | **Prioridad**: Alta | **Estado**:  Conceptual
 
 ### Objetivos de la Fase 4
 - Desplegar en Google Cloud Platform
@@ -147,7 +147,7 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 📊 Métricas de Éxito por Fase
+##  Métricas de Éxito por Fase
 
 ### Fase 1 - Métricas
 - [ ] Landing page con tiempo de carga < 3s
@@ -175,7 +175,7 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🎯 Hitos Críticos
+##  Hitos Críticos
 
 | Fecha | Hito | Descripción |
 |-------|------|-------------|
@@ -186,7 +186,7 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🔄 Metodología de Desarrollo
+##  Metodología de Desarrollo
 
 ### Enfoque Ágil Adaptado
 - **Sprints**: 1 semana por sprint
@@ -202,7 +202,7 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 🚨 Riesgos y Mitigaciones
+##  Riesgos y Mitigaciones
 
 ### Riesgos Técnicos
 | Riesgo | Probabilidad | Impacto | Mitigación |
@@ -220,24 +220,24 @@ Semana 7-8: Optimización Final
 
 ---
 
-## 📈 Próximos Pasos Inmediatos
+##  Próximos Pasos Inmediatos
 
 ### Esta Semana (Semana 1)
 1. ✅ Configurar repositorio GitHub
 2. ✅ Crear documentación base
-3. 🔄 Iniciar desarrollo landing page
-4. 🔄 Configurar entorno Google Cloud
+3.  Iniciar desarrollo landing page
+4.  Configurar entorno Google Cloud
 
 ### Próxima Semana (Semana 2)
-1. 📋 Completar landing page
-2. 📋 Implementar sistema de autenticación
-3. 📋 Comenzar desarrollo de roles
-4. 📋 Preparar demo Fase 1
+1.  Completar landing page
+2.  Implementar sistema de autenticación
+3.  Comenzar desarrollo de roles
+4.  Preparar demo Fase 1
 
 ---
 
-**Última actualización**: Septiembre 12, 2024
-**Próxima revisión**: Septiembre 19, 2024
+**Última actualización**: Enero 15, 2025
+**Próxima revisión**: Enero 22, 2025
 
 ---
 
