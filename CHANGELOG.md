@@ -59,7 +59,7 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 - **Control de Transacciones**: Registro detallado de cada venta
 - **Tipos de Pago**: Efectivo, tarjeta de crédito, tarjeta de débito
 - **Sin Integración SII**: El sistema NO emite boletas electrónicas
-- **Transbank**: Solo para pago de suscripción de la plataforma
+- **Transbank**: API de prueba únicamente para pago de suscripción de la plataforma (no para ventas del negocio)
 - **Reportes de Flujo**: Análisis del movimiento de dinero
 
 ## [Próximas Versiones]
@@ -79,7 +79,7 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 - [ ] PWA para móvil
 
 ### v1.3.0 - Fase 4: Integraciones (Diciembre 2025)
-- [ ] Integración Transbank para suscripciones
+- [ ] Integración API de prueba Transbank para suscripciones únicamente
 - [ ] Registro avanzado de flujo de dinero
 - [ ] Consola del proveedor
 - [ ] Gestión de suscripciones completa

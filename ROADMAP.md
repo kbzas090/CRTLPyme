@@ -90,13 +90,13 @@ Semana 5-6: Reportes y Optimización
 ### Objetivos de la Fase 3
 - Implementar registro avanzado de flujo de dinero
 - Desarrollar reportes avanzados y analytics
-- Integrar APIs chilenas (bancos, servicios)
+- Integrar API de Transbank (solo para pago de suscripción de la plataforma)
 - Optimizar rendimiento y escalabilidad
 
 ### Entregables Principales
 - Sistema avanzado de registro de flujo de dinero
 - Reportes avanzados y analytics
-- Integración APIs chilenas
+- Integración API Transbank (pago de suscripción únicamente)
 - Sistema de backup y recuperación
 - Optimizaciones de rendimiento
 
@@ -114,11 +114,11 @@ Semana 3-4: Reportes Avanzados
 ├── Dashboards ejecutivos
 └── Exportación de datos
 
-Semana 5-6: Integraciones Chilenas
-├── APIs bancarias para pagos
-├── Servicios de delivery
-├── Proveedores de productos
-└── Servicios gubernamentales
+Semana 5-6: Integración Transbank
+├── API de Transbank para suscripciones
+├── Procesamiento de pagos de suscripción
+├── Gestión de suscripciones
+└── Testing de pagos
 
 Semana 7-8: Optimización Final
 ├── Performance optimization
@@ -164,7 +164,7 @@ Semana 7-8: Optimización Final
 ### Fase 3 - Métricas
 - [ ] Registro de flujo 100% preciso
 - [ ] Reportes avanzados en tiempo real
-- [ ] APIs integradas con 99.5% uptime
+- [ ] API Transbank integrada con 99.5% uptime
 - [ ] Performance optimizada (< 1s load time)
 
 ### Fase 4 - Métricas
@@ -209,7 +209,7 @@ Semana 7-8: Optimización Final
 |--------|--------------|---------|------------|
 | Complejidad del registro de flujo | Alta | Alto | Comenzar investigación temprana, APIs de prueba |
 | Performance en producción | Media | Alto | Testing de carga, optimización continua |
-| Compatibilidad códigos barras | Media | Medio | Validación con productos reales chilenos |
+| Integración productos chilenos | Media | Medio | Comenzar temprano, datos mock iniciales |
 
 ### Riesgos de Proyecto
 | Riesgo | Probabilidad | Impacto | Mitigación |

@@ -74,7 +74,7 @@ CRTLPyme/
 ### Fase 3: Funcionalidades Avanzadas (6-8 semanas)
 - Registro de flujo de dinero
 - Reportes avanzados
-- Integración con APIs chilenas
+- Integración con API de Transbank (solo para pago de suscripción)
 - Optimizaciones de rendimiento
 
 ## Instalación y Configuración
@@ -138,7 +138,7 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 ### Planificado
 - [ ] Registro de flujo de dinero
 - [ ] Reportes avanzados
-- [ ] Integración APIs chilenas
+- [ ] Integración API Transbank (pago de suscripción únicamente)
 - [ ] Despliegue Google Cloud
 
 ## Funcionalidades del Sistema
@@ -156,9 +156,9 @@ GOOGLE_CLOUD_PROJECT_ID="tu-project-id"
 - **Categorización**: Organización eficiente de productos
 
 ### Sistema de Pagos
-- **Transbank**: Integración para pago de suscripción de la plataforma
-- **Métodos Locales**: Soporte para métodos de pago chilenos
-- **Procesamiento Seguro**: Manejo seguro de transacciones
+- **Transbank**: Integración ÚNICAMENTE para pago de suscripción de la plataforma (no para ventas del negocio)
+- **Métodos de Pago del Negocio**: Efectivo, tarjeta de crédito, tarjeta de débito (registro interno)
+- **Procesamiento Seguro**: Manejo seguro de transacciones de suscripción
 
 ## Adaptación al Mercado Chileno
 

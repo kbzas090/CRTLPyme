@@ -13,7 +13,7 @@ Desarrollar el corazón funcional de CRTLPyme: un sistema POS completo y gestió
 ### Objetivos Específicos
 1. **Sistema POS Completo**: Interface de venta intuitiva y rápida
 2. **Gestión de Inventario**: Control de stock, productos y categorías
-3. **Integración Productos Chilenos**: Base de datos con códigos de barras locales
+3. **Base de Datos Productos Locales**: Catálogo con códigos de barras de productos chilenos
 4. **Sistema de Transacciones**: Procesamiento de ventas y métodos de pago
 5. **Reportes Básicos**: Analytics esenciales para toma de decisiones
 
@@ -76,7 +76,7 @@ Semana 3: CRUD Productos Avanzado
     ├── Generación de códigos de barras
     ├── Lectura de códigos existentes
     ├── Validación de códigos únicos
-    └── Integración con productos chilenos
+    └── Base de datos productos chilenos
 
 Semana 4: Control de Stock
 ├── Días 1-2: Gestión de stock
@@ -89,7 +89,7 @@ Semana 4: Control de Stock
 │   ├── Órdenes de compra básicas
 │   ├── Recepción de mercadería
 │   └── Actualización de costos
-└── Días 5-7: Integración productos chilenos
+└── Días 5-7: Base de datos productos chilenos
     ├── Base de datos productos locales
     ├── Importación automática
     ├── Validación de códigos chilenos
@@ -414,7 +414,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 - [ ] **Búsqueda Inteligente**: Búsqueda por múltiples campos
 - [ ] **Ordenamiento**: Por nombre, precio, stock, ventas
 
-### 3. Integración Productos Chilenos
+### 3. Base de Datos Productos Chilenos
 
 #### 3.1 Base de Datos Local
 - [ ] **Productos Comunes**: Base de datos con productos chilenos típicos
@@ -467,7 +467,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 - [ ] **Reportes de Flujo**: Análisis detallado por tipo de pago
 
 ### 2. Sistema de Pagos
-- [ ] **Transbank para Suscripción**: Integración para pago de la plataforma únicamente
+- [ ] **Transbank para Suscripción**: API de prueba para pago de suscripción de la plataforma únicamente (no para ventas del negocio)
 - [ ] **Sin Emisión de Boletas**: El sistema NO integra con SII
 - [ ] **Registro Interno**: Mantiene registro completo para control interno
 - [ ] **Reportes Tributarios**: Preparación de datos para declaraciones manuales
@@ -581,7 +581,7 @@ const SalesReports = ({ filters }: SalesReportsProps) => {
 |--------|--------------|---------|------------|
 | Subestimación de complejidad POS | Alta | Alto | Buffer time, desarrollo iterativo |
 | Testing toma más tiempo | Alta | Medio | Testing paralelo, automatización |
-| Integración productos chilenos | Media | Medio | Comenzar temprano, datos mock iniciales |
+| Base de datos productos chilenos | Media | Medio | Comenzar temprano, datos mock iniciales |
 
 ---
 
