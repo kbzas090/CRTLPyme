@@ -101,12 +101,13 @@ Registro de cambios y evolución del proyecto CRTLPyme.
 - Secret management preparado
 - CI/CD workflows configurados
 
-### Información de Contacto
-- **Email**: hernan.c249@gmail.com
-- **LinkedIn**: https://www.linkedin.com/in/hfcabezas/
+### Información del Proyecto
+- **Curso**: Capstone 707V - Ingeniería en Informática
+- **Profesor**: Fernando González
+- **Estudiantes**: Hernán Cabezas y Gricel Sanchez
 
 ---
 
-> **Proyecto Académico**: Tesis Ingeniería en Informática  
+> **Proyecto de Titulación**: Capstone 707V  
 > **Objetivo**: Sistema POS-SaaS para PYMEs chilenas  
-> **Estado**: MVP Completado
+> **Estado**: Desarrollo en progreso
