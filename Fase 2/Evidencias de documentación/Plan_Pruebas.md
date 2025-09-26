@@ -1,6 +1,6 @@
 # Plan de Pruebas - CRTLPyme
 **Versión:** 1.0  
-**Fecha:** Septiembre 2024
+**Fecha:** Septiembre 2025
 
 ## 1. Objetivos
 - Verificar que el sistema cumple con los requerimientos

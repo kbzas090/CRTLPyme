@@ -2,7 +2,7 @@
 **Estudiante:** Hernán Cabezas  
 **Curso:** Capstone 707V  
 **Profesor:** Fernando González  
-**Fecha:** Septiembre 2024
+**Fecha:** Septiembre 2025
 
 ## Competencias Evaluadas
 

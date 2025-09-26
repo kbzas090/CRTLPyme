@@ -2,7 +2,7 @@
 **Estudiante:** Hernán Cabezas  
 **Curso:** Capstone 707V  
 **Profesor:** Fernando González  
-**Fecha:** Noviembre 2024
+**Fecha:** Noviembre 2025
 
 ## Competencias Desarrolladas Durante el Proyecto
 

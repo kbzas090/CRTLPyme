@@ -2,7 +2,7 @@
 **Estudiantes:** Hernán Cabezas, Gricel Sanchez  
 **Curso:** Capstone 707V  
 **Profesor:** Fernando González  
-**Fecha:** Noviembre 2024
+**Fecha:** Noviembre 2025
 
 ## Diapositiva 1: Introducción al Proyecto
 - CRTLPyme: Sistema POS SaaS para PYMEs Chilenas

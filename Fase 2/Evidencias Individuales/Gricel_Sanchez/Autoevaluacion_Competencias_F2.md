@@ -2,7 +2,7 @@
 **Estudiante:** Gricel Sanchez  
 **Curso:** Capstone 707V  
 **Profesor:** Fernando González  
-**Fecha:** Octubre 2024
+**Fecha:** Octubre 2025
 
 ## Competencias Evaluadas
 

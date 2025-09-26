@@ -2,7 +2,7 @@
 **Curso:** Capstone 707V  
 **Profesor:** Fernando González  
 **Estudiantes:** Hernán Cabezas, Gricel Sanchez  
-**Fecha:** Noviembre 2024
+**Fecha:** Noviembre 2025
 
 ## Resumen Ejecutivo
 El proyecto CRTLPyme ha sido completado exitosamente, cumpliendo todos los objetivos establecidos en la Fase 1. Se desarrolló un sistema POS SaaS funcional, validado con usuarios reales y desplegado en producción.
@@ -64,4 +64,4 @@ CRTLPyme continuará como proyecto comercial independiente, con planes de lanzam
 Hernán Cabezas - Desarrollador Full-Stack  
 Gricel Sanchez - UX Researcher & Product Manager  
 
-**Fecha de Cierre:** 30 de Noviembre 2024
+**Fecha de Cierre:** 30 de Noviembre 2025

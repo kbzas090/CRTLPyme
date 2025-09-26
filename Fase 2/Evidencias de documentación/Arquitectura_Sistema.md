@@ -1,6 +1,6 @@
 # Documentación de Arquitectura - CRTLPyme
 **Versión:** 1.0  
-**Fecha:** Septiembre 2024
+**Fecha:** Septiembre 2025
 
 ## 1. Visión General de la Arquitectura
 CRTLPyme utiliza una arquitectura moderna basada en:
