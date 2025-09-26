@@ -9,7 +9,11 @@
 
 ## Descripción del Proyecto
 
-CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto forma parte de una tesis de titulación y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
+CRTLPyme es una plataforma POS (Point of Sale) SaaS diseñada específicamente para pequeñas y medianas empresas (PYMEs) chilenas. Este proyecto corresponde a nuestro trabajo de titulación para el curso Capstone 707V, bajo la supervisión del profesor Fernando González, y busca proporcionar una solución integral de gestión comercial adaptada al mercado chileno.
+
+**Estudiantes:**
+- Hernán Cabezas - hernan.cabezas@estudiante.cl
+- Gricel Sanchez - gricel.sanchez@estudiante.cl
 
 ## Objetivos del Proyecto
 
