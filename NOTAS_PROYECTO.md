@@ -41,6 +41,20 @@
 3. **Pendiente**: Integración con APIs chilenas
 4. **Pendiente**: Despliegue en Google Cloud
 
+## Avances Recientes
+
+### Semana 1 (Septiembre 2025)
+- ✅ Configuración inicial del proyecto
+- ✅ Definición de arquitectura
+- ✅ Documentación base completada
+- ✅ División de tareas establecida
+
+### Semana 2 (Septiembre 2025)
+- 🔄 Implementación de componentes base
+- 🔄 Configuración de base de datos
+- ⏳ Testing inicial
+- ⏳ Revisión con profesor
+
 ## Notas Técnicas
 
 - Usar códigos EAN-13 para productos chilenos
