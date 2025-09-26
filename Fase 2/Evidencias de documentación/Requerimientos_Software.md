@@ -1,7 +1,7 @@
 # Documento de Requerimientos de Software
 **Proyecto:** CRTLPyme  
 **Versión:** 1.0  
-**Fecha:** Septiembre 2024
+**Fecha:** Septiembre 2025
 
 ## 1. Introducción
 ### 1.1 Propósito

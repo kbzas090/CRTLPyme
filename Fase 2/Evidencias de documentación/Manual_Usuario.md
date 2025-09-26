@@ -1,6 +1,6 @@
 # Manual de Usuario - CRTLPyme
 **Versión:** 1.0  
-**Fecha:** Septiembre 2024
+**Fecha:** Septiembre 2025
 
 ## 1. Introducción
 Bienvenido a CRTLPyme, su sistema de punto de venta diseñado especialmente para PYMEs chilenas.
