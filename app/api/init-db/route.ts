@@ -62,26 +62,29 @@ export async function POST(request: Request) {
     const productosData = JSON.parse(fs.readFileSync(productosPath, 'utf8'));
 
     let productosCreados = 0;
-    for (const prod of productosData.productos) {
+    for (const prod of productosData.productos_chilenos) {
+      // Generar SKU único basado en el EAN13
+      const sku = `SKU-${prod.ean13.slice(-6)}`;
+      
       await prisma.product.upsert({
         where: { 
           sku_tenantId: {
-            sku: prod.sku,
+            sku: sku,
             tenantId: tenant.id
           }
         },
         update: {},
         create: {
-          name: prod.nombre,
-          sku: prod.sku,
-          barcode: prod.codigo_barra,
-          description: prod.descripcion,
-          category: prod.categoria,
-          price: prod.precio,
-          cost: prod.costo,
-          stock: prod.stock_inicial,
-          minStock: prod.stock_minimo,
-          unit: prod.unidad,
+          name: prod.name,
+          sku: sku,
+          barcode: prod.ean13,
+          description: `${prod.brand} - ${prod.subcategory}`,
+          category: prod.category,
+          price: prod.price_clp,
+          cost: Math.round(prod.price_clp * 0.7), // Costo estimado 70% del precio
+          stock: 50, // Stock inicial
+          minStock: 10, // Stock mínimo
+          unit: 'UNIDAD',
           tenantId: tenant.id,
         },
       });
