@@ -68,9 +68,9 @@ export async function POST(request: Request) {
       
       await prisma.product.upsert({
         where: { 
-          sku_tenantId: {
-            sku: sku,
-            tenantId: tenant.id
+          tenantId_sku: {
+            tenantId: tenant.id,
+            sku: sku
           }
         },
         update: {},
@@ -80,11 +80,11 @@ export async function POST(request: Request) {
           barcode: prod.ean13,
           description: `${prod.brand} - ${prod.subcategory}`,
           category: prod.category,
-          price: prod.price_clp,
-          cost: Math.round(prod.price_clp * 0.7), // Costo estimado 70% del precio
+          brand: prod.brand,
+          salePrice: prod.price_clp,
+          costPrice: Math.round(prod.price_clp * 0.7), // Costo estimado 70% del precio
           stock: 50, // Stock inicial
           minStock: 10, // Stock mínimo
-          unit: 'UNIDAD',
           tenantId: tenant.id,
         },
       });
