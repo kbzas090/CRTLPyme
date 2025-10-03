@@ -63,8 +63,8 @@ export async function POST(request: Request) {
 
     let productosCreados = 0;
     for (const prod of productosData.productos_chilenos) {
-      // Generar SKU único basado en el EAN13
-      const sku = `SKU-${prod.ean13.slice(-6)}`;
+      // Usar el EAN13 completo como SKU para garantizar unicidad
+      const sku = prod.ean13;
       
       await prisma.product.upsert({
         where: { 
