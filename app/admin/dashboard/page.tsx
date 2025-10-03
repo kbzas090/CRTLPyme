@@ -1,0 +1,251 @@
+
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { 
+  Package, 
+  ShoppingCart, 
+  TrendingUp, 
+  Users,
+  ArrowRight,
+  AlertTriangle
+} from 'lucide-react'
+import Link from 'next/link'
+
+interface DashboardStats {
+  totalProducts: number
+  lowStockProducts: number
+  totalSales: number
+  activeUsers: number
+}
+
+export default function AdminDashboard() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Verificar autenticación
+    if (status === 'unauthenticated') {
+      router.push('/auth/login')
+      return
+    }
+
+    // Cargar estadísticas
+    if (status === 'authenticated') {
+      loadDashboardStats()
+    }
+  }, [status, router])
+
+  const loadDashboardStats = async () => {
+    try {
+      // Obtener productos para calcular estadísticas
+      const response = await fetch('/api/products')
+      if (response.ok) {
+        const products = await response.json()
+        
+        const stats: DashboardStats = {
+          totalProducts: products.length,
+          lowStockProducts: products.filter((p: any) => p.stock <= p.minStock).length,
+          totalSales: 0, // TODO: Implementar cuando exista API de ventas
+          activeUsers: 1, // TODO: Implementar cuando exista API de usuarios
+        }
+        
+        setStats(stats)
+      }
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="p-8 space-y-6">
+        <Skeleton className="h-12 w-64" />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-32" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return null
+  }
+
+  return (
+    <div className="p-8 space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Bienvenido, {session.user.firstName} {session.user.lastName}
+        </h1>
+        <p className="text-muted-foreground mt-2">
+          Panel de control - {session.user.role}
+        </p>
+      </div>
+
+      {/* Tarjetas de estadísticas */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Total Productos */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Productos
+            </CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.totalProducts || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Productos activos en inventario
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Stock Bajo */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Stock Bajo
+            </CardTitle>
+            <AlertTriangle className="h-4 w-4 text-orange-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-orange-500">
+              {stats?.lowStockProducts || 0}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Productos bajo stock mínimo
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Ventas (placeholder) */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Ventas del Mes
+            </CardTitle>
+            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${stats?.totalSales || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Próximamente disponible
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Usuarios (placeholder) */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Usuarios Activos
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.activeUsers || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Usuarios del sistema
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Módulos disponibles */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {/* Inventario */}
+        <Card className="hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5" />
+              Inventario
+            </CardTitle>
+            <CardDescription>
+              Gestiona productos, stock y categorías
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/inventory">
+              <Button className="w-full">
+                Ir a Inventario
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Ventas (próximamente) */}
+        <Card className="opacity-60">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Punto de Venta
+            </CardTitle>
+            <CardDescription>
+              Registra ventas y gestiona caja
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full" disabled>
+              Próximamente
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Reportes (próximamente) */}
+        <Card className="opacity-60">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Reportes
+            </CardTitle>
+            <CardDescription>
+              Análisis de ventas y rentabilidad
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full" disabled>
+              Próximamente
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Alertas de stock bajo */}
+      {stats && stats.lowStockProducts > 0 && (
+        <Card className="border-orange-200 bg-orange-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-orange-700">
+              <AlertTriangle className="h-5 w-5" />
+              Alerta de Stock Bajo
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-orange-700">
+              Tienes {stats.lowStockProducts} producto(s) con stock bajo o agotado. 
+              Revisa el inventario para realizar pedidos.
+            </p>
+            <Link href="/admin/inventory">
+              <Button variant="outline" className="mt-4 border-orange-300 text-orange-700 hover:bg-orange-100">
+                Ver Productos
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  )
+}

@@ -27,7 +27,7 @@ import {
   Building,
   HeadphonesIcon
 } from 'lucide-react'
-import { UserRole } from '@prisma/client'
+import type { UserRole } from '@prisma/client'
 
 interface DashboardLayoutProps {
   children: React.ReactNode

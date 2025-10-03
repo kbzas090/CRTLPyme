@@ -1,0 +1,616 @@
+
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
+import { toast } from 'sonner'
+import { 
+  Plus, 
+  Pencil, 
+  Trash2, 
+  Search,
+  Package,
+  AlertTriangle
+} from 'lucide-react'
+
+// Schema de validación para productos
+const productSchema = z.object({
+  sku: z.string().min(1, 'El código es requerido'),
+  barcode: z.string().optional(),
+  name: z.string().min(1, 'El nombre es requerido'),
+  description: z.string().optional(),
+  category: z.string().min(1, 'La categoría es requerida'),
+  brand: z.string().optional(),
+  costPrice: z.string().min(1, 'El precio de compra es requerido'),
+  salePrice: z.string().min(1, 'El precio de venta es requerido'),
+  stock: z.string().min(0, 'El stock no puede ser negativo'),
+  minStock: z.string().min(0, 'El stock mínimo no puede ser negativo'),
+})
+
+type ProductFormData = z.infer<typeof productSchema>
+
+interface Product {
+  id: string
+  sku: string
+  barcode?: string
+  name: string
+  description?: string
+  category: string
+  brand?: string
+  costPrice: number
+  salePrice: number
+  stock: number
+  minStock: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export default function InventoryPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  
+  const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  
+  // Estados para el diálogo de crear/editar
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  
+  // Estados para el diálogo de confirmación de eliminación
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+  })
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login')
+      return
+    }
+
+    if (status === 'authenticated') {
+      loadProducts()
+    }
+  }, [status, router])
+
+  useEffect(() => {
+    // Filtrar productos según el término de búsqueda
+    if (searchTerm) {
+      const filtered = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (p.barcode && p.barcode.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+      setFilteredProducts(filtered)
+    } else {
+      setFilteredProducts(products)
+    }
+  }, [searchTerm, products])
+
+  const loadProducts = async () => {
+    try {
+      const response = await fetch('/api/products')
+      if (response.ok) {
+        const data = await response.json()
+        setProducts(data)
+        setFilteredProducts(data)
+      } else {
+        toast.error('Error al cargar productos')
+      }
+    } catch (error) {
+      console.error('Error al cargar productos:', error)
+      toast.error('Error al cargar productos')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const openCreateDialog = () => {
+    setEditingProduct(null)
+    reset({
+      sku: '',
+      barcode: '',
+      name: '',
+      description: '',
+      category: '',
+      brand: '',
+      costPrice: '',
+      salePrice: '',
+      stock: '0',
+      minStock: '5',
+    })
+    setIsDialogOpen(true)
+  }
+
+  const openEditDialog = (product: Product) => {
+    setEditingProduct(product)
+    reset({
+      sku: product.sku,
+      barcode: product.barcode || '',
+      name: product.name,
+      description: product.description || '',
+      category: product.category,
+      brand: product.brand || '',
+      costPrice: product.costPrice.toString(),
+      salePrice: product.salePrice.toString(),
+      stock: product.stock.toString(),
+      minStock: product.minStock.toString(),
+    })
+    setIsDialogOpen(true)
+  }
+
+  const onSubmit = async (data: ProductFormData) => {
+    setIsSaving(true)
+
+    try {
+      // Convertir strings a números
+      const productData = {
+        ...data,
+        costPrice: parseFloat(data.costPrice),
+        salePrice: parseFloat(data.salePrice),
+        stock: parseInt(data.stock),
+        minStock: parseInt(data.minStock),
+      }
+
+      const url = editingProduct
+        ? `/api/products/${editingProduct.id}`
+        : '/api/products'
+      
+      const method = editingProduct ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData),
+      })
+
+      if (response.ok) {
+        toast.success(
+          editingProduct
+            ? 'Producto actualizado correctamente'
+            : 'Producto creado correctamente'
+        )
+        setIsDialogOpen(false)
+        loadProducts()
+      } else {
+        const error = await response.json()
+        toast.error(error.error || 'Error al guardar producto')
+      }
+    } catch (error) {
+      console.error('Error al guardar producto:', error)
+      toast.error('Error al guardar producto')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const openDeleteDialog = (product: Product) => {
+    setProductToDelete(product)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const handleDelete = async () => {
+    if (!productToDelete) return
+
+    setIsDeleting(true)
+
+    try {
+      const response = await fetch(`/api/products/${productToDelete.id}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        toast.success('Producto eliminado correctamente')
+        setIsDeleteDialogOpen(false)
+        loadProducts()
+      } else {
+        const error = await response.json()
+        toast.error(error.error || 'Error al eliminar producto')
+      }
+    } catch (error) {
+      console.error('Error al eliminar producto:', error)
+      toast.error('Error al eliminar producto')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const getStockBadge = (product: Product) => {
+    if (product.stock === 0) {
+      return <Badge variant="destructive">Agotado</Badge>
+    } else if (product.stock <= product.minStock) {
+      return <Badge variant="outline" className="border-orange-500 text-orange-500">Stock Bajo</Badge>
+    } else {
+      return <Badge variant="outline" className="border-green-500 text-green-500">Disponible</Badge>
+    }
+  }
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="p-8 space-y-6">
+        <Skeleton className="h-12 w-64" />
+        <Skeleton className="h-96 w-full" />
+      </div>
+    )
+  }
+
+  if (!session) {
+    return null
+  }
+
+  return (
+    <div className="p-8 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Inventario</h1>
+          <p className="text-muted-foreground mt-2">
+            Gestiona tus productos y stock
+          </p>
+        </div>
+        <Button onClick={openCreateDialog}>
+          <Plus className="mr-2 h-4 w-4" />
+          Nuevo Producto
+        </Button>
+      </div>
+
+      {/* Barra de búsqueda y estadísticas */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card className="md:col-span-3">
+          <CardContent className="pt-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar por nombre, código, categoría o código de barras..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium">Total Productos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{products.length}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tabla de productos */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Productos</CardTitle>
+          <CardDescription>
+            Lista de todos los productos en inventario
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Categoría</TableHead>
+                  <TableHead className="text-right">Precio Compra</TableHead>
+                  <TableHead className="text-right">Precio Venta</TableHead>
+                  <TableHead className="text-center">Stock</TableHead>
+                  <TableHead className="text-center">Estado</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredProducts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                      <Package className="mx-auto h-12 w-12 mb-2 opacity-50" />
+                      {searchTerm
+                        ? 'No se encontraron productos con ese criterio'
+                        : 'No hay productos registrados. Crea tu primer producto.'}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredProducts.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell className="font-medium">{product.sku}</TableCell>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{product.name}</div>
+                          {product.brand && (
+                            <div className="text-sm text-muted-foreground">{product.brand}</div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>{product.category}</TableCell>
+                      <TableCell className="text-right">
+                        ${product.costPrice.toLocaleString('es-CL')}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        ${product.salePrice.toLocaleString('es-CL')}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          {product.stock <= product.minStock && (
+                            <AlertTriangle className="h-4 w-4 text-orange-500" />
+                          )}
+                          <span className={product.stock <= product.minStock ? 'text-orange-500 font-semibold' : ''}>
+                            {product.stock}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {getStockBadge(product)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openEditDialog(product)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openDeleteDialog(product)}
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Diálogo de crear/editar producto */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {editingProduct ? 'Editar Producto' : 'Nuevo Producto'}
+            </DialogTitle>
+            <DialogDescription>
+              {editingProduct
+                ? 'Actualiza la información del producto'
+                : 'Completa los datos del nuevo producto'}
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              {/* Código SKU */}
+              <div className="space-y-2">
+                <Label htmlFor="sku">Código SKU *</Label>
+                <Input
+                  id="sku"
+                  {...register('sku')}
+                  placeholder="Ej: PROD001"
+                />
+                {errors.sku && (
+                  <p className="text-sm text-red-500">{errors.sku.message}</p>
+                )}
+              </div>
+
+              {/* Código de Barras */}
+              <div className="space-y-2">
+                <Label htmlFor="barcode">Código de Barras</Label>
+                <Input
+                  id="barcode"
+                  {...register('barcode')}
+                  placeholder="Ej: 7891234567890"
+                />
+              </div>
+            </div>
+
+            {/* Nombre */}
+            <div className="space-y-2">
+              <Label htmlFor="name">Nombre del Producto *</Label>
+              <Input
+                id="name"
+                {...register('name')}
+                placeholder="Ej: Coca Cola 1.5L"
+              />
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              )}
+            </div>
+
+            {/* Descripción */}
+            <div className="space-y-2">
+              <Label htmlFor="description">Descripción</Label>
+              <Input
+                id="description"
+                {...register('description')}
+                placeholder="Descripción opcional del producto"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {/* Categoría */}
+              <div className="space-y-2">
+                <Label htmlFor="category">Categoría *</Label>
+                <Input
+                  id="category"
+                  {...register('category')}
+                  placeholder="Ej: Bebidas"
+                />
+                {errors.category && (
+                  <p className="text-sm text-red-500">{errors.category.message}</p>
+                )}
+              </div>
+
+              {/* Marca */}
+              <div className="space-y-2">
+                <Label htmlFor="brand">Marca</Label>
+                <Input
+                  id="brand"
+                  {...register('brand')}
+                  placeholder="Ej: Coca Cola"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {/* Precio de Compra */}
+              <div className="space-y-2">
+                <Label htmlFor="costPrice">Precio de Compra *</Label>
+                <Input
+                  id="costPrice"
+                  type="number"
+                  step="0.01"
+                  {...register('costPrice')}
+                  placeholder="0.00"
+                />
+                {errors.costPrice && (
+                  <p className="text-sm text-red-500">{errors.costPrice.message}</p>
+                )}
+              </div>
+
+              {/* Precio de Venta */}
+              <div className="space-y-2">
+                <Label htmlFor="salePrice">Precio de Venta *</Label>
+                <Input
+                  id="salePrice"
+                  type="number"
+                  step="0.01"
+                  {...register('salePrice')}
+                  placeholder="0.00"
+                />
+                {errors.salePrice && (
+                  <p className="text-sm text-red-500">{errors.salePrice.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {/* Stock */}
+              <div className="space-y-2">
+                <Label htmlFor="stock">Stock Actual *</Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  {...register('stock')}
+                  placeholder="0"
+                />
+                {errors.stock && (
+                  <p className="text-sm text-red-500">{errors.stock.message}</p>
+                )}
+              </div>
+
+              {/* Stock Mínimo */}
+              <div className="space-y-2">
+                <Label htmlFor="minStock">Stock Mínimo *</Label>
+                <Input
+                  id="minStock"
+                  type="number"
+                  {...register('minStock')}
+                  placeholder="5"
+                />
+                {errors.minStock && (
+                  <p className="text-sm text-red-500">{errors.minStock.message}</p>
+                )}
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsDialogOpen(false)}
+                disabled={isSaving}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isSaving}>
+                {isSaving ? 'Guardando...' : editingProduct ? 'Actualizar' : 'Crear'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Diálogo de confirmación de eliminación */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción eliminará el producto "{productToDelete?.name}". 
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              {isDeleting ? 'Eliminando...' : 'Eliminar'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  )
+}
