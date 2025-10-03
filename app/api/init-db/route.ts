@@ -45,7 +45,6 @@ export async function POST(request: Request) {
       update: {},
       create: {
         email: 'admin@demo.cl',
-        name: 'Administrador Demo',
         firstName: 'Administrador',
         lastName: 'Demo',
         password: hashedPassword,
