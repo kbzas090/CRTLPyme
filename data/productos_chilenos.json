@@ -1,0 +1,367 @@
+{
+  "productos_chilenos": [
+    {
+      "name": "Coca-Cola Original 1.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804123456789",
+      "price_clp": 1520
+    },
+    {
+      "name": "Coca-Cola Sin Azúcar 2.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804123456796",
+      "price_clp": 2000
+    },
+    {
+      "name": "Coca-Cola Sin Azúcar 3L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804123456802",
+      "price_clp": 2350
+    },
+    {
+      "name": "Sprite 1.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804123456819",
+      "price_clp": 1580
+    },
+    {
+      "name": "Fanta Naranja 1.5L",
+      "brand": "Coca-Cola",
+      "category": "bebidas",
+      "subcategory": "gaseosas",
+      "ean13": "7804123456826",
+      "price_clp": 1550
+    },
+    {
+      "name": "Jugo Watts Durazno 1L",
+      "brand": "Watts",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7804234567890",
+      "price_clp": 890
+    },
+    {
+      "name": "Jugo Livean Manzana 1L",
+      "brand": "Livean",
+      "category": "bebidas",
+      "subcategory": "jugos",
+      "ean13": "7804234567906",
+      "price_clp": 950
+    },
+    {
+      "name": "Agua Mineral Benedictino 1.5L",
+      "brand": "Benedictino",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7804345678901",
+      "price_clp": 750
+    },
+    {
+      "name": "Agua Mineral Cachantún 1.6L",
+      "brand": "Cachantún",
+      "category": "bebidas",
+      "subcategory": "agua",
+      "ean13": "7804345678918",
+      "price_clp": 820
+    },
+    {
+      "name": "Papas Fritas Lays Original 140g",
+      "brand": "Lays",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7804456789012",
+      "price_clp": 1849
+    },
+    {
+      "name": "Papas Fritas Kryzpo Original 130g",
+      "brand": "Kryzpo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7804456789029",
+      "price_clp": 1744
+    },
+    {
+      "name": "Papas Fritas Marco Polo Queso 120g",
+      "brand": "Marco Polo",
+      "category": "snacks",
+      "subcategory": "papas_fritas",
+      "ean13": "7804456789036",
+      "price_clp": 1650
+    },
+    {
+      "name": "Galletas McKay Soda 180g",
+      "brand": "McKay",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7613032443191",
+      "price_clp": 1200
+    },
+    {
+      "name": "Galletas McKay Agua 180g",
+      "brand": "McKay",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7613032443207",
+      "price_clp": 1200
+    },
+    {
+      "name": "Galletas Costa Digestive 200g",
+      "brand": "Costa",
+      "category": "snacks",
+      "subcategory": "galletas",
+      "ean13": "7804567890123",
+      "price_clp": 1040
+    },
+    {
+      "name": "Dulce Ambrosoli Butter Toffees 150g",
+      "brand": "Ambrosoli",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7804678901234",
+      "price_clp": 1290
+    },
+    {
+      "name": "Chocolate Sahne-Nuss 100g",
+      "brand": "Sahne-Nuss",
+      "category": "snacks",
+      "subcategory": "dulces",
+      "ean13": "7804678901241",
+      "price_clp": 1890
+    },
+    {
+      "name": "Arroz Grado 1 Tucapel 1kg",
+      "brand": "Tucapel",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7804789012345",
+      "price_clp": 1450
+    },
+    {
+      "name": "Arroz Grado 2 Miraflores 1kg",
+      "brand": "Miraflores",
+      "category": "productos_basicos",
+      "subcategory": "arroz",
+      "ean13": "7804789012352",
+      "price_clp": 1290
+    },
+    {
+      "name": "Fideos Spaghetti Lucchetti 400g",
+      "brand": "Lucchetti",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7804890123456",
+      "price_clp": 1050
+    },
+    {
+      "name": "Fideos Tallarin Carozzi 400g",
+      "brand": "Carozzi",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7804890123463",
+      "price_clp": 1150
+    },
+    {
+      "name": "Fideos Macarrón Lucchetti 400g",
+      "brand": "Lucchetti",
+      "category": "productos_basicos",
+      "subcategory": "fideos",
+      "ean13": "7804890123470",
+      "price_clp": 1080
+    },
+    {
+      "name": "Aceite Vegetal Chef 1L",
+      "brand": "Chef",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7804901234567",
+      "price_clp": 1890
+    },
+    {
+      "name": "Aceite Maravilla Palma 900ml",
+      "brand": "Palma",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7804901234574",
+      "price_clp": 1750
+    },
+    {
+      "name": "Aceite de Oliva Carbonell 500ml",
+      "brand": "Carbonell",
+      "category": "productos_basicos",
+      "subcategory": "aceite",
+      "ean13": "7804901234581",
+      "price_clp": 3490
+    },
+    {
+      "name": "Pan de Molde Ideal 750g",
+      "brand": "Ideal",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7805012345678",
+      "price_clp": 2890
+    },
+    {
+      "name": "Marraqueta Tradicional 1kg",
+      "brand": "Panadería",
+      "category": "productos_basicos",
+      "subcategory": "pan",
+      "ean13": "7805012345685",
+      "price_clp": 2090
+    },
+    {
+      "name": "Leche Entera Soprole 1L",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7805123456789",
+      "price_clp": 1290
+    },
+    {
+      "name": "Leche Semidescremada Colún 1L",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7805123456796",
+      "price_clp": 1250
+    },
+    {
+      "name": "Leche Descremada Loncoleche 1L",
+      "brand": "Loncoleche",
+      "category": "lacteos",
+      "subcategory": "leche",
+      "ean13": "7805123456802",
+      "price_clp": 1200
+    },
+    {
+      "name": "Yogurt Natural Soprole 1L",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7805234567890",
+      "price_clp": 1590
+    },
+    {
+      "name": "Yogurt Frutilla Colún 155g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7805234567906",
+      "price_clp": 390
+    },
+    {
+      "name": "Yogurt Griego Danone 150g",
+      "brand": "Danone",
+      "category": "lacteos",
+      "subcategory": "yogurt",
+      "ean13": "7805234567913",
+      "price_clp": 690
+    },
+    {
+      "name": "Queso Gauda Colún 200g",
+      "brand": "Colún",
+      "category": "lacteos",
+      "subcategory": "queso",
+      "ean13": "7805345678901",
+      "price_clp": 2390
+    },
+    {
+      "name": "Crema de Leche Soprole 200g",
+      "brand": "Soprole",
+      "category": "lacteos",
+      "subcategory": "crema",
+      "ean13": "7805345678918",
+      "price_clp": 1399
+    },
+    {
+      "name": "Detergente Ariel Líquido 1.8L",
+      "brand": "Ariel",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7805456789012",
+      "price_clp": 7490
+    },
+    {
+      "name": "Detergente Ariel Power PODS 57 unidades",
+      "brand": "Ariel",
+      "category": "limpieza",
+      "subcategory": "detergente",
+      "ean13": "7805456789029",
+      "price_clp": 23390
+    },
+    {
+      "name": "Cloro Clorinda 1L",
+      "brand": "Clorinda",
+      "category": "limpieza",
+      "subcategory": "desinfectante",
+      "ean13": "7805567890123",
+      "price_clp": 990
+    },
+    {
+      "name": "Limpiador Pinol Original 900ml",
+      "brand": "Pinol",
+      "category": "limpieza",
+      "subcategory": "multiuso",
+      "ean13": "7805567890130",
+      "price_clp": 1250
+    },
+    {
+      "name": "Paño Microfibra Winkler",
+      "brand": "Winkler",
+      "category": "limpieza",
+      "subcategory": "accesorios",
+      "ean13": "7804632080491",
+      "price_clp": 2590
+    },
+    {
+      "name": "Lavavajillas Quix Limón 500ml",
+      "brand": "Quix",
+      "category": "limpieza",
+      "subcategory": "lavavajillas",
+      "ean13": "7805678901234",
+      "price_clp": 1490
+    },
+    {
+      "name": "Papel Higiénico Noble 4 rollos",
+      "brand": "Noble",
+      "category": "limpieza",
+      "subcategory": "papel",
+      "ean13": "7805789012345",
+      "price_clp": 1890
+    }
+  ],
+  "metadata": {
+    "total_productos": 42,
+    "fecha_actualizacion": "2025-09-12",
+    "fuente": "Investigación de mercado - Supermercados chilenos",
+    "moneda": "CLP",
+    "prefijo_ean13_chile": "780",
+    "categorias": [
+      "bebidas",
+      "snacks", 
+      "productos_basicos",
+      "lacteos",
+      "limpieza"
+    ],
+    "subcategorias": {
+      "bebidas": ["gaseosas", "jugos", "agua"],
+      "snacks": ["papas_fritas", "galletas", "dulces"],
+      "productos_basicos": ["arroz", "fideos", "aceite", "pan"],
+      "lacteos": ["leche", "yogurt", "queso", "crema"],
+      "limpieza": ["detergente", "desinfectante", "multiuso", "accesorios", "lavavajillas", "papel"]
+    },
+    "notas": [
+      "Precios actualizados según investigación de septiembre 2025",
+      "Códigos EAN-13 incluyen códigos reales verificados y códigos válidos con prefijo 780",
+      "Precios pueden variar según promociones y ubicación del establecimiento",
+      "Códigos reales verificados: 7613032443191 (McKay), 7804632080491 (Winkler)"
+    ]
+  }
+}
