@@ -38,8 +38,7 @@ export default function HomePage() {
               Control Total de tu <span className="text-blue-600">Negocio</span>
             </h2>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Sistema POS-SaaS completo para tiendas de abarrotes, kioscos y pequeños comercios. 
-              Con productos chilenos reales, códigos de barras y cálculo automático del punto de equilibrio.
+              Un sistema de ventas ágil y fácil de usar, diseñado para tiendas de abarrotes, kioscos y pequeños comercios. Viene con productos precargados con código de barras y herramientas inteligentes que calculan automáticamente tu punto de equilibrio.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link href="/auth/signup">
@@ -65,7 +64,7 @@ export default function HomePage() {
               Todo lo que necesitas para tu negocio
             </h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Una solución completa y especializada para el mercado chileno
+              Una solución completa y especializada para pymes, pequeña y mediana empresa
             </p>
           </div>
 
@@ -85,7 +84,7 @@ export default function HomePage() {
                 <Package className="h-12 w-12 text-green-600 mb-4" />
                 <CardTitle>Control de Inventario</CardTitle>
                 <CardDescription>
-                  Gestión de stock en tiempo real con alertas de reposición y productos chilenos pre-cargados
+                  Gestión de stock en tiempo real con alertas de reposición y productos pre-cargados
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -113,9 +112,9 @@ export default function HomePage() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CreditCard className="h-12 w-12 text-red-600 mb-4" />
-                <CardTitle>Integración Transbank</CardTitle>
+                <CardTitle>Pago por suscripción</CardTitle>
                 <CardDescription>
-                  Pagos electrónicos con débito y crédito directamente integrado al sistema
+                  Accede a distintos tipos de planes para el control de tu negocio
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -133,32 +132,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Chilean Market Section */}
+      {/* SME Market Section */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-green-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h3 className="text-3xl font-bold mb-6">
-            Diseñado 100% para el Mercado Chileno
+            Diseñado 100% para Pymes y pequeñas-medianas empresas
           </h3>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-1 gap-8 max-w-4xl mx-auto">
             <div className="flex flex-col items-center">
               <CheckCircle className="h-16 w-16 mb-4" />
               <h4 className="text-xl font-semibold mb-2">Productos Reales</h4>
               <p className="text-blue-100">
-                Base de datos con productos chilenos reales, códigos EAN-13 y precios actualizados
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <CheckCircle className="h-16 w-16 mb-4" />
-              <h4 className="text-xl font-semibold mb-2">Validación RUT</h4>
-              <p className="text-blue-100">
-                Sistema completo de validación de RUT chileno integrado
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <CheckCircle className="h-16 w-16 mb-4" />
-              <h4 className="text-xl font-semibold mb-2">Moneda Local</h4>
-              <p className="text-blue-100">
-                Precios en pesos chilenos con formateo local y cálculos precisos
+                Base de datos con productos reales, códigos EAN-13 y precios actualizados
               </p>
             </div>
           </div>
@@ -173,7 +158,7 @@ export default function HomePage() {
               ¿Listo para modernizar tu negocio?
             </h3>
             <p className="text-xl text-gray-600 mb-8">
-              Únete a cientos de pequeños negocios chilenos que ya confían en CRTLPyme
+              Únete a cientos de pequeños negocios que ya confían en CRTLPyme
             </p>
             <Link href="/auth/signup">
               <Button size="lg" className="text-lg px-12">
@@ -194,7 +179,7 @@ export default function HomePage() {
                 <span className="text-lg font-semibold">CRTLPyme</span>
               </div>
               <p className="text-gray-400">
-                Sistema POS-SaaS para PYMEs chilenas
+                Sistema POS-SaaS para PYMEs
               </p>
             </div>
             <div>

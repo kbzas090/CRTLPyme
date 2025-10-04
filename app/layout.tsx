@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'CRTLPyme - Control para PYMEs Chilenas',
-  description: 'Sistema POS-SaaS especializado para pequeños negocios y tiendas de abarrotes chilenas',
+  description: 'Sistema POS-SaaS especializado para pequeños negocios y tiendas de abarrotes',
 }
 
 export default function RootLayout({
