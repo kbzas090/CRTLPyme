@@ -8,8 +8,8 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'CRTLPyme - Control para PYMEs Chilenas',
-  description: 'Sistema POS-SaaS especializado para pequeños negocios y tiendas de abarrotes',
+  title: 'CRTLPyme - Control Total para PYMEs',
+  description: 'Sistema POS-SaaS completo para tiendas de abarrotes, kioscos y pequeños comercios',
 }
 
 export default function RootLayout({

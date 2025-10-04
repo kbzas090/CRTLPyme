@@ -195,3 +195,4 @@ docker-compose.override.yml
 /temp/
 /backups/
 .logs/
+.build

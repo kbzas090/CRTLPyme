@@ -69,7 +69,7 @@ export default function LoginPage() {
             CRTLPyme
           </CardTitle>
           <CardDescription className="text-center">
-            Sistema de Control para PYMEs Chilenas
+            Sistema de Control Total para tu Negocio
           </CardDescription>
         </CardHeader>
         <CardContent>
