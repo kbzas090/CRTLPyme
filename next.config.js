@@ -14,6 +14,10 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: { unoptimized: true },
+  // Force cache invalidation
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
 };
 
 module.exports = nextConfig;
