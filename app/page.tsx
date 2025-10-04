@@ -32,7 +32,7 @@ export default function HomePage() {
         <div className="container mx-auto text-center">
           <div className="max-w-3xl mx-auto">
             <Badge className="mb-6" variant="outline">
-              🇨🇱 Especializado para PYMEs Chilenas
+              Diseñado 100% para Pymes y pequeñas-medianas empresas
             </Badge>
             <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Control Total de tu <span className="text-blue-600">Negocio</span>
@@ -64,7 +64,7 @@ export default function HomePage() {
               Todo lo que necesitas para tu negocio
             </h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Una solución completa y especializada para pymes, pequeña y mediana empresa
+              Una solución completa y especializada para pequeñas y medianas empresas
             </p>
           </div>
 
