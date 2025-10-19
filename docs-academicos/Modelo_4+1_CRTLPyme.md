@@ -221,6 +221,7 @@ graph TB
         SaleSvc[Sales Service]
         SubsSvc[Subscription Service]
         BreakevenSvc[Breakeven Service]
+        FreqCustomerSvc[Frequent Customer Service<br/>OPCIONAL]
     end
     
     subgraph "Persistence Layer"
@@ -250,8 +251,11 @@ graph TB
     Middleware --> SubsSvc
     
     TenantSvc --> BreakevenSvc
+    TenantSvc --> FreqCustomerSvc
     SaleSvc --> ProductSvc
+    SaleSvc --> FreqCustomerSvc
     SubsSvc --> Transbank
+    FreqCustomerSvc --> Repos
     
     TenantSvc --> Repos
     ProductSvc --> Repos
@@ -291,6 +295,7 @@ graph TB
 - **Sales Service:** Registro de ventas, cálculo de totales, actualización de inventario
 - **Subscription Service:** Manejo de suscripciones, integración con Transbank
 - **Breakeven Service:** Cálculo del punto de equilibrio, análisis financiero
+- **Frequent Customer Service (OPCIONAL):** Gestión de clientes frecuentes, cálculo de tramos de descuento, aplicación automática de descuentos, reseteo mensual de acumulaciones
 
 **4. Prisma ORM (Capa de Persistencia)**
 - **Responsabilidad:** Abstracción de base de datos, migraciones, type-safety
@@ -366,6 +371,7 @@ classDiagram
         +String productId
         +Int quantity
         +Decimal unitPrice
+        +Decimal unitCost
         +Decimal subtotal
         +calculateSubtotal()
     }
@@ -402,24 +408,65 @@ classDiagram
         +String transactionId
     }
     
-    class BreakevenConfig {
+    class FixedExpense {
+        +String id
         +String tenantId
-        +Decimal fixedCosts
-        +Decimal averageMargin
+        +String name
+        +Decimal amount
+        +ExpenseFrequency frequency
+        +DateTime startDate
+        +DateTime endDate
+        +Boolean isActive
+        +normalizeToMonthly()
+    }
+    
+    class VariableExpense {
+        +String id
+        +String tenantId
+        +String concept
+        +Decimal amount
+        +DateTime date
+        +ExpenseCategory category
+        +String productId
+        +String saleId
+        +String userId
+        +getMonthlyTotal()
+    }
+    
+    class BreakevenCalculation {
+        +String id
+        +String tenantId
+        +String period
+        +DateTime calculationDate
+        +Decimal totalFixedCosts
+        +Decimal totalVariableCosts
+        +Decimal totalSales
+        +Decimal grossMargin
+        +Decimal breakevenPoint
+        +Int breakevenDays
+        +Decimal currentProgress
+        +Boolean isAchieved
         +calculateBreakeven()
-        +getCurrentProgress()
+        +willAchieveBreakeven()
+        +generateRecommendations()
     }
     
     Tenant "1" --> "*" User : has
     Tenant "1" --> "*" Product : manages
     Tenant "1" --> "*" Sale : records
     Tenant "1" --> "*" Customer : serves
-    Tenant "1" --> "1" BreakevenConfig : configures
+    Tenant "1" --> "*" FixedExpense : has
+    Tenant "1" --> "*" VariableExpense : has
+    Tenant "1" --> "*" BreakevenCalculation : calculates
     
     User "1" --> "*" Sale : creates
+    User "1" --> "*" VariableExpense : registers
     
     Sale "1" --> "*" SaleItem : contains
+    Sale "1" --> "*" VariableExpense : may have
     SaleItem "*" --> "1" Product : references
+    
+    Product "1" --> "*" VariableExpense : may have
     
     Customer "1" --> "*" Subscription : has
     Subscription "1" --> "*" SubscriptionPayment : generates
@@ -428,6 +475,7 @@ classDiagram
         ADMIN
         CASHIER
         MANAGER
+        INVENTARIO
     }
     
     <<enumeration>> PaymentMethod {
@@ -440,6 +488,21 @@ classDiagram
         DAILY
         WEEKLY
         MONTHLY
+    }
+    
+    <<enumeration>> ExpenseFrequency {
+        DAILY
+        WEEKLY
+        MONTHLY
+        YEARLY
+    }
+    
+    <<enumeration>> ExpenseCategory {
+        PRODUCT_COST
+        COMMISSION
+        TRANSPORT
+        PACKAGING
+        OTHER
     }
 ```
 
@@ -463,6 +526,7 @@ classDiagram
   - `ADMIN`: Administrador del negocio, acceso completo
   - `CASHIER`: Cajero, solo puede registrar ventas
   - `MANAGER`: Supervisor, puede ver reportes
+  - `INVENTARIO`: Encargado de inventario y gastos
 
 **3. Product (Gestión de Inventario)**
 - **Propósito:** Producto vendible del negocio
@@ -489,13 +553,30 @@ classDiagram
   - Control de pagos y deudas
   - Renovación automática
 
-**6. BreakevenConfig (Análisis Financiero)**
-- **Propósito:** Configuración para cálculo del punto de equilibrio
+**6. FixedExpense (Gastos Fijos)**
+- **Propósito:** Registro de gastos operacionales recurrentes del negocio
 - **Responsabilidades:**
-  - Almacenar costos fijos del negocio
-  - Calcular margen promedio
-  - Determinar punto de equilibrio
-  - Generar métricas de progreso
+  - Almacenar gastos fijos (arriendo, servicios, sueldos)
+  - Normalizar gastos a frecuencia mensual
+  - Servir como base para cálculo del punto de equilibrio
+  - Permitir activación/desactivación temporal
+
+**7. VariableExpense (Gastos Variables)**
+- **Propósito:** Registro de gastos que varían con el volumen de ventas
+- **Responsabilidades:**
+  - Registrar gastos variables (comisiones, transporte, embalaje)
+  - Asociar gastos a productos o ventas específicas
+  - Calcular costos variables totales del período
+  - Servir como base para cálculo del margen de contribución
+
+**8. BreakevenCalculation (Cálculo de Punto de Equilibrio)**
+- **Propósito:** Almacenar cálculos históricos del punto de equilibrio
+- **Responsabilidades:**
+  - Calcular punto de equilibrio considerando todos los costos
+  - Determinar progreso hacia el equilibrio
+  - Proyectar si se alcanzará el equilibrio en el mes
+  - Generar recomendaciones para mejorar rentabilidad
+  - Mantener histórico mensual para análisis de tendencias
 
 ### 3.4 Patrones de Diseño Aplicados
 
@@ -1147,10 +1228,25 @@ crtlpyme-mvp/
 │   │   ├── customers/
 │   │   │   └── route.ts
 │   │   │
-│   │   └── subscriptions/
-│   │       ├── route.ts
-│   │       └── billing/
-│   │           └── route.ts
+│   │   ├── subscriptions/
+│   │   │   ├── route.ts
+│   │   │   └── billing/
+│   │   │       └── route.ts
+│   │   │
+│   │   └── frequent-customer/    # OPCIONAL
+│   │       ├── config/
+│   │       │   └── route.ts      # GET/POST/PUT config
+│   │       ├── tiers/
+│   │       │   └── route.ts      # GET/POST/PUT tiers
+│   │       ├── [customerId]/
+│   │       │   ├── enroll/
+│   │       │   │   └── route.ts  # POST enroll customer
+│   │       │   ├── stats/
+│   │       │   │   └── route.ts  # GET customer stats
+│   │       │   └── history/
+│   │       │       └── route.ts  # GET purchase history
+│   │       └── reports/
+│   │           └── route.ts      # GET reports
 │   │
 │   ├── layout.tsx                # Root layout
 │   ├── globals.css               # Global styles
@@ -1202,7 +1298,8 @@ crtlpyme-mvp/
 │   │   ├── product.service.ts
 │   │   ├── sale.service.ts
 │   │   ├── subscription.service.ts
-│   │   └── breakeven.service.ts
+│   │   ├── breakeven.service.ts
+│   │   └── frequent-customer.service.ts  # OPCIONAL
 │   │
 │   ├── validations/              # Zod schemas
 │   │   ├── product.schema.ts
@@ -2114,33 +2211,37 @@ graph TB
         end
         
         subgraph "Análisis Financiero"
-            UC11[UC-11: Configurar<br/>Punto de Equilibrio]
-            UC12[UC-12: Ver Dashboard<br/>de Métricas]
-            UC13[UC-13: Generar Reporte<br/>de Ventas]
+            UC11[UC-11: Registrar<br/>Gasto Fijo]
+            UC12[UC-12: Registrar<br/>Gasto Variable]
+            UC13[UC-13: Ver Dashboard<br/>de Punto de Equilibrio]
+            UC14[UC-14: Consultar Histórico<br/>de Punto de Equilibrio]
+            UC15[UC-15: Generar Reporte<br/>de Ventas]
         end
         
         subgraph "Gestión de Usuarios"
-            UC14[UC-14: Invitar Usuario]
-            UC15[UC-15: Login al Sistema]
-            UC16[UC-16: Cambiar Contraseña]
+            UC16[UC-16: Invitar Usuario]
+            UC17[UC-17: Login al Sistema]
+            UC18[UC-18: Cambiar Contraseña]
         end
         
         subgraph "Onboarding SaaS"
-            UC17[UC-17: Registrar Nuevo<br/>Negocio (Tenant)]
-            UC18[UC-18: Seleccionar Plan<br/>de Suscripción]
-            UC19[UC-19: Inscribir Tarjeta<br/>de Pago]
+            UC19[UC-19: Registrar Nuevo<br/>Negocio (Tenant)]
+            UC20[UC-20: Seleccionar Plan<br/>de Suscripción]
+            UC21[UC-21: Inscribir Tarjeta<br/>de Pago]
         end
         
         subgraph "Administración Proveedor"
-            UC20[UC-20: Aprobar Solicitud<br/>de Cajas Extra]
-            UC21[UC-21: Suspender/Reactivar<br/>Tenant]
-            UC22[UC-22: Ver Dashboard<br/>del Proveedor]
+            UC22[UC-22: Aprobar Solicitud<br/>de Cajas Extra]
+            UC23[UC-23: Suspender/Reactivar<br/>Tenant]
+            UC24[UC-24: Ver Dashboard<br/>del Proveedor]
         end
         
         subgraph "Procesos Automáticos"
-            UC23[UC-23: Facturar<br/>Suscripciones]
-            UC24[UC-24: Enviar Alertas<br/>de Stock]
-            UC25[UC-25: Notificar Pago<br/>Fallido]
+            UC25[UC-25: Cálculo Diario<br/>Punto de Equilibrio]
+            UC26[UC-26: Facturar<br/>Suscripciones]
+            UC27[UC-27: Enviar Alertas<br/>de Stock]
+            UC28[UC-28: Notificar Pago<br/>Fallido]
+            UC29[UC-29: Enviar Alertas<br/>de Punto de Equilibrio]
         end
     end
     
@@ -2161,39 +2262,51 @@ graph TB
     Admin --> UC12
     Admin --> UC13
     Admin --> UC14
+    Admin --> UC15
     Admin --> UC16
+    Admin --> UC18
     
     Manager[👤 Supervisor] --> UC3
     Manager --> UC7
-    Manager --> UC12
     Manager --> UC13
+    Manager --> UC14
+    Manager --> UC15
     
-    Customer[👥 Cliente] --> UC17
-    Customer --> UC18
-    Customer --> UC19
+    Customer[👥 Cliente] --> UC19
+    Customer --> UC20
+    Customer --> UC21
     
-    Provider[🏢 Proveedor] --> UC20
-    Provider --> UC21
-    Provider --> UC22
+    Provider[🏢 Proveedor] --> UC22
+    Provider --> UC23
+    Provider --> UC24
     
-    System[⚙️ Sistema] --> UC23
-    System --> UC24
-    System --> UC25
+    System[⚙️ Sistema] --> UC25
+    System --> UC26
+    System --> UC27
+    System --> UC28
+    System --> UC29
     
     UC1 -.->|actualiza| UC7
     UC1 -.->|genera| UC3
+    UC1 -.->|afecta| UC13
     UC4 -.->|afecta| UC7
     UC5 -.->|afecta| UC7
     UC9 -.->|requiere| UC10
-    UC17 -.->|incluye| UC18
-    UC18 -.->|requiere| UC19
-    UC23 -.->|puede generar| UC25
+    UC11 -.->|afecta| UC13
+    UC12 -.->|afecta| UC13
+    UC19 -.->|incluye| UC20
+    UC20 -.->|requiere| UC21
+    UC25 -.->|puede generar| UC29
+    UC26 -.->|puede generar| UC28
     
     style UC1 fill:#e8f5e9
     style UC4 fill:#e1f5ff
     style UC11 fill:#fff4e1
-    style UC17 fill:#f3e5f5
-    style UC23 fill:#ffebee
+    style UC12 fill:#fff4e1
+    style UC13 fill:#fff4e1
+    style UC19 fill:#f3e5f5
+    style UC25 fill:#ffebee
+    style UC26 fill:#ffebee
 ```
 
 ### 7.4 Especificación de Casos de Uso Principales
@@ -3080,11 +3193,16 @@ Como **proyecto Capstone de Ingeniería en Informática**, este documento demues
 6. Testing (unitario, integración, e2e)
 7. Deploy a producción con CI/CD
 
+**Módulos Opcionales:**
+- **Control de Punto de Equilibrio**: Implementado - Análisis financiero automático para determinar viabilidad mensual
+- **Mantenedor de Clientes Frecuentes**: Diseñado - Sistema de fidelización con descuentos por tramos basados en compras acumuladas mensuales (módulo opcional activable por tenant)
+
 **Mejoras Futuras:**
 - Implementación de cache distribuido (Redis)
 - Read replicas para reportes pesados
 - Analytics avanzados con BigQuery
 - App móvil nativa (Flutter/React Native)
+- Módulo de análisis predictivo con ML
 - Integración con más pasarelas de pago
 - Sistema de notificaciones push
 - Soporte multi-idioma (i18n)
