@@ -25,13 +25,14 @@ model Tenant {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  users       User[]
-  products    Product[]
-  sales       Sale[]
-  cashSessions CashSession[]
-  fixedExpenses FixedExpense[]
-  stockAdjustments StockAdjustment[]
-  auditLogs   AuditLog[]
+  users             User[]
+  products          Product[]
+  tenantInventories TenantInventory[]
+  sales             Sale[]
+  cashSessions      CashSession[]
+  fixedExpenses     FixedExpense[]
+  stockAdjustments  StockAdjustment[]
+  auditLogs         AuditLog[]
 
   @@map("tenants")
 }
@@ -61,6 +62,61 @@ model User {
 
 // ============ PRODUCTS & INVENTORY ============
 
+// Catálogo maestro compartido de productos
+model MasterProduct {
+  id              String   @id @default(cuid())
+  sku             String   @unique // código único global
+  barcode         String?  @unique // EAN-13
+  name            String
+  description     String?
+  category        String
+  brand           String?
+  suggestedPrice  Decimal  @db.Decimal(10,2) // precio sugerido
+  unit            String   @default("unidad") // unidad de medida
+  imageUrl        String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  tenantInventories TenantInventory[]
+
+  @@index([category])
+  @@index([barcode])
+  @@map("master_products")
+}
+
+// Inventario específico de cada tenant (reemplaza Product)
+model TenantInventory {
+  id                String   @id @default(cuid())
+  tenantId          String
+  masterProductId   String
+  
+  // Información específica del tenant
+  customSku         String?  // código interno del tenant (opcional)
+  costPrice         Decimal  @db.Decimal(10,2) // costo de compra del tenant
+  salePrice         Decimal  @db.Decimal(10,2) // precio de venta del tenant
+  stock             Int      @default(0)
+  minStock          Int      @default(5) // umbral de reposición
+  location          String?  // ubicación en el almacén
+  customNotes       String?  // notas personalizadas
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  tenant           Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  masterProduct    MasterProduct  @relation(fields: [masterProductId], references: [id])
+  saleItems        SaleItem[]
+  stockAdjustments StockAdjustment[]
+
+  @@unique([tenantId, masterProductId])
+  @@index([tenantId])
+  @@index([tenantId, customSku])
+  @@map("tenant_inventory")
+}
+
+// Tabla legacy para mantener compatibilidad (DEPRECATED)
 model Product {
   id          String   @id @default(cuid())
   sku         String   // código interno
@@ -80,31 +136,29 @@ model Product {
 
   // Relations
   tenant      Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  saleItems   SaleItem[]
-  stockAdjustments StockAdjustment[]
 
   @@unique([tenantId, sku])
   @@index([tenantId, barcode])
   @@index([tenantId, category])
-  @@map("products")
+  @@map("products_legacy")
 }
 
 model StockAdjustment {
-  id        String           @id @default(cuid())
-  productId String
-  quantity  Int              // puede ser negativo para mermas
-  type      AdjustmentType
-  reason    String?
-  userId    String
-  tenantId  String
-  createdAt DateTime         @default(now())
+  id                String           @id @default(cuid())
+  tenantInventoryId String           // referencia al inventario del tenant
+  quantity          Int              // puede ser negativo para mermas
+  type              AdjustmentType
+  reason            String?
+  userId            String
+  tenantId          String
+  createdAt         DateTime         @default(now())
 
   // Relations
-  product   Product @relation(fields: [productId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
-  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantInventory TenantInventory @relation(fields: [tenantInventoryId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
+  tenant          Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  @@index([tenantId, productId])
+  @@index([tenantId, tenantInventoryId])
   @@map("stock_adjustments")
 }
 
@@ -159,18 +213,18 @@ model Sale {
 }
 
 model SaleItem {
-  id         String  @id @default(cuid())
-  quantity   Int
-  unitPrice  Decimal @db.Decimal(10,2)
-  unitCost   Decimal @db.Decimal(10,2) // para calcular margen
-  subtotal   Decimal @db.Decimal(10,2)
-  saleId     String
-  productId  String
-  tenantId   String
+  id                String  @id @default(cuid())
+  quantity          Int
+  unitPrice         Decimal @db.Decimal(10,2)
+  unitCost          Decimal @db.Decimal(10,2) // para calcular margen
+  subtotal          Decimal @db.Decimal(10,2)
+  saleId            String
+  tenantInventoryId String  // referencia al inventario del tenant
+  tenantId          String
 
   // Relations
-  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
+  sale            Sale            @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  tenantInventory TenantInventory @relation(fields: [tenantInventoryId], references: [id])
 
   @@index([tenantId, saleId])
   @@map("sale_items")

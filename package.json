@@ -9,6 +9,7 @@
     "lint": "next lint",
     "seed": "tsx prisma/seed.ts",
     "seed:multitenancy": "tsx prisma/seed-multitenancy.ts",
+    "seed:master-products": "tsx scripts/seed-master-products.ts",
     "verify": "node scripts/verify-installation.js"
   },
   "prisma": {
