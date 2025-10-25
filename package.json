@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "seed:multitenancy": "tsx prisma/seed-multitenancy.ts",
+    "verify": "node scripts/verify-installation.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
