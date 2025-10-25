@@ -166,6 +166,69 @@ export default function AdminDashboard() {
 
       {/* Módulos disponibles */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {/* Punto de Venta */}
+        <Card className="hover:shadow-lg transition-shadow border-green-200 bg-green-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-green-700">
+              <ShoppingCart className="h-5 w-5" />
+              Punto de Venta
+            </CardTitle>
+            <CardDescription>
+              Sistema de ventas rápido y eficiente
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/pos">
+              <Button className="w-full bg-green-600 hover:bg-green-700">
+                Ir al POS
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Sesión de Caja */}
+        <Card className="hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Sesión de Caja
+            </CardTitle>
+            <CardDescription>
+              Apertura, cierre y arqueo de caja
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/cash-session">
+              <Button className="w-full">
+                Gestionar Caja
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Historial de Ventas */}
+        <Card className="hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Historial de Ventas
+            </CardTitle>
+            <CardDescription>
+              Consulta y reportes de ventas
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/sales">
+              <Button className="w-full">
+                Ver Ventas
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
         {/* Inventario */}
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
@@ -187,15 +250,15 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Ventas (próximamente) */}
+        {/* Usuarios (próximamente) */}
         <Card className="opacity-60">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5" />
-              Punto de Venta
+              <Users className="h-5 w-5" />
+              Usuarios
             </CardTitle>
             <CardDescription>
-              Registra ventas y gestiona caja
+              Gestión de usuarios del sistema
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -205,15 +268,15 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Reportes (próximamente) */}
+        {/* Reportes Avanzados (próximamente) */}
         <Card className="opacity-60">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
-              Reportes
+              Reportes Avanzados
             </CardTitle>
             <CardDescription>
-              Análisis de ventas y rentabilidad
+              Análisis de rentabilidad y break-even
             </CardDescription>
           </CardHeader>
           <CardContent>

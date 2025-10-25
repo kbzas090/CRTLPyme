@@ -25,7 +25,10 @@ import {
   LogOut,
   User,
   Building,
-  HeadphonesIcon
+  HeadphonesIcon,
+  Receipt,
+  DollarSign,
+  CreditCard
 } from 'lucide-react'
 import type { UserRole } from '@prisma/client'
 
@@ -41,15 +44,17 @@ const roleRoutes = {
   ],
   ADMIN: [
     { href: '/admin/dashboard', label: 'Dashboard', icon: BarChart3 },
-    { href: '/admin/sales', label: 'Ventas', icon: ShoppingCart },
+    { href: '/admin/pos', label: 'Punto de Venta', icon: ShoppingCart },
+    { href: '/admin/cash-session', label: 'Sesión de Caja', icon: DollarSign },
+    { href: '/admin/sales', label: 'Historial Ventas', icon: Receipt },
     { href: '/admin/inventory', label: 'Inventario', icon: Package },
     { href: '/admin/users', label: 'Usuarios', icon: Users },
     { href: '/admin/settings', label: 'Configuración', icon: Settings },
   ],
   CAJA: [
-    { href: '/caja/dashboard', label: 'Dashboard', icon: BarChart3 },
-    { href: '/caja/pos', label: 'Punto de Venta', icon: ShoppingCart },
-    { href: '/caja/cash-session', label: 'Sesión de Caja', icon: Settings },
+    { href: '/admin/pos', label: 'Punto de Venta', icon: ShoppingCart },
+    { href: '/admin/cash-session', label: 'Sesión de Caja', icon: DollarSign },
+    { href: '/admin/sales', label: 'Mis Ventas', icon: Receipt },
   ],
   INVENTARIO: [
     { href: '/inventario/dashboard', label: 'Dashboard', icon: BarChart3 },

@@ -1,0 +1,65 @@
+
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/db'
+
+// GET: Obtener sesión activa del usuario
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    
+    if (!session?.user) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    const activeSession = await prisma.cashSession.findFirst({
+      where: {
+        userId: session.user.id,
+        tenantId: session.user.tenantId,
+        status: 'OPEN',
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        sales: {
+          where: {
+            status: 'COMPLETED',
+          },
+        },
+        _count: {
+          select: {
+            sales: true,
+          },
+        },
+      },
+    })
+
+    if (!activeSession) {
+      return NextResponse.json({ error: 'No hay sesión activa' }, { status: 404 })
+    }
+
+    // Calcular totales de la sesión
+    const totalSales = activeSession.sales.reduce((sum, sale) => sum + Number(sale.total), 0)
+    const totalCash = activeSession.sales
+      .filter(sale => sale.paymentMethod === 'CASH')
+      .reduce((sum, sale) => sum + Number(sale.total), 0)
+
+    const expectedAmount = Number(activeSession.initialAmount) + totalSales
+
+    return NextResponse.json({
+      ...activeSession,
+      totalSales,
+      totalCash,
+      expectedAmount,
+    })
+  } catch (error) {
+    console.error('Error al obtener sesión activa:', error)
+    return NextResponse.json({ error: 'Error al obtener sesión activa' }, { status: 500 })
+  }
+}
