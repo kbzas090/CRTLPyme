@@ -34,11 +34,16 @@ RUN apk add --no-cache openssl
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Copiar archivos del build
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/prisma ./prisma
+
+# Copiar public solo si existe
+RUN mkdir -p ./public
+COPY --from=builder /app/public* ./public/ 2>/dev/null || true
 
 USER nextjs
 
