@@ -41,10 +41,6 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/prisma ./prisma
 
-# Copiar public solo si existe
-RUN mkdir -p ./public
-COPY --from=builder /app/public* ./public/ 2>/dev/null || true
-
 USER nextjs
 
 EXPOSE 3000
