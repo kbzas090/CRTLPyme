@@ -1,23 +1,11 @@
-const path = require('path');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: process.env.NEXT_DIST_DIR || '.next',
-  output: process.env.NEXT_OUTPUT_MODE,
+  output: 'standalone',
   experimental: {
-    outputFileTracingRoot: path.join(__dirname, '../'),
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  images: { unoptimized: true },
-  // Force cache invalidation
-  generateBuildId: async () => {
-    return `build-${Date.now()}`;
-  },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
