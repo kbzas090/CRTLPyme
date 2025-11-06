@@ -1,303 +1,301 @@
 /**
- * Seeder para crear planes de suscripción iniciales
- * Ejecutar con: npm run seed:subscription-plans
+ * Script de inicialización de planes de suscripción para CRTLPyme SaaS
+ * 
+ * Este script crea los 8 planes de suscripción iniciales:
+ * - 4 planes mensuales (FREE, BASIC, PROFESSIONAL, ENTERPRISE)
+ * - 4 planes anuales con descuento (BASIC, PROFESSIONAL, ENTERPRISE, PREMIUM)
  */
 
 import { PrismaClient, BillingCycle } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Definición de los planes de suscripción
+const subscriptionPlans = [
+  // ========================================
+  // PLANES MENSUALES
+  // ========================================
+  {
+    name: 'Plan Gratuito',
+    description: 'Perfecto para comenzar y probar el sistema',
+    price: 0,
+    billingCycle: 'MONTHLY' as BillingCycle,
+    trialDays: 0,
+    isVisible: true,
+    sortOrder: 1,
+    features: JSON.stringify([
+      '1 Usuario',
+      '50 Productos',
+      '100 Ventas/mes',
+      'Soporte por email',
+      'Reportes básicos',
+      '1 Caja registradora'
+    ]),
+    maxUsers: 1,
+    maxProducts: 50,
+    maxSales: 100,
+    isActive: true,
+  },
+  {
+    name: 'Plan Básico - Mensual',
+    description: 'Ideal para pequeños negocios que están creciendo',
+    price: 19990,
+    billingCycle: 'MONTHLY' as BillingCycle,
+    trialDays: 14,
+    isVisible: true,
+    sortOrder: 2,
+    features: JSON.stringify([
+      '3 Usuarios',
+      '500 Productos',
+      'Ventas ilimitadas',
+      'Soporte prioritario',
+      'Reportes avanzados',
+      '2 Cajas registradoras',
+      'Control de inventario',
+      'Gestión de clientes'
+    ]),
+    maxUsers: 3,
+    maxProducts: 500,
+    maxSales: null,
+    isActive: true,
+  },
+  {
+    name: 'Plan Profesional - Mensual',
+    description: 'Para negocios establecidos con múltiples puntos de venta',
+    price: 39990,
+    billingCycle: 'MONTHLY' as BillingCycle,
+    trialDays: 14,
+    isVisible: true,
+    sortOrder: 3,
+    features: JSON.stringify([
+      '10 Usuarios',
+      '2000 Productos',
+      'Ventas ilimitadas',
+      'Soporte 24/7',
+      'Reportes personalizados',
+      '5 Cajas registradoras',
+      'Multi-sucursal',
+      'Integración con Transbank',
+      'Facturación electrónica',
+      'API de integración',
+      'Backup automático diario'
+    ]),
+    maxUsers: 10,
+    maxProducts: 2000,
+    maxSales: null,
+    isActive: true,
+  },
+  {
+    name: 'Plan Empresarial - Mensual',
+    description: 'Solución completa para cadenas y grandes empresas',
+    price: 79990,
+    billingCycle: 'MONTHLY' as BillingCycle,
+    trialDays: 30,
+    isVisible: true,
+    sortOrder: 4,
+    features: JSON.stringify([
+      'Usuarios ilimitados',
+      'Productos ilimitados',
+      'Ventas ilimitadas',
+      'Soporte dedicado 24/7',
+      'Reportes personalizados',
+      'Cajas registradoras ilimitadas',
+      'Multi-sucursal avanzado',
+      'Integración con todos los medios de pago',
+      'Facturación electrónica SII',
+      'API completa',
+      'Backup en tiempo real',
+      'Personalización del sistema',
+      'Capacitación incluida'
+    ]),
+    maxUsers: null,
+    maxProducts: null,
+    maxSales: null,
+    isActive: true,
+  },
+
+  // ========================================
+  // PLANES ANUALES (con 20% de descuento)
+  // ========================================
+  {
+    name: 'Plan Básico - Anual',
+    description: 'Ahorra 20% pagando anualmente',
+    price: 191904, // 19990 * 12 * 0.8
+    billingCycle: 'YEARLY' as BillingCycle,
+    trialDays: 30,
+    isVisible: true,
+    sortOrder: 5,
+    features: JSON.stringify([
+      '3 Usuarios',
+      '500 Productos',
+      'Ventas ilimitadas',
+      'Soporte prioritario',
+      'Reportes avanzados',
+      '2 Cajas registradoras',
+      'Control de inventario',
+      'Gestión de clientes',
+      '⭐ 20% de descuento',
+      '⭐ 2 meses gratis'
+    ]),
+    maxUsers: 3,
+    maxProducts: 500,
+    maxSales: null,
+    isActive: true,
+  },
+  {
+    name: 'Plan Profesional - Anual',
+    description: 'Ahorra 20% pagando anualmente',
+    price: 383904, // 39990 * 12 * 0.8
+    billingCycle: 'YEARLY' as BillingCycle,
+    trialDays: 30,
+    isVisible: true,
+    sortOrder: 6,
+    features: JSON.stringify([
+      '10 Usuarios',
+      '2000 Productos',
+      'Ventas ilimitadas',
+      'Soporte 24/7',
+      'Reportes personalizados',
+      '5 Cajas registradoras',
+      'Multi-sucursal',
+      'Integración con Transbank',
+      'Facturación electrónica',
+      'API de integración',
+      'Backup automático diario',
+      '⭐ 20% de descuento',
+      '⭐ 2 meses gratis'
+    ]),
+    maxUsers: 10,
+    maxProducts: 2000,
+    maxSales: null,
+    isActive: true,
+  },
+  {
+    name: 'Plan Empresarial - Anual',
+    description: 'Ahorra 20% pagando anualmente',
+    price: 767904, // 79990 * 12 * 0.8
+    billingCycle: 'YEARLY' as BillingCycle,
+    trialDays: 30,
+    isVisible: true,
+    sortOrder: 7,
+    features: JSON.stringify([
+      'Usuarios ilimitados',
+      'Productos ilimitados',
+      'Ventas ilimitadas',
+      'Soporte dedicado 24/7',
+      'Reportes personalizados',
+      'Cajas registradoras ilimitadas',
+      'Multi-sucursal avanzado',
+      'Integración con todos los medios de pago',
+      'Facturación electrónica SII',
+      'API completa',
+      'Backup en tiempo real',
+      'Personalización del sistema',
+      'Capacitación incluida',
+      '⭐ 20% de descuento',
+      '⭐ 2 meses gratis'
+    ]),
+    maxUsers: null,
+    maxProducts: null,
+    maxSales: null,
+    isActive: true,
+  },
+  {
+    name: 'Plan Premium - Anual',
+    description: 'La solución más completa con todo incluido',
+    price: 1199904, // 124990 * 12 * 0.8
+    billingCycle: 'YEARLY' as BillingCycle,
+    trialDays: 30,
+    isVisible: true,
+    sortOrder: 8,
+    features: JSON.stringify([
+      '✨ Todo lo del Plan Empresarial',
+      '✨ Módulo de Contabilidad integrado',
+      '✨ Módulo de RRHH',
+      '✨ Módulo de Compras y Proveedores',
+      '✨ CRM avanzado',
+      '✨ Business Intelligence',
+      '✨ Integraciones personalizadas',
+      '✨ Desarrollo de módulos a medida',
+      '✨ Consultor dedicado',
+      '✨ SLA garantizado 99.9%',
+      '⭐ 20% de descuento',
+      '⭐ 2 meses gratis'
+    ]),
+    maxUsers: null,
+    maxProducts: null,
+    maxSales: null,
+    isActive: true,
+  },
+];
+
 async function main() {
-  console.log('🌱 Iniciando seed de planes de suscripción...');
+  console.log('🚀 Iniciando seed de planes de suscripción...\n');
 
-  // Verificar si ya existen planes
-  const existingPlans = await prisma.subscriptionPlan.count();
-  
-  if (existingPlans > 0) {
-    console.log('⚠️  Ya existen planes de suscripción. ¿Desea continuar? (se crearán planes adicionales)');
+  try {
+    // Eliminar planes existentes si es necesario (solo en desarrollo)
+    // await prisma.subscriptionPlan.deleteMany({});
+    // console.log('🗑️  Planes existentes eliminados\n');
+
+    // Crear los planes de suscripción
+    let createdCount = 0;
+    let updatedCount = 0;
+
+    for (const plan of subscriptionPlans) {
+      try {
+        const existingPlan = await prisma.subscriptionPlan.findFirst({
+          where: {
+            name: plan.name,
+            billingCycle: plan.billingCycle,
+          },
+        });
+
+        if (existingPlan) {
+          // Actualizar el plan existente
+          await prisma.subscriptionPlan.update({
+            where: { id: existingPlan.id },
+            data: plan,
+          });
+          console.log(`✅ Plan actualizado: ${plan.name}`);
+          updatedCount++;
+        } else {
+          // Crear nuevo plan
+          await prisma.subscriptionPlan.create({
+            data: plan,
+          });
+          console.log(`✅ Plan creado: ${plan.name} - $${plan.price.toLocaleString('es-CL')}`);
+          createdCount++;
+        }
+      } catch (error) {
+        console.error(`❌ Error procesando plan ${plan.name}:`, error);
+      }
+    }
+
+    console.log(`\n✅ Seed completado exitosamente!`);
+    console.log(`📊 Resumen:`);
+    console.log(`   - Planes creados: ${createdCount}`);
+    console.log(`   - Planes actualizados: ${updatedCount}`);
+    console.log(`   - Total: ${createdCount + updatedCount}`);
+
+    // Mostrar todos los planes creados
+    const allPlans = await prisma.subscriptionPlan.findMany({
+      orderBy: { sortOrder: 'asc' },
+    });
+
+    console.log('\n📋 Planes de suscripción disponibles:');
+    allPlans.forEach((plan) => {
+      console.log(`   ${plan.sortOrder}. ${plan.name} - $${Number(plan.price).toLocaleString('es-CL')} ${plan.billingCycle === 'MONTHLY' ? '/mes' : '/año'}`);
+    });
+
+  } catch (error) {
+    console.error('❌ Error en el seed:', error);
+    throw error;
   }
-
-  // === PLANES MENSUALES ===
-
-  const basicMonthly = await prisma.subscriptionPlan.upsert({
-    where: { id: 'basic-monthly' },
-    update: {},
-    create: {
-      id: 'basic-monthly',
-      name: 'Básico Mensual',
-      description: 'Plan básico con las funcionalidades esenciales para pequeños negocios',
-      price: 9990, // CLP
-      billingCycle: 'MONTHLY' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 1,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Hasta 5 usuarios',
-          'Hasta 500 productos',
-          'Ventas ilimitadas',
-          'Gestión de inventario',
-          'Reportes básicos',
-          'Soporte por email',
-        ],
-      },
-      maxUsers: 5,
-      maxProducts: 500,
-      maxSales: null, // ilimitado
-      isActive: true,
-    },
-  });
-
-  const proMonthly = await prisma.subscriptionPlan.upsert({
-    where: { id: 'pro-monthly' },
-    update: {},
-    create: {
-      id: 'pro-monthly',
-      name: 'Profesional Mensual',
-      description: 'Plan profesional con funcionalidades avanzadas para negocios en crecimiento',
-      price: 19990, // CLP
-      billingCycle: 'MONTHLY' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 2,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Hasta 15 usuarios',
-          'Hasta 2000 productos',
-          'Ventas ilimitadas',
-          'Gestión avanzada de inventario',
-          'Reportes avanzados y analítica',
-          'Dashboard en tiempo real',
-          'Cálculo de punto de equilibrio',
-          'Soporte prioritario',
-        ],
-      },
-      maxUsers: 15,
-      maxProducts: 2000,
-      maxSales: null, // ilimitado
-      isActive: true,
-    },
-  });
-
-  const enterpriseMonthly = await prisma.subscriptionPlan.upsert({
-    where: { id: 'enterprise-monthly' },
-    update: {},
-    create: {
-      id: 'enterprise-monthly',
-      name: 'Enterprise Mensual',
-      description: 'Plan empresarial con todas las funcionalidades y soporte premium',
-      price: 39990, // CLP
-      billingCycle: 'MONTHLY' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 3,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Usuarios ilimitados',
-          'Productos ilimitados',
-          'Ventas ilimitadas',
-          'Gestión completa de inventario',
-          'Reportes personalizados',
-          'Dashboard avanzado',
-          'Análisis predictivo',
-          'API access',
-          'Soporte 24/7',
-          'Asesoría personalizada',
-        ],
-      },
-      maxUsers: null, // ilimitado
-      maxProducts: null, // ilimitado
-      maxSales: null, // ilimitado
-      isActive: true,
-    },
-  });
-
-  // === PLANES TRIMESTRALES (10% descuento) ===
-
-  const basicQuarterly = await prisma.subscriptionPlan.upsert({
-    where: { id: 'basic-quarterly' },
-    update: {},
-    create: {
-      id: 'basic-quarterly',
-      name: 'Básico Trimestral',
-      description: 'Plan básico con pago trimestral (10% descuento)',
-      price: 26970, // CLP (9990 * 3 * 0.9)
-      billingCycle: 'QUARTERLY' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 4,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Hasta 5 usuarios',
-          'Hasta 500 productos',
-          'Ventas ilimitadas',
-          'Gestión de inventario',
-          'Reportes básicos',
-          'Soporte por email',
-          '10% descuento vs plan mensual',
-        ],
-      },
-      maxUsers: 5,
-      maxProducts: 500,
-      maxSales: null,
-      isActive: true,
-    },
-  });
-
-  const proQuarterly = await prisma.subscriptionPlan.upsert({
-    where: { id: 'pro-quarterly' },
-    update: {},
-    create: {
-      id: 'pro-quarterly',
-      name: 'Profesional Trimestral',
-      description: 'Plan profesional con pago trimestral (10% descuento)',
-      price: 53973, // CLP (19990 * 3 * 0.9)
-      billingCycle: 'QUARTERLY' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 5,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Hasta 15 usuarios',
-          'Hasta 2000 productos',
-          'Ventas ilimitadas',
-          'Gestión avanzada de inventario',
-          'Reportes avanzados y analítica',
-          'Dashboard en tiempo real',
-          'Cálculo de punto de equilibrio',
-          'Soporte prioritario',
-          '10% descuento vs plan mensual',
-        ],
-      },
-      maxUsers: 15,
-      maxProducts: 2000,
-      maxSales: null,
-      isActive: true,
-    },
-  });
-
-  // === PLANES ANUALES (20% descuento) ===
-
-  const basicAnnual = await prisma.subscriptionPlan.upsert({
-    where: { id: 'basic-annual' },
-    update: {},
-    create: {
-      id: 'basic-annual',
-      name: 'Básico Anual',
-      description: 'Plan básico con pago anual (20% descuento)',
-      price: 95904, // CLP (9990 * 12 * 0.8)
-      billingCycle: 'ANNUAL' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 6,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Hasta 5 usuarios',
-          'Hasta 500 productos',
-          'Ventas ilimitadas',
-          'Gestión de inventario',
-          'Reportes básicos',
-          'Soporte por email',
-          '20% descuento vs plan mensual',
-        ],
-      },
-      maxUsers: 5,
-      maxProducts: 500,
-      maxSales: null,
-      isActive: true,
-    },
-  });
-
-  const proAnnual = await prisma.subscriptionPlan.upsert({
-    where: { id: 'pro-annual' },
-    update: {},
-    create: {
-      id: 'pro-annual',
-      name: 'Profesional Anual',
-      description: 'Plan profesional con pago anual (20% descuento)',
-      price: 191904, // CLP (19990 * 12 * 0.8)
-      billingCycle: 'ANNUAL' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 7,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Hasta 15 usuarios',
-          'Hasta 2000 productos',
-          'Ventas ilimitadas',
-          'Gestión avanzada de inventario',
-          'Reportes avanzados y analítica',
-          'Dashboard en tiempo real',
-          'Cálculo de punto de equilibrio',
-          'Soporte prioritario',
-          '20% descuento vs plan mensual',
-        ],
-      },
-      maxUsers: 15,
-      maxProducts: 2000,
-      maxSales: null,
-      isActive: true,
-    },
-  });
-
-  const enterpriseAnnual = await prisma.subscriptionPlan.upsert({
-    where: { id: 'enterprise-annual' },
-    update: {},
-    create: {
-      id: 'enterprise-annual',
-      name: 'Enterprise Anual',
-      description: 'Plan empresarial con pago anual (20% descuento)',
-      price: 383904, // CLP (39990 * 12 * 0.8)
-      billingCycle: 'ANNUAL' as BillingCycle,
-      trialDays: 14,
-      isVisible: true,
-      sortOrder: 8,
-      features: {
-        items: [
-          '2 cajas/terminales incluidas',
-          'Usuarios ilimitados',
-          'Productos ilimitados',
-          'Ventas ilimitadas',
-          'Gestión completa de inventario',
-          'Reportes personalizados',
-          'Dashboard avanzado',
-          'Análisis predictivo',
-          'API access',
-          'Soporte 24/7',
-          'Asesoría personalizada',
-          '20% descuento vs plan mensual',
-        ],
-      },
-      maxUsers: null,
-      maxProducts: null,
-      maxSales: null,
-      isActive: true,
-    },
-  });
-
-  console.log('✅ Planes de suscripción creados exitosamente:');
-  console.log('   - Básico Mensual:', basicMonthly.id);
-  console.log('   - Profesional Mensual:', proMonthly.id);
-  console.log('   - Enterprise Mensual:', enterpriseMonthly.id);
-  console.log('   - Básico Trimestral:', basicQuarterly.id);
-  console.log('   - Profesional Trimestral:', proQuarterly.id);
-  console.log('   - Básico Anual:', basicAnnual.id);
-  console.log('   - Profesional Anual:', proAnnual.id);
-  console.log('   - Enterprise Anual:', enterpriseAnnual.id);
-  console.log('');
-  console.log('🎉 Seed completado!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error durante el seed:', e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

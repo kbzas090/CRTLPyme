@@ -12,7 +12,8 @@
     "seed:master-products": "tsx scripts/seed-master-products.ts",
     "seed:subscription-plans": "tsx prisma/seed-subscription-plans.ts",
     "verify": "node scripts/verify-installation.js",
-    "verify:prod": "tsx scripts/verify-production.ts"
+    "verify:prod": "tsx scripts/verify-production.ts",
+    "seed:plans": "tsx prisma/seed-subscription-plans.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

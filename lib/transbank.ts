@@ -1,34 +1,56 @@
 /**
- * Servicio de integración con Transbank para procesar pagos
- * Utiliza Webpay Plus para pagos de suscripciones
+ * Transbank Integration Helper
+ * 
+ * Este módulo maneja la integración con la API de Transbank Webpay Plus
+ * para procesamiento de pagos de suscripciones.
+ * 
+ * Documentación: https://www.transbankdevelopers.cl/
  */
 
-import { WebpayPlus, Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } from 'transbank-sdk';
+import { WebpayPlus, Options, IntegrationApiKeys, IntegrationCommerceCodes, Environment } from 'transbank-sdk';
 
-// Configuración de Transbank
-const TRANSBANK_ENVIRONMENT = process.env.TRANSBANK_ENVIRONMENT || 'integration';
-const TRANSBANK_COMMERCE_CODE = process.env.TRANSBANK_COMMERCE_CODE || IntegrationCommerceCodes.WEBPAY_PLUS;
-const TRANSBANK_API_KEY = process.env.TRANSBANK_API_KEY || IntegrationApiKeys.WEBPAY;
+/**
+ * Configuración de Transbank según variables de entorno
+ */
+const TRANSBANK_CONFIG = {
+  apiKey: process.env.TRANSBANK_API_KEY || IntegrationApiKeys.WEBPAY_PLUS,
+  commerceCode: process.env.TRANSBANK_COMMERCE_CODE || IntegrationCommerceCodes.WEBPAY_PLUS,
+  environment: process.env.TRANSBANK_ENVIRONMENT === 'production' 
+    ? Environment.Production 
+    : Environment.Integration,
+};
 
-// Configurar ambiente de Transbank
-const options = new Options(
-  TRANSBANK_COMMERCE_CODE,
-  TRANSBANK_API_KEY,
-  TRANSBANK_ENVIRONMENT === 'production' ? Environment.Production : Environment.Integration
-);
+/**
+ * Inicializa y retorna una instancia configurada de Webpay Plus
+ */
+export function getWebpayPlus() {
+  try {
+    // Configurar las opciones
+    const options = new Options(
+      TRANSBANK_CONFIG.commerceCode,
+      TRANSBANK_CONFIG.apiKey,
+      TRANSBANK_CONFIG.environment
+    );
 
-export interface TransbankPaymentRequest {
-  buyOrder: string;
-  sessionId: string;
-  amount: number;
-  returnUrl: string;
+    // Retornar instancia de Webpay Plus con las opciones configuradas
+    return new WebpayPlus.Transaction(options);
+  } catch (error) {
+    console.error('❌ Error inicializando Webpay Plus:', error);
+    throw new Error('No se pudo inicializar Transbank Webpay Plus');
+  }
 }
 
-export interface TransbankPaymentResponse {
+/**
+ * Interface para la respuesta de creación de transacción
+ */
+export interface TransbankCreateResponse {
   token: string;
   url: string;
 }
 
+/**
+ * Interface para la respuesta de confirmación de transacción
+ */
 export interface TransbankCommitResponse {
   vci: string;
   amount: number;
@@ -47,236 +69,160 @@ export interface TransbankCommitResponse {
 }
 
 /**
- * Crea una transacción de pago en Transbank
- * Retorna el token y URL para redirigir al usuario
+ * Crea una nueva transacción en Transbank
+ * 
+ * @param buyOrder - Número de orden único (máximo 26 caracteres)
+ * @param sessionId - Identificador de sesión (puede ser ID de usuario/suscripción)
+ * @param amount - Monto en pesos chilenos (sin decimales)
+ * @param returnUrl - URL de retorno después del pago
+ * @returns Token y URL para redirección al formulario de pago
  */
-export async function createPayment(
-  request: TransbankPaymentRequest
-): Promise<TransbankPaymentResponse | null> {
+export async function createTransaction(
+  buyOrder: string,
+  sessionId: string,
+  amount: number,
+  returnUrl: string
+): Promise<TransbankCreateResponse> {
   try {
-    console.log('Creando transacción en Transbank:', {
-      buyOrder: request.buyOrder,
-      amount: request.amount,
-      sessionId: request.sessionId,
+    console.log('🚀 Creando transacción en Transbank:', {
+      buyOrder,
+      sessionId,
+      amount,
+      returnUrl,
+      environment: TRANSBANK_CONFIG.environment
     });
 
-    const transaction = new WebpayPlus.Transaction(options);
+    const transaction = getWebpayPlus();
     
     const response = await transaction.create(
-      request.buyOrder,
-      request.sessionId,
-      request.amount,
-      request.returnUrl
+      buyOrder,
+      sessionId,
+      amount,
+      returnUrl
     );
 
-    console.log('Transacción creada exitosamente:', response);
+    console.log('✅ Transacción creada exitosamente:', {
+      token: response.token?.substring(0, 20) + '...',
+      url: response.url
+    });
 
     return {
       token: response.token,
-      url: response.url,
+      url: response.url
     };
-  } catch (error: any) {
-    console.error('Error al crear transacción en Transbank:', error);
-    return null;
+  } catch (error) {
+    console.error('❌ Error creando transacción en Transbank:', error);
+    throw new Error('Error al crear transacción de pago');
   }
 }
 
 /**
- * Confirma una transacción de pago después de que el usuario regrese de Transbank
+ * Confirma una transacción después del retorno desde Transbank
+ * 
+ * @param token - Token de la transacción retornado por Transbank
+ * @returns Detalles de la transacción confirmada
  */
-export async function commitPayment(
+export async function commitTransaction(
   token: string
-): Promise<TransbankCommitResponse | null> {
+): Promise<TransbankCommitResponse> {
   try {
-    console.log('Confirmando transacción en Transbank:', token);
+    console.log('🔍 Confirmando transacción en Transbank:', {
+      token: token.substring(0, 20) + '...'
+    });
 
-    const transaction = new WebpayPlus.Transaction(options);
+    const transaction = getWebpayPlus();
     const response = await transaction.commit(token);
 
-    console.log('Transacción confirmada exitosamente:', response);
+    console.log('✅ Transacción confirmada:', {
+      buyOrder: response.buy_order,
+      status: response.status,
+      responseCode: response.response_code,
+      amount: response.amount
+    });
 
     return response as TransbankCommitResponse;
-  } catch (error: any) {
-    console.error('Error al confirmar transacción en Transbank:', error);
-    return null;
+  } catch (error) {
+    console.error('❌ Error confirmando transacción en Transbank:', error);
+    throw new Error('Error al confirmar transacción de pago');
   }
 }
 
 /**
- * Verifica el estado de una transacción
+ * Obtiene el estado de una transacción
+ * 
+ * @param token - Token de la transacción
+ * @returns Estado de la transacción
  */
-export async function getTransactionStatus(
-  token: string
-): Promise<TransbankCommitResponse | null> {
+export async function getTransactionStatus(token: string) {
   try {
-    console.log('Consultando estado de transacción:', token);
-
-    const transaction = new WebpayPlus.Transaction(options);
+    const transaction = getWebpayPlus();
     const response = await transaction.status(token);
-
-    console.log('Estado de transacción obtenido:', response);
-
-    return response as TransbankCommitResponse;
-  } catch (error: any) {
-    console.error('Error al consultar estado de transacción:', error);
-    return null;
+    return response;
+  } catch (error) {
+    console.error('❌ Error obteniendo estado de transacción:', error);
+    throw new Error('Error al obtener estado de transacción');
   }
 }
 
 /**
- * Valida si una transacción fue exitosa
+ * Verifica si una transacción fue aprobada
+ * 
+ * @param responseCode - Código de respuesta de Transbank
+ * @returns true si fue aprobada, false en caso contrario
  */
-export function isPaymentSuccessful(response: TransbankCommitResponse): boolean {
-  // Código de respuesta 0 indica transacción aprobada
-  return response.response_code === 0 && response.status === 'AUTHORIZED';
+export function isTransactionApproved(responseCode: number): boolean {
+  // Código 0 = transacción aprobada
+  return responseCode === 0;
 }
 
 /**
- * Formatea el monto para Transbank (sin decimales, en pesos chilenos)
+ * Obtiene descripción del código de respuesta
+ */
+export function getResponseCodeDescription(responseCode: number): string {
+  const codes: Record<string, string> = {
+    '0': 'Transacción aprobada',
+    '-1': 'Rechazo de transacción',
+    '-2': 'Transacción debe reintentarse',
+    '-3': 'Error en transacción',
+    '-4': 'Rechazo de transacción',
+    '-5': 'Rechazo por error de tasa',
+    '-6': 'Excede cupo máximo mensual',
+    '-7': 'Excede límite diario por transacción',
+    '-8': 'Rubro no autorizado',
+  };
+
+  return codes[responseCode.toString()] || 'Código de respuesta desconocido';
+}
+
+/**
+ * Genera un número de orden único
+ * 
+ * @param prefix - Prefijo para la orden (ej: "SUB" para suscripción)
+ * @returns Número de orden único (máximo 26 caracteres)
+ */
+export function generateBuyOrder(prefix: string = 'ORD'): string {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `${prefix}-${timestamp}-${random}`.substring(0, 26);
+}
+
+/**
+ * Formatea el monto para Transbank (sin decimales, entero)
+ * 
+ * @param amount - Monto en pesos chilenos
+ * @returns Monto formateado como entero
  */
 export function formatAmount(amount: number): number {
-  // Transbank espera el monto en pesos chilenos sin decimales
   return Math.round(amount);
 }
 
-/**
- * Genera un número de orden único para Transbank
- */
-export function generateBuyOrder(prefix: string = 'ORDER'): string {
-  const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 10000);
-  return `${prefix}-${timestamp}-${random}`;
-}
-
-/**
- * Obtiene los últimos 4 dígitos de la tarjeta
- */
-export function getCardLast4(cardNumber: string): string {
-  return cardNumber.slice(-4);
-}
-
-/**
- * Obtiene el tipo de tarjeta basado en el payment_type_code
- */
-export function getCardType(paymentTypeCode: string): string {
-  const cardTypes: Record<string, string> = {
-    'VD': 'Visa Débito',
-    'VN': 'Visa',
-    'MC': 'Mastercard',
-    'AX': 'American Express',
-    'DC': 'Diners Club',
-  };
-  
-  return cardTypes[paymentTypeCode] || 'Desconocida';
-}
-
-/**
- * Formatea la respuesta de Transbank para guardar en la base de datos
- */
-export function formatTransbankResponse(response: TransbankCommitResponse) {
-  return {
-    vci: response.vci,
-    amount: response.amount,
-    status: response.status,
-    buyOrder: response.buy_order,
-    sessionId: response.session_id,
-    cardNumber: response.card_detail.card_number,
-    cardLast4: getCardLast4(response.card_detail.card_number),
-    cardType: getCardType(response.payment_type_code),
-    accountingDate: response.accounting_date,
-    transactionDate: response.transaction_date,
-    authorizationCode: response.authorization_code,
-    paymentTypeCode: response.payment_type_code,
-    responseCode: response.response_code,
-    installmentsNumber: response.installments_number,
-  };
-}
-
-/**
- * Procesa el pago de una suscripción
- * Esta es una función de alto nivel que combina todas las operaciones necesarias
- */
-export async function processSubscriptionPayment(
-  tenantId: string,
-  subscriptionId: string,
-  amount: number,
-  returnUrl: string
-): Promise<{ success: boolean; token?: string; url?: string; error?: string }> {
-  try {
-    // Generar orden de compra única
-    const buyOrder = generateBuyOrder(`SUB-${tenantId.slice(0, 8)}`);
-    
-    // Formatear monto
-    const formattedAmount = formatAmount(amount);
-    
-    // Crear transacción
-    const payment = await createPayment({
-      buyOrder,
-      sessionId: subscriptionId,
-      amount: formattedAmount,
-      returnUrl,
-    });
-
-    if (!payment) {
-      return {
-        success: false,
-        error: 'No se pudo crear la transacción en Transbank',
-      };
-    }
-
-    return {
-      success: true,
-      token: payment.token,
-      url: payment.url,
-    };
-  } catch (error: any) {
-    console.error('Error al procesar pago de suscripción:', error);
-    return {
-      success: false,
-      error: error.message || 'Error desconocido al procesar el pago',
-    };
-  }
-}
-
-/**
- * Confirma el pago de una suscripción después de que el usuario regrese
- */
-export async function confirmSubscriptionPayment(
-  token: string
-): Promise<{ 
-  success: boolean; 
-  transactionData?: any; 
-  error?: string;
-}> {
-  try {
-    const response = await commitPayment(token);
-
-    if (!response) {
-      return {
-        success: false,
-        error: 'No se pudo confirmar la transacción',
-      };
-    }
-
-    const isSuccess = isPaymentSuccessful(response);
-
-    if (!isSuccess) {
-      return {
-        success: false,
-        error: `Transacción rechazada (código: ${response.response_code})`,
-        transactionData: formatTransbankResponse(response),
-      };
-    }
-
-    return {
-      success: true,
-      transactionData: formatTransbankResponse(response),
-    };
-  } catch (error: any) {
-    console.error('Error al confirmar pago de suscripción:', error);
-    return {
-      success: false,
-      error: error.message || 'Error desconocido al confirmar el pago',
-    };
-  }
-}
+export default {
+  getWebpayPlus,
+  createTransaction,
+  commitTransaction,
+  getTransactionStatus,
+  isTransactionApproved,
+  getResponseCodeDescription,
+  generateBuyOrder,
+  formatAmount,
+};
