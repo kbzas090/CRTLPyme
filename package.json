@@ -10,6 +10,7 @@
     "seed": "tsx prisma/seed.ts",
     "seed:multitenancy": "tsx prisma/seed-multitenancy.ts",
     "seed:master-products": "tsx scripts/seed-master-products.ts",
+    "seed:subscription-plans": "tsx prisma/seed-subscription-plans.ts",
     "verify": "node scripts/verify-installation.js",
     "verify:prod": "tsx scripts/verify-production.ts"
   },
@@ -47,6 +48,7 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.76.1",
     "@types/pg": "^8.15.5",
     "autoprefixer": "^10.4.21",
@@ -72,6 +74,7 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "transbank-sdk": "^6.1.0",
     "vaul": "^1.1.2",
     "zod": "^3.25.76"
   },
