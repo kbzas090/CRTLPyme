@@ -29,6 +29,7 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.local_temp
 
 # Vercel
 .vercel
@@ -38,11 +39,11 @@ yarn-error.log*
 next-env.d.ts
 
 # Prisma
-prisma/migrations/
 .env.database
 
 # PostgreSQL
 *.sql
+!prisma/migrations/**/*.sql
 *.db
 
 # Logs
