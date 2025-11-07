@@ -7,7 +7,7 @@ Esta guía te llevará paso a paso a través del proceso completo de despliegue 
 Antes de comenzar, asegúrate de tener:
 
 - [x] Cuenta de GCP activa con facturación habilitada
-- [x] Proyecto GCP creado: `crtlpyme-442414`
+- [x] Proyecto GCP creado: `crtlpyme-477300`
 - [x] Cloud SQL PostgreSQL configurado (IP: `136.116.45.158`)
 - [x] Google Cloud SDK instalado localmente o acceso a Cloud Shell
 - [x] Repositorio clonado localmente
@@ -22,7 +22,7 @@ Antes de comenzar, asegúrate de tener:
 gcloud auth login
 
 # Configurar el proyecto
-gcloud config set project crtlpyme-442414
+gcloud config set project crtlpyme-477300
 
 # Verificar configuración
 gcloud config list
@@ -47,7 +47,7 @@ Este script creará o actualizará los siguientes secrets:
 
 ### Opción B: Configurar secrets manualmente
 
-Puedes acceder a [GCP Secret Manager](https://console.cloud.google.com/security/secret-manager?project=crtlpyme-442414) y crear los secrets manualmente:
+Puedes acceder a [GCP Secret Manager](https://console.cloud.google.com/security/secret-manager?project=crtlpyme-477300) y crear los secrets manualmente:
 
 | Secret Name | Valor |
 |-------------|-------|
@@ -129,7 +129,7 @@ git commit -m "chore: Prepare for Cloud Run deployment"
 git push origin main
 
 # Ejecutar Cloud Build
-gcloud builds submit --config cloudbuild.yaml --project=crtlpyme-442414
+gcloud builds submit --config cloudbuild.yaml --project=crtlpyme-477300
 ```
 
 El archivo `cloudbuild.yaml` está configurado para:
@@ -145,17 +145,17 @@ Si prefieres construir y desplegar manualmente:
 
 ```bash
 # Construir la imagen
-docker build -t gcr.io/crtlpyme-442414/crtlpyme:latest .
+docker build -t gcr.io/crtlpyme-477300/crtlpyme:latest .
 
 # Autenticar Docker con GCR
 gcloud auth configure-docker
 
 # Push de la imagen
-docker push gcr.io/crtlpyme-442414/crtlpyme:latest
+docker push gcr.io/crtlpyme-477300/crtlpyme:latest
 
 # Desplegar a Cloud Run
 gcloud run deploy crtlpyme \
-  --image=gcr.io/crtlpyme-442414/crtlpyme:latest \
+  --image=gcr.io/crtlpyme-477300/crtlpyme:latest \
   --region=us-central1 \
   --platform=managed \
   --allow-unauthenticated \
@@ -192,7 +192,7 @@ gcloud run services logs read crtlpyme --region=us-central1 --limit=50
 gcloud run services logs tail crtlpyme --region=us-central1
 ```
 
-También puedes ver los logs en la [Consola de GCP](https://console.cloud.google.com/logs?project=crtlpyme-442414).
+También puedes ver los logs en la [Consola de GCP](https://console.cloud.google.com/logs?project=crtlpyme-477300).
 
 ## 🚀 Script de Despliegue Automatizado
 
@@ -212,13 +212,13 @@ Si ves errores relacionados con secrets faltantes:
 
 ```bash
 # Listar todos los secrets
-gcloud secrets list --project=crtlpyme-442414
+gcloud secrets list --project=crtlpyme-477300
 
 # Crear un secret manualmente
 echo -n "valor-del-secret" | gcloud secrets create NOMBRE_SECRET \
   --data-file=- \
   --replication-policy="automatic" \
-  --project=crtlpyme-442414
+  --project=crtlpyme-477300
 ```
 
 ### Error: "Migration failed"
@@ -283,12 +283,12 @@ Cuando estés listo para producción:
 # Actualizar el secret de Transbank Environment
 echo -n "production" | gcloud secrets versions add TRANSBANK_ENVIRONMENT \
   --data-file=- \
-  --project=crtlpyme-442414
+  --project=crtlpyme-477300
 
 # Actualizar el código de comercio con el de producción
 echo -n "TU_CODIGO_PRODUCCION" | gcloud secrets versions add TRANSBANK_COMMERCE_CODE \
   --data-file=- \
-  --project=crtlpyme-442414
+  --project=crtlpyme-477300
 ```
 
 ### 4. Configurar backups automáticos
