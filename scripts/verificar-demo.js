@@ -54,7 +54,7 @@ function main() {
                     return [4 /*yield*/, prisma.$connect()];
                 case 2:
                     _a.sent();
-                    console.log('✅ Conexión exitosa a Supabase');
+                    console.log('✅ Conexión exitosa a Cloud SQL PostgreSQL');
                     // 2. Contar registros en tablas principales
                     console.log('\n2️⃣ Estado de las tablas principales:');
                     return [4 /*yield*/, prisma.tenant.count()];

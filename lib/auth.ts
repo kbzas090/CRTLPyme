@@ -47,7 +47,11 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        console.log('🔐 [AUTH] Authorization attempt started')
+        console.log('🔐 [AUTH] Email provided:', credentials?.email)
+        
         if (!credentials?.email || !credentials?.password) {
+          console.log('❌ [AUTH] Missing credentials - email or password not provided')
           return null
         }
 
@@ -56,15 +60,51 @@ export const authOptions: NextAuthOptions = {
           include: { tenant: true }
         })
 
-        if (!user || !user.isActive || !user.tenant?.isActive) {
+        console.log('🔐 [AUTH] User found:', user ? 'YES' : 'NO')
+        if (user) {
+          console.log('🔐 [AUTH] User details:', {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            isActive: user.isActive,
+            tenantId: user.tenantId,
+            tenantIsActive: user.tenant?.isActive,
+            hasPassword: !!user.password,
+            passwordLength: user.password?.length || 0
+          })
+        }
+
+        if (!user) {
+          console.log('❌ [AUTH] User not found in database')
           return null
         }
 
+        if (!user.isActive) {
+          console.log('❌ [AUTH] User is not active')
+          return null
+        }
+
+        if (!user.tenant?.isActive) {
+          console.log('❌ [AUTH] Tenant is not active')
+          return null
+        }
+
+        console.log('🔐 [AUTH] Attempting password comparison...')
+        console.log('🔐 [AUTH] Stored hash starts with:', user.password.substring(0, 10))
+        
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
+        
+        console.log('🔐 [AUTH] Password valid:', isPasswordValid)
+        
         if (!isPasswordValid) {
+          console.log('❌ [AUTH] Password comparison failed')
+          // Additional debugging: try comparing with a test hash
+          const testHash = await bcrypt.hash(credentials.password, 10)
+          console.log('🔐 [AUTH] Test hash of provided password:', testHash.substring(0, 10))
           return null
         }
 
+        console.log('✅ [AUTH] Authentication successful for user:', user.email)
         return {
           id: user.id,
           email: user.email,

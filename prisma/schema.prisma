@@ -36,7 +36,6 @@ model Tenant {
 
   // Relations
   users                   User[]
-  products                Product[]
   tenantInventories       TenantInventory[]
   sales                   Sale[]
   cashSessions            CashSession[]
@@ -133,32 +132,7 @@ model TenantInventory {
   @@map("tenant_inventory")
 }
 
-// Tabla legacy para mantener compatibilidad (DEPRECATED)
-model Product {
-  id          String   @id @default(cuid())
-  sku         String // código interno
-  barcode     String? // EAN-13
-  name        String
-  description String?
-  category    String
-  brand       String?
-  costPrice   Decimal  @db.Decimal(10, 2) // costo de compra
-  salePrice   Decimal  @db.Decimal(10, 2) // precio de venta
-  stock       Int      @default(0)
-  minStock    Int      @default(5) // umbral de reposición
-  isActive    Boolean  @default(true)
-  tenantId    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@unique([tenantId, sku])
-  @@index([tenantId, barcode])
-  @@index([tenantId, category])
-  @@map("products_legacy")
-}
 
 model StockAdjustment {
   id                String         @id @default(cuid())

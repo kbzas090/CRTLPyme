@@ -11,7 +11,7 @@ async function main() {
     // 1. Verificar conexión
     console.log('\n1️⃣ Verificando conexión a la base de datos...');
     await prisma.$connect();
-    console.log('✅ Conexión exitosa a Supabase');
+    console.log('✅ Conexión exitosa a Cloud SQL PostgreSQL');
 
     // 2. Contar registros en tablas principales
     console.log('\n2️⃣ Estado de las tablas principales:');
