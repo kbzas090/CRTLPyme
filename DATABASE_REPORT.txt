@@ -1,0 +1,775 @@
+═══════════════════════════════════════════════════════════════════════
+              REPORTE COMPLETO DE BASE DE DATOS CRTLPYME
+═══════════════════════════════════════════════════════════════════════
+
+📊 RESUMEN GENERAL DE LA BASE DE DATOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   • Planes de Suscripción:        3
+   • Negocios (Tenants):           14
+   • Usuarios Totales:             72
+   • Productos en Catálogo Maestro: 542
+   • Items en Inventario:          3300
+   • Ventas Registradas:           728
+   • Ajustes de Stock:             136
+   • Suscripciones Activas:        39
+   • Pagos de Suscripción:         151
+
+═══════════════════════════════════════════════════════════════════════
+📦 PLANES DE SUSCRIPCIÓN DISPONIBLES
+═══════════════════════════════════════════════════════════════════════
+
+1. Plan Básico
+   • Precio: $9990 CLP/mes
+   • Días de prueba: 15 días
+   • Descripción: Perfecto para emprendedores y pequeños negocios
+   • Características:
+     - 2 usuarios incluidos
+     - Hasta 500 productos
+     - Reportes básicos
+     - Soporte por email
+     - App móvil
+
+2. Plan Pro
+   • Precio: $19990 CLP/mes
+   • Días de prueba: 15 días
+   • Descripción: Para negocios en crecimiento que necesitan más
+   • Características:
+     - 5 usuarios incluidos
+     - Productos ilimitados
+     - Reportes avanzados
+     - Soporte prioritario
+     - App móvil
+     - Integración con Transbank
+
+3. Plan Enterprise
+   • Precio: $49990 CLP/mes
+   • Días de prueba: 30 días
+   • Descripción: Solución completa para cadenas y grandes negocios
+   • Características:
+     - Usuarios ilimitados
+     - Productos ilimitados
+     - Reportes personalizados
+     - Soporte 24/7
+     - App móvil
+     - Integración con Transbank
+     - API personalizada
+     - Gestor de cuenta dedicado
+
+═══════════════════════════════════════════════════════════════════════
+🔐 CREDENCIALES DE USUARIOS
+═══════════════════════════════════════════════════════════════════════
+
+⚠️  CONTRASEÑAS ESTÁNDAR:
+   • Administrador de Plataforma: Admin2025!
+   • Todos los demás usuarios:    Demo2025!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👨‍💼 ADMINISTRADOR DE PLATAFORMA (Super Admin / Proveedor)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Email:      admin@crtlpyme.com
+Contraseña: Admin2025!
+Nombre:     Admin Plataforma
+Rol:        PROVEEDOR (Acceso total al sistema)
+Negocio:    CRTLPyme - Plataforma
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 ADMINISTRADORES DE NEGOCIOS (Business Owners)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Almacén Doña Rosa
+   Plan: BASIC
+
+   • Email:      admin@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Jorge Rojas Silva
+     Rol:        ADMIN (Administrador del negocio)
+
+📋 Almacén El Rinconcito
+   Plan: BASIC
+
+   • Email:      admin@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Rosa Silva López
+     Rol:        ADMIN (Administrador del negocio)
+
+📋 Minimarket Central
+   Plan: PRO
+
+   • Email:      admin@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel Rodríguez López
+     Rol:        ADMIN (Administrador del negocio)
+
+📋 Minimarket Don Luis
+   Plan: PRO
+
+   • Email:      admin@minimarketdonluis.cl
+     Contraseña: Demo2025!
+     Nombre:     Luis López Muñoz
+     Rol:        ADMIN (Administrador del negocio)
+
+📋 Supermercado Familiar
+   Plan: PRO
+
+   • Email:      admin@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     Carlos Rojas Pérez
+     Rol:        ADMIN (Administrador del negocio)
+
+📋 Supermercado Los Andes
+   Plan: ENTERPRISE
+
+   • Email:      admin@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     Luis Rodríguez Rodríguez
+     Rol:        ADMIN (Administrador del negocio)
+
+📋 Tienda La Esquina
+   Plan: BASIC
+
+   • Email:      admin@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Rosa Martínez Pérez
+     Rol:        ADMIN (Administrador del negocio)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💰 CAJEROS (Sellers / Cashiers)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Abarrotes San José
+
+   • Email:      claudia2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Claudia Fuentes Sepúlveda
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Almacén Doña Rosa
+
+   • Email:      patricia1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Patricia González Pérez
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      isabel2@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel González Hernández
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Almacén El Buen Vecino
+
+   • Email:      luis2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Luis Rojas Soto
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Almacén El Rinconcito
+
+   • Email:      luis1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Luis Pérez Díaz
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      patricia1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Patricia Pérez López
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Minimarket Central
+
+   • Email:      rosa1@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     Rosa Fuentes López
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      maría1@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     María Silva Díaz
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      carlos2@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     Carlos López Pérez
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      miguel1@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     Miguel Morales González
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Minimarket Don Luis
+
+   • Email:      ana2@minimarketdonluis.cl
+     Contraseña: Demo2025!
+     Nombre:     Ana Pérez Contreras
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      ana1@minimarketdonluis.cl
+     Contraseña: Demo2025!
+     Nombre:     Ana Fuentes Morales
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      carmen1@minimarketdonluis.cl
+     Contraseña: Demo2025!
+     Nombre:     Carmen González Pérez
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      maría1@minimarketdonluis.cl
+     Contraseña: Demo2025!
+     Nombre:     María Rojas Soto
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Minimarket Express 24/7
+
+   • Email:      pedro1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Pedro Rodríguez Rodríguez
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      miguel2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Miguel Hernández Contreras
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Minimarket Nuevo Amanecer
+
+   • Email:      carlos2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Carlos Hernández Rodríguez
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Supermercado Familiar
+
+   • Email:      maría2@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     María Fuentes González
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      jorge2@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     Jorge Muñoz Muñoz
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      josé1@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     José Muñoz Rodríguez
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      carmen1@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     Carmen López Contreras
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      claudia2@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     Claudia López Sepúlveda
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Supermercado La Familia
+
+   • Email:      ana1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Ana Morales Contreras
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      miguel1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Miguel Hernández Sepúlveda
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      carlos2@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Carlos Rojas Morales
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Supermercado Los Andes
+
+   • Email:      isabel1@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     Isabel González Muñoz
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      miguel2@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     Miguel Sepúlveda Morales
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      miguel1@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     Miguel Fuentes López
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Tienda Don Pedro
+
+   • Email:      juan1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Juan Muñoz Contreras
+     Rol:        CAJA (Cajero/Vendedor)
+
+📋 Tienda La Esquina
+
+   • Email:      rosa1@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Rosa Sepúlveda Rojas
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      isabel2@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel Pérez Sepúlveda
+     Rol:        CAJA (Cajero/Vendedor)
+
+   • Email:      maría1@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     María López Díaz
+     Rol:        CAJA (Cajero/Vendedor)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 GESTORES DE INVENTARIO (Inventory Managers)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Abarrotes San José
+
+   • Email:      pedro2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Pedro Sepúlveda Sepúlveda
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      carlos1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Carlos Fuentes Hernández
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      jorge1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Jorge González Muñoz
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Almacén Doña Rosa
+
+   • Email:      carmen2@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Carmen Contreras Fuentes
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      isabel1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel López Díaz
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      jorge2@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Jorge Rojas Díaz
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      luis1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Luis Díaz Muñoz
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Almacén El Buen Vecino
+
+   • Email:      ana1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Ana Rodríguez Rodríguez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      isabel1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel Martínez Morales
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Almacén El Rinconcito
+
+   • Email:      isabel2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel González Díaz
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Minimarket Central
+
+   • Email:      isabel2@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     Isabel López Sepúlveda
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      ricardo1@yahoo.com
+     Contraseña: Demo2025!
+     Nombre:     Ricardo Silva Soto
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Minimarket Don Luis
+
+   • Email:      jorge1@minimarketdonluis.cl
+     Contraseña: Demo2025!
+     Nombre:     Jorge Fuentes Martínez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Minimarket Express 24/7
+
+   • Email:      ricardo1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Ricardo Contreras Fuentes
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      jorge2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Jorge Sepúlveda Rojas
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Minimarket Nuevo Amanecer
+
+   • Email:      patricia2@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Patricia López López
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      miguel1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Miguel López Pérez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      rosa1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Rosa Hernández Soto
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      josé1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     José Morales Soto
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Supermercado Familiar
+
+   • Email:      maría1@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     María Sepúlveda Pérez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      isabel1@superfamiliar.cl
+     Contraseña: Demo2025!
+     Nombre:     Isabel Hernández Fuentes
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Supermercado La Familia
+
+   • Email:      patricia2@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Patricia Silva Martínez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      juan1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Juan Rojas Rodríguez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      claudia1@outlook.com
+     Contraseña: Demo2025!
+     Nombre:     Claudia Contreras Díaz
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Supermercado Los Andes
+
+   • Email:      josé2@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     José López Rojas
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      maría2@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     María González Hernández
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      claudia1@losandessupermarket.cl
+     Contraseña: Demo2025!
+     Nombre:     Claudia Morales González
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Tienda Don Pedro
+
+   • Email:      claudia1@gmail.com
+     Contraseña: Demo2025!
+     Nombre:     Claudia Hernández Silva
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+📋 Tienda La Esquina
+
+   • Email:      miguel2@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Miguel Hernández López
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      luis2@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Luis Hernández Martínez
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      jorge1@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Jorge López López
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+   • Email:      ricardo1@hotmail.com
+     Contraseña: Demo2025!
+     Nombre:     Ricardo Silva Fuentes
+     Rol:        INVENTARIO (Gestor de Inventario)
+
+═══════════════════════════════════════════════════════════════════════
+🏢 INFORMACIÓN DE NEGOCIOS (TENANTS)
+═══════════════════════════════════════════════════════════════════════
+
+1. Abarrotes San José
+   • RUT:           76.567.890-1
+   • Email:         sanjose.abarrotes@gmail.com
+   • Teléfono:      +56956789012
+   • Dirección:     Av. Los Pajaritos 456, Estación Central, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      4
+   • Suscripción:   Plan Básico - ACTIVE
+
+2. Almacén Doña Rosa
+   • RUT:           76.789.012-3
+   • Email:         almacendonarosa@outlook.com
+   • Teléfono:      +56978901234
+   • Dirección:     Calle Santa Rosa 234, San Bernardo, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      7
+   • Suscripción:   Plan Básico - ACTIVE
+
+3. Almacén El Buen Vecino
+   • RUT:           77.123.456-7
+   • Email:         buenvecino@gmail.com
+   • Teléfono:      +56912345670
+   • Dirección:     Pasaje Los Olivos 89, Quilicura, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      3
+   • Suscripción:   Plan Básico - ACTIVE
+
+4. Almacén El Rinconcito
+   • RUT:           76.234.567-8
+   • Email:         elrinconcito@gmail.com
+   • Teléfono:      +56923456789
+   • Dirección:     Calle Los Carrera 567, Maipú, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      4
+   • Suscripción:   Plan Básico - ACTIVE
+
+5. CRTLPyme - Plataforma
+   • RUT:           99.999.999-9
+   • Email:         plataforma@crtlpyme.com
+   • Teléfono:      +56900000000
+   • Dirección:     Santiago, Chile
+   • Plan:          ENTERPRISE
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      1
+
+6. Minimarket Central
+   • RUT:           77.012.345-6
+   • Email:         minimarketcentral@yahoo.com
+   • Teléfono:      +56901234567
+   • Dirección:     Av. Libertador Bernardo O'Higgins 2345, Santiago Centro, Santiago
+   • Plan:          PRO
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      7
+   • Suscripción:   Plan Pro - ACTIVE
+
+7. Minimarket Don Luis
+   • RUT:           76.123.456-7
+   • Email:         contacto@minimarketdonluis.cl
+   • Teléfono:      +56912345678
+   • Dirección:     Av. Providencia 1234, Providencia, Santiago
+   • Plan:          PRO
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      6
+   • Suscripción:   Plan Pro - ACTIVE
+
+8. Minimarket Express 24/7
+   • RUT:           76.678.901-2
+   • Email:         express247@gmail.com
+   • Teléfono:      +56967890123
+   • Dirección:     Av. Vicuña Mackenna 789, La Reina, Santiago
+   • Plan:          PRO
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      4
+   • Suscripción:   Plan Pro - ACTIVE
+
+9. Minimarket Nuevo Amanecer
+   • RUT:           77.345.678-9
+   • Email:         nuevoamanecer.mm@gmail.com
+   • Teléfono:      +56934567012
+   • Dirección:     Calle Los Cerezos 567, Cerrillos, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      5
+   • Suscripción:   Plan Básico - ACTIVE
+
+10. Supermercado Familiar
+   • RUT:           76.345.678-9
+   • Email:         info@superfamiliar.cl
+   • Teléfono:      +56934567890
+   • Dirección:     Av. Grecia 890, Ñuñoa, Santiago
+   • Plan:          PRO
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      8
+   • Suscripción:   Plan Pro - ACTIVE
+
+11. Supermercado La Familia
+   • RUT:           77.234.567-8
+   • Email:         superfamilia@outlook.com
+   • Teléfono:      +56923456701
+   • Dirección:     Av. Pajaritos 3456, Maipú, Santiago
+   • Plan:          PRO
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      6
+   • Suscripción:   Plan Pro - ACTIVE
+
+12. Supermercado Los Andes
+   • RUT:           76.890.123-4
+   • Email:         contacto@losandessupermarket.cl
+   • Teléfono:      +56989012345
+   • Dirección:     Av. Apoquindo 1567, Las Condes, Santiago
+   • Plan:          ENTERPRISE
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      7
+   • Suscripción:   Plan Enterprise - ACTIVE
+
+13. Tienda Don Pedro
+   • RUT:           76.901.234-5
+   • Email:         donpedro.tienda@gmail.com
+   • Teléfono:      +56990123456
+   • Dirección:     Calle O'Higgins 678, Puente Alto, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      2
+   • Suscripción:   Plan Básico - ACTIVE
+
+14. Tienda La Esquina
+   • RUT:           76.456.789-0
+   • Email:         laesquina@hotmail.com
+   • Teléfono:      +56945678901
+   • Dirección:     Pasaje Los Aromos 123, La Florida, Santiago
+   • Plan:          BASIC
+   • Estado:        ACTIVE
+   • Activo:        Sí
+   • Usuarios:      8
+   • Suscripción:   Plan Básico - ACTIVE
+
+═══════════════════════════════════════════════════════════════════════
+🛍️  MUESTRA DE PRODUCTOS EN CATÁLOGO MAESTRO
+═══════════════════════════════════════════════════════════════════════
+
+Total de productos: 542
+Mostrando los primeros 10 productos:
+
+1. Aceite Chef Maravilla 900ml
+   • SKU:      7804650100088
+   • Barcode:  7804650100088
+   • Marca:    Chef
+   • Categoría: Alimentos y Abarrotes
+   • Precio Sugerido: $3850 CLP
+
+2. Aceite de Oliva Carbonell 500ml
+   • SKU:      7804901234581
+   • Barcode:  7804901234581
+   • Marca:    Carbonell
+   • Categoría: productos_basicos
+   • Precio Sugerido: $3490 CLP
+
+3. Aceite Maravilla Palma 900ml
+   • SKU:      7804901234574
+   • Barcode:  7804901234574
+   • Marca:    Palma
+   • Categoría: productos_basicos
+   • Precio Sugerido: $1750 CLP
+
+4. Aceite Vegetal Chef 1L
+   • SKU:      7804901234567
+   • Barcode:  7804901234567
+   • Marca:    Chef
+   • Categoría: productos_basicos
+   • Precio Sugerido: $1890 CLP
+
+5. Agua Mineral Benedictino 1.5L
+   • SKU:      7804345678901
+   • Barcode:  7804345678901
+   • Marca:    Benedictino
+   • Categoría: bebidas
+   • Precio Sugerido: $750 CLP
+
+6. Agua Mineral Cachantun 1.6L
+   • SKU:      7802220200022
+   • Barcode:  7802220200022
+   • Marca:    Cachantun
+   • Categoría: Bebidas
+   • Precio Sugerido: $920 CLP
+
+7. Agua Mineral Cachantún 1.6L
+   • SKU:      7804345678918
+   • Barcode:  7804345678918
+   • Marca:    Cachantún
+   • Categoría: bebidas
+   • Precio Sugerido: $820 CLP
+
+8. Arroz Grado 1 Tucapel 1kg
+   • SKU:      7804789012345
+   • Barcode:  7804789012345
+   • Marca:    Tucapel
+   • Categoría: productos_basicos
+   • Precio Sugerido: $1450 CLP
+
+9. Arroz Grado 2 Miraflores 1kg
+   • SKU:      7804789012352
+   • Barcode:  7804789012352
+   • Marca:    Miraflores
+   • Categoría: productos_basicos
+   • Precio Sugerido: $1290 CLP
+
+10. Arroz Tucapel Grado 2 1kg
+   • SKU:      7802900100087
+   • Barcode:  7802900100087
+   • Marca:    Tucapel
+   • Categoría: Alimentos y Abarrotes
+   • Precio Sugerido: $3450 CLP
+
+═══════════════════════════════════════════════════════════════════════
+📝 NOTAS IMPORTANTES
+═══════════════════════════════════════════════════════════════════════
+
+1. Este es un entorno de DEMOSTRACIÓN/DESARROLLO
+2. Las contraseñas son simples para facilitar las pruebas
+3. En producción, las contraseñas deben ser seguras y únicas
+4. Los datos son ficticios para pruebas y desarrollo
+
+═══════════════════════════════════════════════════════════════════════
+🚀 PRÓXIMOS PASOS
+═══════════════════════════════════════════════════════════════════════
+
+1. Acceder a la aplicación en: http://localhost:3000
+2. Iniciar sesión con cualquiera de las credenciales listadas arriba
+3. Explorar las funcionalidades según el rol del usuario
+4. Para despliegue en producción:
+   - Cambiar todas las contraseñas
+   - Configurar variables de entorno de producción
+   - Revisar y ajustar configuraciones de seguridad
+
+═══════════════════════════════════════════════════════════════════════
+Reporte generado: 07-11-2025, 1:29:32 a. m.
+═══════════════════════════════════════════════════════════════════════
