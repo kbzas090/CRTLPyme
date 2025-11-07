@@ -476,3 +476,122 @@ export async function sendAccountReactivatedEmail(
     html,
   });
 }
+
+/**
+ * Envía notificación de suscripción expirada
+ */
+export async function sendSubscriptionExpiredEmail(
+  email: string,
+  businessName: string,
+  planName: string
+): Promise<boolean> {
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #dc2626; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9fafb; }
+        .alert-box { background: #fef2f2; padding: 15px; margin: 20px 0; border-left: 4px solid #dc2626; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #dc2626; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>⚠ Suscripción Expirada</h1>
+        </div>
+        <div class="content">
+          <h2>Hola ${businessName},</h2>
+          <p>Tu suscripción al plan <strong>${planName}</strong> ha expirado.</p>
+          
+          <div class="alert-box">
+            <p>Tu cuenta ha sido suspendida hasta que renueves tu suscripción.</p>
+            <p>No podrás acceder a los servicios de CRTLPyme hasta renovar tu plan.</p>
+          </div>
+          
+          <a href="${process.env.NEXTAUTH_URL}/subscriptions/plans" class="button">Renovar Suscripción</a>
+          
+          <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+          <p><strong>Email de soporte:</strong> support@crtlpyme.cl</p>
+        </div>
+        <div class="footer">
+          <p>© 2024 CRTLPyme - Sistema de Gestión para Pequeñas Empresas</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return await sendEmail({
+    to: email,
+    subject: `⚠ Tu Suscripción ha Expirado - CRTLPyme`,
+    html,
+  });
+}
+
+/**
+ * Envía notificación de cancelación de suscripción
+ */
+export async function sendSubscriptionCancelledEmail(
+  email: string,
+  businessName: string,
+  planName: string,
+  endDate: Date
+): Promise<boolean> {
+  const formattedDate = new Intl.DateTimeFormat('es-CL', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(endDate);
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #6b7280; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9fafb; }
+        .info-box { background: #f3f4f6; padding: 15px; margin: 20px 0; border-left: 4px solid #6b7280; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Suscripción Cancelada</h1>
+        </div>
+        <div class="content">
+          <h2>Hola ${businessName},</h2>
+          <p>Tu suscripción al plan <strong>${planName}</strong> ha sido cancelada.</p>
+          
+          <div class="info-box">
+            <p>Tendrás acceso a los servicios hasta: <strong>${formattedDate}</strong></p>
+            <p>Después de esta fecha, tu cuenta será suspendida.</p>
+          </div>
+          
+          <p>Si cambiaste de opinión, puedes reactivar tu suscripción en cualquier momento desde tu panel de control.</p>
+          
+          <p>Lamentamos verte partir. Si hay algo que podamos mejorar, por favor háznoslo saber.</p>
+        </div>
+        <div class="footer">
+          <p>© 2024 CRTLPyme - Sistema de Gestión para Pequeñas Empresas</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return await sendEmail({
+    to: email,
+    subject: `Confirmación de Cancelación - CRTLPyme`,
+    html,
+  });
+}
