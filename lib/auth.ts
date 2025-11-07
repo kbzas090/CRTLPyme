@@ -98,6 +98,28 @@ export const authOptions: NextAuthOptions = {
       session.user.tenantId = token.tenantId
       return session
     },
+    async redirect({ url, baseUrl }) {
+      // Check if we're coming from a successful sign-in
+      // The URL might contain a callbackUrl parameter
+      const callbackUrl = url.includes('callbackUrl=') 
+        ? new URL(url).searchParams.get('callbackUrl')
+        : null;
+
+      // If there's a specific callback URL requested, use it
+      if (callbackUrl) {
+        // Make sure it's a relative URL or from our domain
+        if (callbackUrl.startsWith('/')) return `${baseUrl}${callbackUrl}`;
+        if (callbackUrl.startsWith(baseUrl)) return callbackUrl;
+      }
+
+      // Default redirect - role-based redirect is handled in the login page
+      if (url === baseUrl || url.startsWith(baseUrl + '/auth')) {
+        return baseUrl;
+      }
+
+      // For any other case, allow the redirect
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
   },
   pages: {
     signIn: '/auth/login',

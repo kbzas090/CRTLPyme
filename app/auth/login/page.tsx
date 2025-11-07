@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -50,8 +50,16 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Credenciales inválidas. Por favor verifica tu email y contraseña.')
       } else if (result?.ok) {
-        // Redirección exitosa al dashboard
-        router.push('/admin/dashboard')
+        // Fetch the session to get user role
+        const response = await fetch('/api/auth/session')
+        const session = await response.json()
+        
+        // Redirect based on user role
+        if (session?.user?.role === 'PROVEEDOR') {
+          router.push('/saas-admin')
+        } else {
+          router.push('/admin/dashboard')
+        }
         router.refresh()
       }
     } catch (err) {
