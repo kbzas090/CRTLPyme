@@ -28,6 +28,7 @@ import {
   Cell,
 } from 'recharts';
 import { Download, RefreshCw, Users, TrendingUp, DollarSign } from 'lucide-react';
+import BackButton from '@/components/admin/BackButton';
 
 interface CustomersReport {
   summary: {
@@ -157,6 +158,7 @@ export default function CustomersReportPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
+      <BackButton href="/admin/reports" label="Volver a Reportes" />
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Reporte de Clientes</h1>
         <p className="text-gray-600">
