@@ -277,12 +277,18 @@ async function crearPlanesSuscripcion() {
     }
   ]
   
-  for (const plan of planes) {
-    await prisma.subscriptionPlan.upsert({
-      where: { name: plan.name },
-      update: plan,
-      create: plan
-    })
+  // Verificar si ya existen planes
+  const existingPlans = await prisma.subscriptionPlan.findMany()
+  
+  if (existingPlans.length === 0) {
+    // Solo crear planes si no existen
+    for (const plan of planes) {
+      await prisma.subscriptionPlan.create({
+        data: plan
+      })
+    }
+  } else {
+    console.log('   ℹ️  Planes ya existen, omitiendo creación...')
   }
   
   console.log(`✅ ${planes.length} planes de suscripción creados\n`)
@@ -351,21 +357,28 @@ async function crearNegocios() {
   const now = new Date()
   
   for (const negocio of negociosChilenos) {
-    const tenant = await prisma.tenant.create({
-      data: {
-        businessName: negocio.businessName,
-        rut: negocio.rut,
-        email: negocio.email,
-        phone: negocio.phone,
-        address: negocio.address,
-        isActive: true,
-        planType: negocio.planType,
-        maxCashiers: negocio.planType === PlanType.ENTERPRISE ? 10 : negocio.planType === PlanType.PRO ? 5 : 2,
-        accountStatus: AccountStatus.ACTIVE,
-        onboardingCompleted: true,
-        lastActivityAt: now
-      }
-    })
+    // Verificar si el tenant ya existe
+    let tenant = await prisma.tenant.findUnique({ where: { rut: negocio.rut } })
+    
+    if (!tenant) {
+      tenant = await prisma.tenant.create({
+        data: {
+          businessName: negocio.businessName,
+          rut: negocio.rut,
+          email: negocio.email,
+          phone: negocio.phone,
+          address: negocio.address,
+          isActive: true,
+          planType: negocio.planType,
+          maxCashiers: negocio.planType === PlanType.ENTERPRISE ? 10 : negocio.planType === PlanType.PRO ? 5 : 2,
+          accountStatus: AccountStatus.ACTIVE,
+          onboardingCompleted: true,
+          lastActivityAt: now
+        }
+      })
+    } else {
+      console.log(`   ⚠️  Negocio ${negocio.businessName} (${negocio.rut}) ya existe, omitiendo...`)
+    }
     
     tenants.push(tenant)
   }
@@ -442,40 +455,54 @@ async function crearUsuariosNegocios(tenants: any[]) {
     // Crear usuario administrador del negocio
     const { firstName: adminFirstName, lastName: adminLastName } = generarNombreAleatorio()
     const emailDomain = tenant.email.split('@')[1]
+    const adminEmail = `admin@${emailDomain}`
     
-    const admin = await prisma.user.create({
-      data: {
-        email: `admin@${emailDomain}`,
-        password: hashedPassword,
-        firstName: adminFirstName,
-        lastName: adminLastName,
-        role: UserRole.ADMIN,
-        isActive: true,
-        tenantId: tenant.id
-      }
-    })
+    // Verificar si el usuario ya existe
+    let admin = await prisma.user.findUnique({ where: { email: adminEmail } })
     
-    usuarios.push(admin)
+    if (!admin) {
+      admin = await prisma.user.create({
+        data: {
+          email: adminEmail,
+          password: hashedPassword,
+          firstName: adminFirstName,
+          lastName: adminLastName,
+          role: UserRole.ADMIN,
+          isActive: true,
+          tenantId: tenant.id
+        }
+      })
+      usuarios.push(admin)
+    } else {
+      console.log(`   ⚠️  Usuario ${adminEmail} ya existe, omitiendo...`)
+    }
     
     // Crear usuarios adicionales (cajeros/inventario)
     for (let i = 1; i < numUsuarios; i++) {
       const { firstName, lastName } = generarNombreAleatorio()
       const role = Math.random() > 0.5 ? UserRole.CAJA : UserRole.INVENTARIO
       const userName = firstName.toLowerCase() + i
+      const userEmail = `${userName}@${emailDomain}`
       
-      const user = await prisma.user.create({
-        data: {
-          email: `${userName}@${emailDomain}`,
-          password: hashedPassword,
-          firstName,
-          lastName,
-          role,
-          isActive: true,
-          tenantId: tenant.id
-        }
-      })
+      // Verificar si el usuario ya existe
+      const existingUser = await prisma.user.findUnique({ where: { email: userEmail } })
       
-      usuarios.push(user)
+      if (!existingUser) {
+        const user = await prisma.user.create({
+          data: {
+            email: userEmail,
+            password: hashedPassword,
+            firstName,
+            lastName,
+            role,
+            isActive: true,
+            tenantId: tenant.id
+          }
+        })
+        usuarios.push(user)
+      } else {
+        console.log(`   ⚠️  Usuario ${userEmail} ya existe, omitiendo...`)
+      }
     }
   }
   
@@ -513,17 +540,27 @@ async function crearInventario(tenants: any[], productos: any[]) {
       // Stock inicial entre 5 y 100 unidades
       const stock = Math.floor(Math.random() * 95) + 5
       
-      const inventario = await prisma.tenantInventory.create({
-        data: {
+      // Verificar si el producto ya existe en el inventario
+      let inventario = await prisma.tenantInventory.findFirst({
+        where: {
           tenantId: tenant.id,
-          masterProductId: masterProduct.id,
-          costPrice,
-          salePrice,
-          stock,
-          minStock: 5 + Math.floor(Math.random() * 10),
-          isActive: true
+          masterProductId: masterProduct.id
         }
       })
+      
+      if (!inventario) {
+        inventario = await prisma.tenantInventory.create({
+          data: {
+            tenantId: tenant.id,
+            masterProductId: masterProduct.id,
+            costPrice,
+            salePrice,
+            stock,
+            minStock: 5 + Math.floor(Math.random() * 10),
+            isActive: true
+          }
+        })
+      }
       
       inventarios.push(inventario)
     }
@@ -624,9 +661,15 @@ async function crearVentasHistoricas(tenants: any[], usuarios: any[]) {
     
     if (inventario.length === 0) continue
     
+    // Obtener el último número de venta para este tenant
+    const lastSale = await prisma.sale.findFirst({
+      where: { tenantId: tenant.id },
+      orderBy: { saleNumber: 'desc' }
+    })
+    
     // Número de ventas por negocio: 50-300 en 3 meses
     const numVentas = Math.floor(Math.random() * 250) + 50
-    let saleNumber = 1
+    let saleNumber = lastSale ? parseInt(lastSale.saleNumber) + 1 : 1
     
     for (let i = 0; i < numVentas; i++) {
       const fechaVenta = fechaAleatoria(diasHistoricos)
