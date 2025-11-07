@@ -35,5 +35,8 @@ export const config = {
     '/soporte/:path*',
     // Proteger todas las rutas de saas
     '/saas/:path*',
+    // Proteger el nuevo dashboard de SaaS admin
+    '/saas-admin/:path*',
+    '/admin-saas/:path*',
   ],
 }
