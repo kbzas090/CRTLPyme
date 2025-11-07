@@ -7,12 +7,13 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Loader2, AlertCircle } from 'lucide-react'
+import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 
 // Schema de validación con Zod
 const loginSchema = z.object({
@@ -63,15 +64,26 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">
-            CRTLPyme
-          </CardTitle>
-          <CardDescription className="text-center">
-            Sistema de Control Total para tu Negocio
-          </CardDescription>
-        </CardHeader>
+      <div className="w-full max-w-md">
+        {/* Back Button */}
+        <div className="mb-4">
+          <Link href="/">
+            <Button variant="ghost" className="hover:bg-white/50">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Volver al Inicio
+            </Button>
+          </Link>
+        </div>
+
+        <Card className="shadow-xl">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-3xl font-bold text-center">
+              CRTLPyme
+            </CardTitle>
+            <CardDescription className="text-center">
+              Sistema de Control Total para tu Negocio
+            </CardDescription>
+          </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Campo Email */}
@@ -138,6 +150,7 @@ export default function LoginPage() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }
