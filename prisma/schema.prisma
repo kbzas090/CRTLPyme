@@ -49,6 +49,7 @@ model Tenant {
   refunds                 Refund[]
   notificationPreferences NotificationPreference[]
   notificationHistory     NotificationHistory[]
+  customers               Customer[]
 
   @@map("tenants")
 }
@@ -153,6 +154,32 @@ model StockAdjustment {
   @@map("stock_adjustments")
 }
 
+// ============ CUSTOMERS ============
+
+model Customer {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+  address   String?
+  rut       String?
+  tenantId  String
+  isActive  Boolean  @default(true)
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sales  Sale[] @relation("CustomerSales")
+
+  @@unique([tenantId, rut])
+  @@index([tenantId])
+  @@index([tenantId, email])
+  @@map("customers")
+}
+
 // ============ SALES & CASH MANAGEMENT ============
 
 model CashSession {
@@ -189,6 +216,7 @@ model Sale {
   userId        String
   tenantId      String
   cashSessionId String?
+  customerId    String? // Cliente asociado (opcional)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
@@ -196,10 +224,12 @@ model Sale {
   user        User         @relation(fields: [userId], references: [id])
   tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   cashSession CashSession? @relation(fields: [cashSessionId], references: [id])
+  customer    Customer?    @relation("CustomerSales", fields: [customerId], references: [id])
   items       SaleItem[]
 
   @@unique([tenantId, saleNumber])
   @@index([tenantId, createdAt])
+  @@index([tenantId, customerId])
   @@map("sales")
 }
 

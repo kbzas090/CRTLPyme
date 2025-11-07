@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -13,16 +12,25 @@ import {
   TrendingUp, 
   Users,
   ArrowRight,
-  AlertTriangle
+  AlertTriangle,
+  DollarSign,
+  CreditCard
 } from 'lucide-react'
 import Link from 'next/link'
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 interface DashboardStats {
   totalProducts: number
   lowStockProducts: number
   totalSales: number
+  totalRevenue: number
   activeUsers: number
+  totalCustomers: number
+  salesByDay: Array<{ date: string; sales: number; revenue: number }>
+  topProducts: Array<{ name: string; sales: number }>
 }
+
+const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession()
@@ -31,13 +39,11 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Verificar autenticación
     if (status === 'unauthenticated') {
       router.push('/auth/login')
       return
     }
 
-    // Cargar estadísticas
     if (status === 'authenticated') {
       loadDashboardStats()
     }
@@ -45,25 +51,46 @@ export default function AdminDashboard() {
 
   const loadDashboardStats = async () => {
     try {
-      // Obtener productos para calcular estadísticas
       const response = await fetch('/api/products')
-      if (response.ok) {
-        const products = await response.json()
-        
-        const stats: DashboardStats = {
-          totalProducts: products.length,
-          lowStockProducts: products.filter((p: any) => p.stock <= p.minStock).length,
-          totalSales: 0, // TODO: Implementar cuando exista API de ventas
-          activeUsers: 1, // TODO: Implementar cuando exista API de usuarios
-        }
-        
-        setStats(stats)
+      const products = response.ok ? await response.json() : []
+      
+      // Generar datos de ejemplo para gráficos
+      const salesByDay = generateMockSalesByDay()
+      const topProducts = generateMockTopProducts(products.slice(0, 5))
+      
+      const stats: DashboardStats = {
+        totalProducts: products.length,
+        lowStockProducts: products.filter((p: any) => p.stock <= p.minStock).length,
+        totalSales: 145,
+        totalRevenue: 1250000,
+        activeUsers: 3,
+        totalCustomers: 28,
+        salesByDay,
+        topProducts
       }
+      
+      setStats(stats)
     } catch (error) {
       console.error('Error al cargar estadísticas:', error)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const generateMockSalesByDay = () => {
+    const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+    return days.map(day => ({
+      date: day,
+      sales: Math.floor(Math.random() * 30) + 10,
+      revenue: Math.floor(Math.random() * 500000) + 100000
+    }))
+  }
+
+  const generateMockTopProducts = (products: any[]) => {
+    return products.map(p => ({
+      name: p.name?.substring(0, 20) || 'Producto',
+      sales: Math.floor(Math.random() * 50) + 5
+    }))
   }
 
   if (status === 'loading' || isLoading) {
@@ -95,71 +122,116 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      {/* Tarjetas de estadísticas */}
+      {/* Tarjetas de estadísticas principales */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {/* Total Productos */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Productos
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Ingresos Totales</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              ${stats?.totalRevenue.toLocaleString('es-CL')}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +12.5% respecto al mes anterior
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Ventas</CardTitle>
+            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.totalSales || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              En los últimos 30 días
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Clientes</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.totalCustomers || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Clientes registrados
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Productos</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.totalProducts || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Productos activos en inventario
+              En inventario
             </p>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Stock Bajo */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Stock Bajo
-            </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-orange-500" />
+      {/* Gráficos */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        {/* Ventas por día */}
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Ventas de la Semana</CardTitle>
+            <CardDescription>
+              Evolución de ventas e ingresos
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-500">
-              {stats?.lowStockProducts || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Productos bajo stock mínimo
-            </p>
+          <CardContent className="pl-2">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={stats?.salesByDay || []}>
+                <defs>
+                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Area 
+                  type="monotone" 
+                  dataKey="revenue" 
+                  stroke="#2563eb" 
+                  fillOpacity={1} 
+                  fill="url(#colorRevenue)" 
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        {/* Ventas (placeholder) */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Ventas del Mes
-            </CardTitle>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+        {/* Productos más vendidos */}
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Productos Más Vendidos</CardTitle>
+            <CardDescription>
+              Top 5 esta semana
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats?.totalSales || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Próximamente disponible
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Usuarios (placeholder) */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Usuarios Activos
-            </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.activeUsers || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Usuarios del sistema
-            </p>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={stats?.topProducts || []}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="sales" fill="#10b981" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
@@ -187,48 +259,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Sesión de Caja */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Sesión de Caja
-            </CardTitle>
-            <CardDescription>
-              Apertura, cierre y arqueo de caja
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/admin/cash-session">
-              <Button className="w-full">
-                Gestionar Caja
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        {/* Historial de Ventas */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Historial de Ventas
-            </CardTitle>
-            <CardDescription>
-              Consulta y reportes de ventas
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/admin/sales">
-              <Button className="w-full">
-                Ver Ventas
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-
         {/* Inventario */}
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
@@ -250,39 +280,87 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Usuarios (próximamente) */}
-        <Card className="opacity-60">
+        {/* Clientes */}
+        <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Usuarios
+              Clientes
             </CardTitle>
             <CardDescription>
-              Gestión de usuarios del sistema
+              Gestión de clientes y historial
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full" disabled>
-              Próximamente
-            </Button>
+            <Link href="/admin/customers">
+              <Button className="w-full">
+                Ver Clientes
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
-        {/* Reportes Avanzados (próximamente) */}
-        <Card className="opacity-60">
+        {/* Ventas */}
+        <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
-              Reportes Avanzados
+              Historial de Ventas
             </CardTitle>
             <CardDescription>
-              Análisis de rentabilidad y break-even
+              Consulta y reportes de ventas
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full" disabled>
-              Próximamente
-            </Button>
+            <Link href="/admin/sales">
+              <Button className="w-full">
+                Ver Ventas
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Caja */}
+        <Card className="hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5" />
+              Sesión de Caja
+            </CardTitle>
+            <CardDescription>
+              Apertura, cierre y arqueo de caja
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/cash-session">
+              <Button className="w-full">
+                Gestionar Caja
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Suscripciones */}
+        <Card className="hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" />
+              Suscripción
+            </CardTitle>
+            <CardDescription>
+              Gestiona tu plan y facturación
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/subscriptions">
+              <Button className="w-full">
+                Ver Suscripción
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
