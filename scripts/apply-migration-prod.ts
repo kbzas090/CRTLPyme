@@ -4,7 +4,7 @@ import * as path from 'path';
 
 async function applyMigration() {
   const DATABASE_URL = process.env.DATABASE_URL || 
-    'postgresql://postgres:CrtlPyme_2025@db.bxfetsflhxhigacuqtfe.supabase.co:5432/postgres';
+    'postgresql://postgres:CRTLPyme2025!@136.116.45.158:5432/crtlpyme';
 
   const pool = new Pool({
     connectionString: DATABASE_URL,

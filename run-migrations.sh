@@ -13,7 +13,7 @@ echo ""
 if [ -z "$DATABASE_URL" ]; then
     echo "❌ ERROR: La variable DATABASE_URL no está configurada"
     echo "Por favor, configúrala con:"
-    echo 'export DATABASE_URL="postgresql://postgres:PASSWORD@136.116.45.158:5432/crtlpyme-db?schema=public"'
+    echo 'export DATABASE_URL="postgresql://postgres:PASSWORD@136.116.45.158:5432/crtlpyme?schema=public"'
     exit 1
 fi
 

@@ -7,7 +7,7 @@ const { Pool } = require('pg');
 
 // Usar la conexión pooler
 const pool = new Pool({
-  connectionString: "postgresql://postgres.bxfetsflhxhigacuqtfe:Pyme_2025@aws-0-us-east-1.pooler.supabase.com:6543/postgres",
+  connectionString: "postgresql://postgres:CRTLPyme2025!@136.116.45.158:5432/crtlpyme",
   ssl: false // pgbouncer no usa SSL
 });
 

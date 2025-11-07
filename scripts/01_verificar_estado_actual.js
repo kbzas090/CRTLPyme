@@ -7,7 +7,7 @@ const { Pool } = require('pg');
 
 // Configuración de la conexión a Supabase
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || "postgresql://postgres.bxfetsflhxhigacuqtfe:Pyme_2025@aws-0-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1",
+  connectionString: process.env.DATABASE_URL || "postgresql://postgres:CRTLPyme2025!@136.116.45.158:5432/crtlpyme",
 });
 
 async function verificarEstadoActual() {

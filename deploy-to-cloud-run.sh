@@ -5,10 +5,10 @@
 
 set -e  # Salir si hay algún error
 
-PROJECT_ID="crtlpyme-442414"
+PROJECT_ID="crtlpyme-477300"
 REGION="us-central1"
 SERVICE_NAME="crtlpyme"
-DB_PASSWORD="kkE[8SyJ@G_IyF"  # Cambiar si es diferente
+DB_PASSWORD="CRTLPyme2025!"  # Cambiar si es diferente
 
 echo "╔════════════════════════════════════════════════════════════════╗"
 echo "║         🚀 Despliegue de CRTLPyme Fase 1 MVP a GCP            ║"
@@ -53,7 +53,7 @@ echo ""
 read -p "¿Deseas ejecutar las migraciones de Prisma? (y/n): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    export DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@136.116.45.158:5432/crtlpyme-db?schema=public"
+    export DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@136.116.45.158:5432/crtlpyme?schema=public"
     ./run-migrations.sh
 else
     echo "⚠️  Saltando migraciones. Asegúrate de ejecutarlas antes del primer uso."
@@ -68,7 +68,7 @@ echo ""
 read -p "¿Deseas ejecutar el seeder de planes? (y/n): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    export DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@136.116.45.158:5432/crtlpyme-db?schema=public"
+    export DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@136.116.45.158:5432/crtlpyme?schema=public"
     ./run-seeder.sh
 else
     echo "⚠️  Saltando seeder. Los planes deben crearse antes de usar la aplicación."

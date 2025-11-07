@@ -46,7 +46,7 @@ function applyMigration() {
             switch (_a.label) {
                 case 0:
                     DATABASE_URL = process.env.DATABASE_URL ||
-                        'postgresql://postgres:CrtlPyme_2025@db.bxfetsflhxhigacuqtfe.supabase.co:5432/postgres';
+                        'postgresql://postgres:CRTLPyme2025!@136.116.45.158:5432/crtlpyme';
                     pool = new pg_1.Pool({
                         connectionString: DATABASE_URL,
                         ssl: {

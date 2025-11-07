@@ -13,7 +13,7 @@ echo ""
 if [ -z "$DATABASE_URL" ]; then
     echo "❌ Error: DATABASE_URL no está configurada"
     echo "Por favor, exporta la variable de entorno:"
-    echo "export DATABASE_URL='postgresql://postgres:CrtlPyme_2025@db.bxfetsflhxhigacuqtfe.supabase.co:5432/postgres'"
+    echo "export DATABASE_URL='postgresql://postgres:CRTLPyme2025!@136.116.45.158:5432/crtlpyme'"
     exit 1
 fi
 

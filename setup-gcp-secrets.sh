@@ -3,7 +3,7 @@
 # Script para configurar secrets en GCP Secret Manager
 # Ejecutar este script en Cloud Shell de GCP
 
-PROJECT_ID="crtlpyme-442414"
+PROJECT_ID="crtlpyme-477300"
 REGION="us-central1"
 
 echo "🔐 Configurando secrets en GCP Secret Manager para proyecto: $PROJECT_ID"
