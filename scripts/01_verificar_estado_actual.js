@@ -5,7 +5,7 @@
 
 const { Pool } = require('pg');
 
-// Configuración de la conexión a Supabase
+// Configuración de la conexión a Cloud SQL PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgresql://postgres:CRTLPyme2025!@136.116.45.158:5432/crtlpyme",
 });

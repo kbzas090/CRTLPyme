@@ -9,7 +9,7 @@ async function applyMigration() {
   const pool = new Pool({
     connectionString: DATABASE_URL,
     ssl: {
-      rejectUnauthorized: false // Supabase requiere SSL
+      rejectUnauthorized: false // Cloud SQL PostgreSQL con SSL
     }
   });
 

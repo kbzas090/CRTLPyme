@@ -50,7 +50,7 @@ function applyMigration() {
                     pool = new pg_1.Pool({
                         connectionString: DATABASE_URL,
                         ssl: {
-                            rejectUnauthorized: false // Supabase requiere SSL
+                            rejectUnauthorized: false // Cloud SQL PostgreSQL con SSL
                         }
                     });
                     _a.label = 1;
