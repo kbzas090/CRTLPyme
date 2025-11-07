@@ -75,25 +75,25 @@ TRANSBANK_ENVIRONMENT="integration"
 **Comandos para verificar secrets en GCP:**
 ```bash
 # Verificar secrets existentes
-gcloud secrets list --project=ctrlpyme-442414
+gcloud secrets list --project=crtlpyme-477300
 
 # Verificar versiones de secrets de Transbank
-gcloud secrets versions list transbank-api-key --project=ctrlpyme-442414
-gcloud secrets versions list transbank-commerce-code --project=ctrlpyme-442414
-gcloud secrets versions list TRANSBANK_ENVIRONMENT --project=ctrlpyme-442414
+gcloud secrets versions list transbank-api-key --project=crtlpyme-477300
+gcloud secrets versions list transbank-commerce-code --project=crtlpyme-477300
+gcloud secrets versions list TRANSBANK_ENVIRONMENT --project=crtlpyme-477300
 ```
 
 **Si los secrets no existen, crearlos con:**
 ```bash
 # Crear secrets de Transbank
 echo -n "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C" | \
-  gcloud secrets create transbank-api-key --data-file=- --project=ctrlpyme-442414
+  gcloud secrets create transbank-api-key --data-file=- --project=crtlpyme-477300
 
 echo -n "597055555532" | \
-  gcloud secrets create transbank-commerce-code --data-file=- --project=ctrlpyme-442414
+  gcloud secrets create transbank-commerce-code --data-file=- --project=crtlpyme-477300
 
 echo -n "integration" | \
-  gcloud secrets create TRANSBANK_ENVIRONMENT --data-file=- --project=ctrlpyme-442414
+  gcloud secrets create TRANSBANK_ENVIRONMENT --data-file=- --project=crtlpyme-477300
 ```
 
 ---
@@ -549,40 +549,40 @@ enum PaymentStatus {
 gcloud config get-value project
 
 # Listar secrets existentes
-gcloud secrets list --project=ctrlpyme-442414
+gcloud secrets list --project=crtlpyme-477300
 
 # Si no existen, crearlos:
 echo -n "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C" | \
-  gcloud secrets create transbank-api-key --data-file=- --project=ctrlpyme-442414
+  gcloud secrets create transbank-api-key --data-file=- --project=crtlpyme-477300
 
 echo -n "597055555532" | \
-  gcloud secrets create transbank-commerce-code --data-file=- --project=ctrlpyme-442414
+  gcloud secrets create transbank-commerce-code --data-file=- --project=crtlpyme-477300
 
 echo -n "integration" | \
-  gcloud secrets create TRANSBANK_ENVIRONMENT --data-file=- --project=ctrlpyme-442414
+  gcloud secrets create TRANSBANK_ENVIRONMENT --data-file=- --project=crtlpyme-477300
 ```
 
 **2. Dar Permisos a Cloud Run:**
 ```bash
 # Obtener el service account de Cloud Run
-PROJECT_NUMBER=$(gcloud projects describe ctrlpyme-442414 --format="value(projectNumber)")
+PROJECT_NUMBER=$(gcloud projects describe crtlpyme-477300 --format="value(projectNumber)")
 SERVICE_ACCOUNT="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
 
 # Dar permisos de acceso a los secrets
 gcloud secrets add-iam-policy-binding transbank-api-key \
   --member="serviceAccount:${SERVICE_ACCOUNT}" \
   --role="roles/secretmanager.secretAccessor" \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 
 gcloud secrets add-iam-policy-binding transbank-commerce-code \
   --member="serviceAccount:${SERVICE_ACCOUNT}" \
   --role="roles/secretmanager.secretAccessor" \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 
 gcloud secrets add-iam-policy-binding TRANSBANK_ENVIRONMENT \
   --member="serviceAccount:${SERVICE_ACCOUNT}" \
   --role="roles/secretmanager.secretAccessor" \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 ```
 
 **3. Ejecutar Seed de Planes en Producción:**
@@ -594,7 +594,7 @@ DATABASE_URL="postgresql://..." npm run seed:plans
 gcloud run services update crtlpyme \
   --region=us-central1 \
   --command="npm,run,seed:plans" \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 ```
 
 **4. Deployment:**
@@ -602,7 +602,7 @@ gcloud run services update crtlpyme \
 # Deploy usando Cloud Build
 gcloud builds submit \
   --config=cloudbuild.yaml \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 
 # O push a GitHub (si está configurado el trigger)
 git push origin main
@@ -614,13 +614,13 @@ git push origin main
 gcloud run services logs read crtlpyme \
   --region=us-central1 \
   --limit=50 \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 
 # Obtener URL del servicio
 gcloud run services describe crtlpyme \
   --region=us-central1 \
   --format="value(status.url)" \
-  --project=ctrlpyme-442414
+  --project=crtlpyme-477300
 
 # Probar endpoint de planes
 curl https://crtlpyme-vhndaajwpq-uc.a.run.app/api/subscriptions/plans

@@ -51,7 +51,7 @@ def create_or_update_secret(project_id: str, secret_id: str, secret_value: str):
             raise
 
 def main():
-    project_id = "crtlpyme-442414"
+    project_id = "crtlpyme-477300"
     
     print(f"🔐 Configurando secrets en GCP Secret Manager para proyecto: {project_id}\n")
     

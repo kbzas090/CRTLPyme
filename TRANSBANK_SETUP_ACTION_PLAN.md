@@ -31,14 +31,14 @@ La integración de Transbank está **100% implementada en código** pero requier
 
 ### Acceso Necesario:
 - ✅ Cuenta GCP: ctrlpyme@gmail.com
-- ✅ Proyecto: ctrlpyme-442414 (o ctrlpyme-679472948305)
+- ✅ Proyecto: crtlpyme-477300 (o ctrlpyme-679472948305)
 - ✅ Rol requerido: Editor o Secret Manager Admin
 
 ### Opción A: Usar Google Cloud Console (Recomendado para principiantes)
 
 1. **Abrir Cloud Console:**
    ```
-   https://console.cloud.google.com/security/secret-manager?project=ctrlpyme-442414
+   https://console.cloud.google.com/security/secret-manager?project=crtlpyme-477300
    ```
 
 2. **Crear Secret: transbank-api-key**
@@ -67,7 +67,7 @@ La integración de Transbank está **100% implementada en código** pero requier
 2. **Ejecutar comandos:**
    ```bash
    # Verificar proyecto activo
-   gcloud config set project ctrlpyme-442414
+   gcloud config set project crtlpyme-477300
    
    # Crear los 3 secrets
    echo -n "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C" | \
@@ -123,7 +123,7 @@ Cloud Run necesita permiso para leer los secrets que acabas de crear.
 # En Cloud Shell, ejecutar:
 
 # Obtener el PROJECT_NUMBER
-PROJECT_NUMBER=$(gcloud projects describe ctrlpyme-442414 --format="value(projectNumber)")
+PROJECT_NUMBER=$(gcloud projects describe crtlpyme-477300 --format="value(projectNumber)")
 SERVICE_ACCOUNT="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
 
 echo "Service Account: $SERVICE_ACCOUNT"
@@ -227,7 +227,7 @@ git push origin main
 
 # Si hay Cloud Build trigger configurado, se deployará automáticamente
 # Si no, ejecutar manualmente:
-gcloud builds submit --config=cloudbuild.yaml --project=ctrlpyme-442414
+gcloud builds submit --config=cloudbuild.yaml --project=crtlpyme-477300
 ```
 
 **Tiempo de build:** ~5-10 minutos
@@ -236,13 +236,13 @@ gcloud builds submit --config=cloudbuild.yaml --project=ctrlpyme-442414
 
 1. **Ir a Cloud Run:**
    ```
-   https://console.cloud.google.com/run?project=ctrlpyme-442414
+   https://console.cloud.google.com/run?project=crtlpyme-477300
    ```
 
 2. **Click en el servicio existente** (crtlpyme) o "CREATE SERVICE"
 
 3. **Configurar:**
-   - Container image: `gcr.io/ctrlpyme-442414/crtlpyme:latest`
+   - Container image: `gcr.io/crtlpyme-477300/crtlpyme:latest`
    - Region: us-central1
    - CPU: 2
    - Memory: 2Gi
@@ -263,7 +263,7 @@ gcloud builds submit --config=cloudbuild.yaml --project=ctrlpyme-442414
 # Ver el status del servicio
 gcloud run services describe crtlpyme \
   --region=us-central1 \
-  --project=ctrlpyme-442414 \
+  --project=crtlpyme-477300 \
   --format="value(status.url)"
 
 # Debería retornar URL como:
@@ -280,7 +280,7 @@ gcloud run services describe crtlpyme \
 # Obtener URL del servicio
 CLOUD_RUN_URL=$(gcloud run services describe crtlpyme \
   --region=us-central1 \
-  --project=ctrlpyme-442414 \
+  --project=crtlpyme-477300 \
   --format="value(status.url)")
 
 echo "URL: $CLOUD_RUN_URL"
@@ -399,7 +399,7 @@ LIMIT 1;
 # Ver logs recientes de Cloud Run
 gcloud run services logs read crtlpyme \
   --region=us-central1 \
-  --project=ctrlpyme-442414 \
+  --project=crtlpyme-477300 \
   --limit=50
 
 # Buscar líneas con:
