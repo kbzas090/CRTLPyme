@@ -216,6 +216,151 @@ export function formatAmount(amount: number): number {
   return Math.round(amount);
 }
 
+/**
+ * Interface para la respuesta de procesamiento de pago de suscripción
+ */
+export interface SubscriptionPaymentResponse {
+  success: boolean;
+  token?: string;
+  url?: string;
+  error?: string;
+}
+
+/**
+ * Interface para la respuesta de confirmación de pago de suscripción
+ */
+export interface SubscriptionConfirmResponse {
+  success: boolean;
+  transactionData?: {
+    cardLast4?: string;
+    cardType?: string;
+    transactionDate?: string;
+    amount?: number;
+    authorizationCode?: string;
+    status?: string;
+    responseCode?: number;
+    buyOrder?: string;
+  };
+  error?: string;
+}
+
+/**
+ * Procesa un pago de suscripción iniciando una transacción en Transbank
+ * 
+ * @param tenantId - ID del tenant que realiza el pago
+ * @param subscriptionId - ID de la suscripción a pagar
+ * @param amount - Monto a cobrar en pesos chilenos
+ * @param returnUrl - URL de retorno después del pago
+ * @returns Respuesta con token y URL para redirigir al usuario
+ */
+export async function processSubscriptionPayment(
+  tenantId: string,
+  subscriptionId: string,
+  amount: number,
+  returnUrl: string
+): Promise<SubscriptionPaymentResponse> {
+  try {
+    console.log('💳 Procesando pago de suscripción:', {
+      tenantId,
+      subscriptionId,
+      amount,
+    });
+
+    // Generar orden de compra única
+    const buyOrder = generateBuyOrder(`SUB-${tenantId.substring(0, 8)}`);
+    
+    // Usar subscriptionId como sessionId
+    const sessionId = subscriptionId;
+    
+    // Formatear el monto
+    const formattedAmount = formatAmount(amount);
+
+    // Crear transacción en Transbank
+    const transaction = await createTransaction(
+      buyOrder,
+      sessionId,
+      formattedAmount,
+      returnUrl
+    );
+
+    console.log('✅ Pago de suscripción procesado exitosamente');
+
+    return {
+      success: true,
+      token: transaction.token,
+      url: transaction.url,
+    };
+  } catch (error) {
+    console.error('❌ Error procesando pago de suscripción:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Error desconocido al procesar pago',
+    };
+  }
+}
+
+/**
+ * Confirma un pago de suscripción después del retorno desde Transbank
+ * 
+ * @param token - Token de la transacción retornado por Transbank
+ * @returns Respuesta con datos de la transacción confirmada
+ */
+export async function confirmSubscriptionPayment(
+  token: string
+): Promise<SubscriptionConfirmResponse> {
+  try {
+    console.log('✅ Confirmando pago de suscripción con token:', token.substring(0, 20) + '...');
+
+    // Confirmar transacción en Transbank
+    const transactionData = await commitTransaction(token);
+
+    // Verificar si la transacción fue aprobada
+    const approved = isTransactionApproved(transactionData.response_code);
+
+    if (!approved) {
+      const errorDescription = getResponseCodeDescription(transactionData.response_code);
+      console.warn('⚠️ Pago de suscripción rechazado:', errorDescription);
+      
+      return {
+        success: false,
+        error: errorDescription,
+        transactionData: {
+          cardLast4: transactionData.card_detail?.card_number?.slice(-4),
+          cardType: transactionData.payment_type_code,
+          transactionDate: transactionData.transaction_date,
+          amount: transactionData.amount,
+          authorizationCode: transactionData.authorization_code,
+          status: transactionData.status,
+          responseCode: transactionData.response_code,
+          buyOrder: transactionData.buy_order,
+        },
+      };
+    }
+
+    console.log('✅ Pago de suscripción confirmado exitosamente');
+
+    return {
+      success: true,
+      transactionData: {
+        cardLast4: transactionData.card_detail?.card_number?.slice(-4),
+        cardType: transactionData.payment_type_code,
+        transactionDate: transactionData.transaction_date,
+        amount: transactionData.amount,
+        authorizationCode: transactionData.authorization_code,
+        status: transactionData.status,
+        responseCode: transactionData.response_code,
+        buyOrder: transactionData.buy_order,
+      },
+    };
+  } catch (error) {
+    console.error('❌ Error confirmando pago de suscripción:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Error desconocido al confirmar pago',
+    };
+  }
+}
+
 export default {
   getWebpayPlus,
   createTransaction,
@@ -225,4 +370,6 @@ export default {
   getResponseCodeDescription,
   generateBuyOrder,
   formatAmount,
+  processSubscriptionPayment,
+  confirmSubscriptionPayment,
 };
