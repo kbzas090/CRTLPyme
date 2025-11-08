@@ -62,7 +62,11 @@ async function main() {
   // 2. Crear Usuarios de prueba
   console.log('👥 Creando usuarios...')
   
-  // Usuario SaaS Admin (john@doe.com - cuenta de prueba requerida)
+  // NOTA: Ya no se crean cuentas PROVEEDOR automáticamente en seed
+  // Las cuentas PROVEEDOR existentes en la base de datos ya tienen acceso al dashboard /saas-admin
+  // Si necesitas crear una cuenta PROVEEDOR, hazlo manualmente en la base de datos o mediante un script dedicado
+  
+  /* Usuario SaaS Admin - COMENTADO para evitar crear cuentas duplicadas
   const hashedPassword = await bcrypt.hash('johndoe123', 12)
   
   const saasAdmin = await prisma.user.create({
@@ -75,6 +79,7 @@ async function main() {
       tenantId: tenant1.id, // Asignado a un tenant pero con rol PROVEEDOR tiene acceso global
     }
   })
+  */
 
   // Usuarios para Tenant 1 (Almacén San Juan)
   const admin1 = await prisma.user.create({
