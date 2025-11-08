@@ -176,10 +176,14 @@ export default function AdminNavBar() {
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Configuración</span>
-                </DropdownMenuItem>
+                {session?.user?.role === 'ADMIN' && (
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/settings" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Configuración</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleLogout}
