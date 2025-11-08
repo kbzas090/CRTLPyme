@@ -48,6 +48,22 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 interface Product {
+  id: string // This is the tenantInventoryId
+  customSku?: string
+  salePrice: number
+  stock: number
+  masterProduct: {
+    id: string
+    sku: string
+    name: string
+    category: string
+    brand?: string
+    barcode?: string
+  }
+}
+
+// Compatibility helper to access product properties
+type ProductDisplay = {
   id: string
   sku: string
   name: string
@@ -73,8 +89,10 @@ interface Sale {
   paymentMethod: string
   createdAt: string
   items: Array<{
-    product: {
-      name: string
+    tenantInventory: {
+      masterProduct: {
+        name: string
+      }
     }
     quantity: number
     unitPrice: number
@@ -123,10 +141,11 @@ export default function POSPage() {
     if (searchTerm) {
       const filtered = products.filter(
         (p) =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (p.barcode && p.barcode.toLowerCase().includes(searchTerm.toLowerCase()))
+          p.masterProduct.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.masterProduct.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.masterProduct.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (p.masterProduct.barcode && p.masterProduct.barcode.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (p.customSku && p.customSku.toLowerCase().includes(searchTerm.toLowerCase()))
       )
       setFilteredProducts(filtered)
     } else {
@@ -141,12 +160,14 @@ export default function POSPage() {
       const sessionRes = await fetch('/api/cash-sessions/active')
       setHasActiveSession(sessionRes.ok)
 
-      // Cargar productos
-      const productsRes = await fetch('/api/products')
+      // Cargar inventario
+      const productsRes = await fetch('/api/inventory')
       if (productsRes.ok) {
-        const data = await productsRes.json()
-        setProducts(data.filter((p: Product) => p.stock > 0))
-        setFilteredProducts(data.filter((p: Product) => p.stock > 0))
+        const response = await productsRes.json()
+        // The API returns { inventory: [...], stats: {...} }
+        const inventoryData = response.inventory || response
+        setProducts(inventoryData.filter((p: Product) => p.stock > 0))
+        setFilteredProducts(inventoryData.filter((p: Product) => p.stock > 0))
       }
     } catch (error) {
       console.error('Error al cargar datos:', error)
@@ -177,7 +198,7 @@ export default function POSPage() {
         subtotal: product.salePrice,
       }
       setCart([...cart, newItem])
-      toast.success(`${product.name} agregado al carrito`)
+      toast.success(`${product.masterProduct.name} agregado al carrito`)
     }
   }
 
@@ -266,7 +287,7 @@ export default function POSPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: cart.map((item) => ({
-            productId: item.product.id,
+            tenantInventoryId: item.product.id,
             quantity: item.quantity,
           })),
           paymentMethod,
@@ -402,11 +423,11 @@ export default function POSPage() {
                   >
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base line-clamp-2">
-                        {product.name}
+                        {product.masterProduct.name}
                       </CardTitle>
                       <CardDescription className="text-xs">
-                        {product.category}
-                        {product.brand && ` • ${product.brand}`}
+                        {product.masterProduct.category}
+                        {product.masterProduct.brand && ` • ${product.masterProduct.brand}`}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -422,7 +443,7 @@ export default function POSPage() {
                         </Badge>
                       </div>
                       <div className="text-xs text-muted-foreground mt-2">
-                        SKU: {product.sku}
+                        SKU: {product.customSku || product.masterProduct.sku}
                       </div>
                     </CardContent>
                   </Card>
@@ -474,7 +495,7 @@ export default function POSPage() {
                         >
                           <div className="flex-1 min-w-0">
                             <div className="font-medium text-sm line-clamp-2">
-                              {item.product.name}
+                              {item.product.masterProduct.name}
                             </div>
                             <div className="text-xs text-muted-foreground mt-1">
                               {formatCurrency(item.product.salePrice)} c/u
@@ -680,7 +701,7 @@ export default function POSPage() {
                   {completedSale.items.map((item, index) => (
                     <div key={index} className="flex justify-between text-sm">
                       <div className="flex-1">
-                        <div className="font-medium">{item.product.name}</div>
+                        <div className="font-medium">{item.tenantInventory.masterProduct.name}</div>
                         <div className="text-xs text-muted-foreground">
                           {item.quantity} x {formatCurrency(Number(item.unitPrice))}
                         </div>

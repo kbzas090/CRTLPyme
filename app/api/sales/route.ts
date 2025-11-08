@@ -8,7 +8,7 @@ import { z } from 'zod'
 // Schema de validación para crear venta
 const createSaleSchema = z.object({
   items: z.array(z.object({
-    productId: z.string(),
+    tenantInventoryId: z.string(),
     quantity: z.number().int().positive(),
   })).min(1, 'Debe incluir al menos un producto'),
   paymentMethod: z.enum(['CASH', 'DEBIT', 'CREDIT', 'TRANSFER']),
@@ -69,11 +69,17 @@ export async function GET(request: NextRequest) {
         },
         items: {
           include: {
-            product: {
+            tenantInventory: {
               select: {
                 id: true,
-                name: true,
-                sku: true,
+                customSku: true,
+                masterProduct: {
+                  select: {
+                    id: true,
+                    name: true,
+                    sku: true,
+                  },
+                },
               },
             },
           },
@@ -132,17 +138,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Obtener productos y verificar stock
-    const productIds = validatedData.items.map(item => item.productId)
-    const products = await prisma.product.findMany({
+    // Obtener inventario del tenant y verificar stock
+    const inventoryIds = validatedData.items.map(item => item.tenantInventoryId)
+    const inventoryItems = await prisma.tenantInventory.findMany({
       where: {
-        id: { in: productIds },
+        id: { in: inventoryIds },
         tenantId: session.user.tenantId,
         isActive: true,
       },
+      include: {
+        masterProduct: {
+          select: {
+            id: true,
+            name: true,
+            sku: true,
+          },
+        },
+      },
     })
 
-    if (products.length !== validatedData.items.length) {
+    if (inventoryItems.length !== validatedData.items.length) {
       return NextResponse.json(
         { error: 'Algunos productos no existen o están inactivos' },
         { status: 400 }
@@ -151,16 +166,16 @@ export async function POST(request: NextRequest) {
 
     // Verificar stock suficiente
     for (const item of validatedData.items) {
-      const product = products.find(p => p.id === item.productId)
-      if (!product) {
+      const inventoryItem = inventoryItems.find(p => p.id === item.tenantInventoryId)
+      if (!inventoryItem) {
         return NextResponse.json(
-          { error: `Producto no encontrado: ${item.productId}` },
+          { error: `Producto no encontrado en inventario: ${item.tenantInventoryId}` },
           { status: 400 }
         )
       }
-      if (product.stock < item.quantity) {
+      if (inventoryItem.stock < item.quantity) {
         return NextResponse.json(
-          { error: `Stock insuficiente para ${product.name}. Disponible: ${product.stock}` },
+          { error: `Stock insuficiente para ${inventoryItem.masterProduct.name}. Disponible: ${inventoryItem.stock}` },
           { status: 400 }
         )
       }
@@ -169,15 +184,15 @@ export async function POST(request: NextRequest) {
     // Calcular totales
     let subtotal = 0
     const saleItems = validatedData.items.map(item => {
-      const product = products.find(p => p.id === item.productId)!
-      const itemSubtotal = Number(product.salePrice) * item.quantity
+      const inventoryItem = inventoryItems.find(p => p.id === item.tenantInventoryId)!
+      const itemSubtotal = Number(inventoryItem.salePrice) * item.quantity
       subtotal += itemSubtotal
       
       return {
-        productId: item.productId,
+        tenantInventoryId: item.tenantInventoryId,
         quantity: item.quantity,
-        unitPrice: product.salePrice,
-        unitCost: product.costPrice,
+        unitPrice: inventoryItem.salePrice,
+        unitCost: inventoryItem.costPrice,
         subtotal: itemSubtotal,
       }
     })
@@ -235,7 +250,11 @@ export async function POST(request: NextRequest) {
         include: {
           items: {
             include: {
-              product: true,
+              tenantInventory: {
+                include: {
+                  masterProduct: true,
+                },
+              },
             },
           },
           user: {
@@ -247,10 +266,12 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      // Actualizar stock de productos
+      // Actualizar stock en TenantInventory
       for (const item of validatedData.items) {
-        await tx.product.update({
-          where: { id: item.productId },
+        await tx.tenantInventory.update({
+          where: { 
+            id: item.tenantInventoryId,
+          },
           data: {
             stock: {
               decrement: item.quantity,
