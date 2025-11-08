@@ -1,0 +1,105 @@
+name: Deploy to Cloud Run
+
+# Trigger del workflow
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Permite ejecución manual
+
+# Variables de entorno globales
+env:
+  PROJECT_ID: crtlpyme-477300
+  SERVICE_NAME: crtlpyme-app
+  REGION: us-central1
+  IMAGE_NAME: crtlpyme
+
+jobs:
+  deploy:
+    name: Build and Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    
+    # Permisos necesarios para el token de GitHub
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      # 1. Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Autenticación con Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # 3. Configurar Google Cloud SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      # 4. Configurar Docker para usar gcloud como credential helper
+      - name: Configure Docker for GCR
+        run: |
+          gcloud auth configure-docker
+
+      # 5. Build de la imagen Docker
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -t gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:latest \
+            .
+
+      # 6. Push de la imagen a Google Container Registry
+      - name: Push image to GCR
+        run: |
+          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:latest
+
+      # 7. Deploy a Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --memory 2Gi \
+            --cpu 2 \
+            --timeout 300 \
+            --min-instances 0 \
+            --max-instances 10 \
+            --port 3000 \
+            --set-secrets=DATABASE_URL=DATABASE_URL:latest,NEXTAUTH_SECRET=NEXTAUTH_SECRET:latest,NEXTAUTH_URL=NEXTAUTH_URL:latest,SENDGRID_API_KEY=SENDGRID_API_KEY:latest,SENDGRID_FROM_EMAIL=SENDGRID_FROM_EMAIL:latest,TRANSBANK_API_KEY=transbank-api-key:latest,TRANSBANK_COMMERCE_CODE=transbank-commerce-code:latest,TRANSBANK_ENVIRONMENT=TRANSBANK_ENVIRONMENT:latest \
+            --set-env-vars=NODE_ENV=production,NEXT_PUBLIC_APP_NAME=CRTLPyme,GOOGLE_CLOUD_PROJECT_ID=${{ env.PROJECT_ID }}
+
+      # 8. Mostrar URL del servicio
+      - name: Show service URL
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region ${{ env.REGION }} \
+            --format 'value(status.url)')
+          echo "✅ Deployment successful!"
+          echo "🌐 Service URL: $SERVICE_URL"
+          echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+
+      # 9. Verificar el deployment
+      - name: Verify deployment
+        run: |
+          echo "Waiting for service to be ready..."
+          sleep 10
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region ${{ env.REGION }} \
+            --format 'value(status.url)')
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $SERVICE_URL)
+          if [ $HTTP_CODE -eq 200 ] || [ $HTTP_CODE -eq 301 ] || [ $HTTP_CODE -eq 302 ]; then
+            echo "✅ Service is responding correctly (HTTP $HTTP_CODE)"
+          else
+            echo "⚠️  Service responded with HTTP $HTTP_CODE"
+            exit 1
+          fi
