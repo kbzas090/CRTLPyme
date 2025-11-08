@@ -6,7 +6,27 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Search, Edit, Trash2, Package } from 'lucide-react'
+import { Plus, Search, Edit, Trash2, Package, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { useToast } from '@/components/ui/use-toast'
 
 interface MasterProduct {
   id: string
@@ -24,6 +44,30 @@ interface MasterProduct {
   updatedAt: string
 }
 
+interface ProductFormData {
+  sku: string
+  barcode?: string
+  name: string
+  description?: string
+  category: string
+  brand?: string
+  suggestedPrice: number | string
+  unit: string
+  imageUrl?: string
+}
+
+const INITIAL_FORM_DATA: ProductFormData = {
+  sku: '',
+  barcode: '',
+  name: '',
+  description: '',
+  category: '',
+  brand: '',
+  suggestedPrice: '',
+  unit: 'unidad',
+  imageUrl: '',
+}
+
 export default function MasterProductsPage() {
   const [products, setProducts] = useState<MasterProduct[]>([])
   const [categories, setCategories] = useState<string[]>([])
@@ -31,6 +75,16 @@ export default function MasterProductsPage() {
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  
+  // Dialog states
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<MasterProduct | null>(null)
+  const [formData, setFormData] = useState<ProductFormData>(INITIAL_FORM_DATA)
+  const [formLoading, setFormLoading] = useState(false)
+
+  const { toast } = useToast()
 
   useEffect(() => {
     fetchProducts()
@@ -56,11 +110,163 @@ export default function MasterProductsPage() {
       const data = await response.json()
       setProducts(data.products)
       setCategories(data.categories)
+      setError(null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido')
+      toast({
+        title: 'Error',
+        description: 'No se pudieron cargar los productos',
+        variant: 'destructive',
+      })
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleCreateProduct = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormLoading(true)
+
+    try {
+      const payload = {
+        ...formData,
+        suggestedPrice: parseFloat(formData.suggestedPrice as string),
+        barcode: formData.barcode || undefined,
+        brand: formData.brand || undefined,
+        description: formData.description || undefined,
+        imageUrl: formData.imageUrl || undefined,
+      }
+
+      const response = await fetch('/api/admin-saas/master-products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al crear producto')
+      }
+
+      toast({
+        title: 'Éxito',
+        description: 'Producto creado correctamente',
+      })
+
+      setIsCreateDialogOpen(false)
+      setFormData(INITIAL_FORM_DATA)
+      fetchProducts()
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'Error al crear producto',
+        variant: 'destructive',
+      })
+    } finally {
+      setFormLoading(false)
+    }
+  }
+
+  const handleEditProduct = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedProduct) return
+
+    setFormLoading(true)
+
+    try {
+      const payload = {
+        ...formData,
+        suggestedPrice: parseFloat(formData.suggestedPrice as string),
+        barcode: formData.barcode || undefined,
+        brand: formData.brand || undefined,
+        description: formData.description || undefined,
+        imageUrl: formData.imageUrl || undefined,
+      }
+
+      const response = await fetch(`/api/admin-saas/master-products/${selectedProduct.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al actualizar producto')
+      }
+
+      toast({
+        title: 'Éxito',
+        description: 'Producto actualizado correctamente',
+      })
+
+      setIsEditDialogOpen(false)
+      setSelectedProduct(null)
+      setFormData(INITIAL_FORM_DATA)
+      fetchProducts()
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'Error al actualizar producto',
+        variant: 'destructive',
+      })
+    } finally {
+      setFormLoading(false)
+    }
+  }
+
+  const handleDeleteProduct = async () => {
+    if (!selectedProduct) return
+
+    setFormLoading(true)
+
+    try {
+      const response = await fetch(`/api/admin-saas/master-products/${selectedProduct.id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al eliminar producto')
+      }
+
+      toast({
+        title: 'Éxito',
+        description: 'Producto eliminado correctamente',
+      })
+
+      setIsDeleteDialogOpen(false)
+      setSelectedProduct(null)
+      fetchProducts()
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'Error al eliminar producto',
+        variant: 'destructive',
+      })
+    } finally {
+      setFormLoading(false)
+    }
+  }
+
+  const openEditDialog = (product: MasterProduct) => {
+    setSelectedProduct(product)
+    setFormData({
+      sku: product.sku,
+      barcode: product.barcode || '',
+      name: product.name,
+      description: product.description || '',
+      category: product.category,
+      brand: product.brand || '',
+      suggestedPrice: product.suggestedPrice,
+      unit: product.unit,
+      imageUrl: product.imageUrl || '',
+    })
+    setIsEditDialogOpen(true)
+  }
+
+  const openDeleteDialog = (product: MasterProduct) => {
+    setSelectedProduct(product)
+    setIsDeleteDialogOpen(true)
   }
 
   const filteredProducts = products.filter(product =>
@@ -79,13 +285,15 @@ export default function MasterProductsPage() {
             Catálogo compartido de productos disponible para todos los tenants
           </p>
         </div>
-        <button
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-          onClick={() => alert('Funcionalidad de crear producto en desarrollo')}
+        <Button
+          onClick={() => {
+            setFormData(INITIAL_FORM_DATA)
+            setIsCreateDialogOpen(true)
+          }}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4 mr-2" />
           Nuevo Producto
-        </button>
+        </Button>
       </div>
 
       {/* Stats */}
@@ -128,27 +336,26 @@ export default function MasterProductsPage() {
         <div className="flex-1">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
+            <Input
               type="text"
               placeholder="Buscar por nombre, SKU o código de barras..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-md"
+              className="pl-10"
             />
           </div>
         </div>
-        <div>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2 border rounded-md"
-          >
-            <option value="all">Todas las categorías</option>
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Seleccionar categoría" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas las categorías</SelectItem>
             {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+              <SelectItem key={cat} value={cat}>{cat}</SelectItem>
             ))}
-          </select>
-        </div>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Error Message */}
@@ -215,24 +422,21 @@ export default function MasterProductsPage() {
                     <td className="px-4 py-3 text-sm text-center">{product.unit}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => alert('Editar producto: ' + product.id)}
-                          className="p-2 hover:bg-muted rounded-md"
-                          title="Editar"
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openEditDialog(product)}
                         >
                           <Edit className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (confirm('¿Estás seguro de eliminar este producto?')) {
-                              alert('Eliminar producto: ' + product.id)
-                            }
-                          }}
-                          className="p-2 hover:bg-destructive/10 text-destructive rounded-md"
-                          title="Eliminar"
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openDeleteDialog(product)}
+                          className="text-destructive hover:text-destructive"
                         >
                           <Trash2 className="h-4 w-4" />
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -242,6 +446,299 @@ export default function MasterProductsPage() {
           </div>
         </div>
       )}
+
+      {/* Create Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Crear Nuevo Producto Maestro</DialogTitle>
+            <DialogDescription>
+              Ingresa los detalles del nuevo producto para el catálogo compartido.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleCreateProduct}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="sku">SKU *</Label>
+                  <Input
+                    id="sku"
+                    value={formData.sku}
+                    onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="barcode">Código de Barras</Label>
+                  <Input
+                    id="barcode"
+                    value={formData.barcode}
+                    onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="name">Nombre *</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">Descripción</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="category">Categoría *</Label>
+                  <Input
+                    id="category"
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="brand">Marca</Label>
+                  <Input
+                    id="brand"
+                    value={formData.brand}
+                    onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="suggestedPrice">Precio Sugerido *</Label>
+                  <Input
+                    id="suggestedPrice"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.suggestedPrice}
+                    onChange={(e) => setFormData({ ...formData, suggestedPrice: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="unit">Unidad *</Label>
+                  <Select
+                    value={formData.unit}
+                    onValueChange={(value) => setFormData({ ...formData, unit: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="unidad">Unidad</SelectItem>
+                      <SelectItem value="kg">Kilogramo</SelectItem>
+                      <SelectItem value="litro">Litro</SelectItem>
+                      <SelectItem value="metro">Metro</SelectItem>
+                      <SelectItem value="caja">Caja</SelectItem>
+                      <SelectItem value="pack">Pack</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="imageUrl">URL de Imagen</Label>
+                <Input
+                  id="imageUrl"
+                  type="url"
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsCreateDialogOpen(false)}
+                disabled={formLoading}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={formLoading}>
+                {formLoading ? 'Creando...' : 'Crear Producto'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Editar Producto Maestro</DialogTitle>
+            <DialogDescription>
+              Modifica los detalles del producto seleccionado.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleEditProduct}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-sku">SKU *</Label>
+                  <Input
+                    id="edit-sku"
+                    value={formData.sku}
+                    onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-barcode">Código de Barras</Label>
+                  <Input
+                    id="edit-barcode"
+                    value={formData.barcode}
+                    onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-name">Nombre *</Label>
+                <Input
+                  id="edit-name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-description">Descripción</Label>
+                <Textarea
+                  id="edit-description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-category">Categoría *</Label>
+                  <Input
+                    id="edit-category"
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-brand">Marca</Label>
+                  <Input
+                    id="edit-brand"
+                    value={formData.brand}
+                    onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-suggestedPrice">Precio Sugerido *</Label>
+                  <Input
+                    id="edit-suggestedPrice"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.suggestedPrice}
+                    onChange={(e) => setFormData({ ...formData, suggestedPrice: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-unit">Unidad *</Label>
+                  <Select
+                    value={formData.unit}
+                    onValueChange={(value) => setFormData({ ...formData, unit: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="unidad">Unidad</SelectItem>
+                      <SelectItem value="kg">Kilogramo</SelectItem>
+                      <SelectItem value="litro">Litro</SelectItem>
+                      <SelectItem value="metro">Metro</SelectItem>
+                      <SelectItem value="caja">Caja</SelectItem>
+                      <SelectItem value="pack">Pack</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-imageUrl">URL de Imagen</Label>
+                <Input
+                  id="edit-imageUrl"
+                  type="url"
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsEditDialogOpen(false)}
+                disabled={formLoading}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={formLoading}>
+                {formLoading ? 'Guardando...' : 'Guardar Cambios'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmar Eliminación</DialogTitle>
+            <DialogDescription>
+              ¿Estás seguro de que deseas eliminar el producto &quot;{selectedProduct?.name}&quot;?
+              Esta acción marcará el producto como inactivo.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={formLoading}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteProduct}
+              disabled={formLoading}
+            >
+              {formLoading ? 'Eliminando...' : 'Eliminar'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
