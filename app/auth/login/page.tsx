@@ -56,7 +56,7 @@ export default function LoginPage() {
         
         // Redirect based on user role
         if (session?.user?.role === 'PROVEEDOR') {
-          router.push('/saas-admin')
+          router.push('/admin-saas')
         } else {
           router.push('/admin/dashboard')
         }

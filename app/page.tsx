@@ -176,7 +176,7 @@ export default function HomePage() {
             <p className="text-xl text-gray-600 mb-8">
               Únete a cientos de pequeños negocios que ya confían en CRTLPyme
             </p>
-            <Link href="/auth/signup">
+            <Link href="/auth/register">
               <Button size="lg" className="text-lg px-12">
                 Comenzar Ahora - Es Gratis
               </Button>
