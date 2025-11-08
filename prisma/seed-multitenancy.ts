@@ -43,6 +43,11 @@ async function main() {
     },
   });
 
+  // NOTA: Ya no se crean cuentas PROVEEDOR automáticamente en seed
+  // Las cuentas PROVEEDOR existentes en la base de datos ya tienen acceso al dashboard /saas-admin
+  // Si necesitas crear una cuenta PROVEEDOR, hazlo manualmente en la base de datos o mediante un script dedicado
+  
+  /* Usuario Admin SaaS - COMENTADO para evitar crear cuentas duplicadas
   const adminSaas = await prisma.user.upsert({
     where: { email: 'admin_saas@crtlpyme.cl' },
     update: {},
@@ -58,6 +63,7 @@ async function main() {
   });
 
   console.log(`✅ Usuario Admin SaaS creado: ${adminSaas.email} / Admin2025!\n`);
+  */
 
   // ========================================
   // 2. CREAR TENANTS Y SUS DATOS

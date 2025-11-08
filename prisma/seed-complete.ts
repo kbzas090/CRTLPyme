@@ -411,6 +411,11 @@ async function crearAdminPlataforma() {
     }
   })
   
+  // NOTA: Ya no se crean cuentas PROVEEDOR automáticamente en seed
+  // Las cuentas PROVEEDOR existentes en la base de datos ya tienen acceso al dashboard /saas-admin
+  // Si necesitas crear una cuenta PROVEEDOR, hazlo manualmente en la base de datos o mediante un script dedicado
+  
+  /* Usuario administrador - COMENTADO para evitar crear cuentas duplicadas
   const admin = await prisma.user.upsert({
     where: { email: 'admin@crtlpyme.com' },
     update: {
@@ -435,8 +440,11 @@ async function crearAdminPlataforma() {
   console.log('   Email: admin@crtlpyme.com')
   console.log('   Contraseña: Admin2025!')
   console.log('   Rol: PROVEEDOR (Super Admin)\n')
+  */
   
-  return { admin, platformTenant }
+  console.log('ℹ️  No se crea usuario PROVEEDOR en seed - usar cuentas existentes\n')
+  
+  return { admin: null, platformTenant }
 }
 
 /**
@@ -862,17 +870,15 @@ async function main() {
     console.log(`   ✓ Planes de suscripción: ${planes.length}`)
     console.log(`   ✓ Productos en catálogo maestro: ${productos.length}`)
     console.log(`   ✓ Negocios PyME: ${tenants.length}`)
-    console.log(`   ✓ Usuarios totales: ${usuarios.length + 1} (incluye admin)`)
+    console.log(`   ✓ Usuarios totales: ${usuarios.length}`)
     console.log(`   ✓ Productos en inventario: ${inventarios.length}`)
     console.log(`   ✓ Suscripciones activas: ${suscripciones.length}`)
     console.log(`   ✓ Ventas históricas: ${ventas.length}`)
     console.log(`   ✓ Movimientos de inventario: ${movimientos.length}`)
     console.log('\n' + '=' .repeat(60))
     console.log('\n🔐 CREDENCIALES DE ACCESO:\n')
-    console.log('   👨‍💼 Administrador de Plataforma:')
-    console.log('      Email: admin@crtlpyme.com')
-    console.log('      Contraseña: Admin2025!')
-    console.log('      Rol: PROVEEDOR (Super Admin)')
+    console.log('   ℹ️  NOTA: No se crean cuentas PROVEEDOR en seed')
+    console.log('      Usar cuentas PROVEEDOR existentes para acceder a /saas-admin')
     console.log('\n   👥 Usuarios de Negocios:')
     console.log('      Contraseña para todos: Demo2025!')
     console.log('      Email: admin@[dominio-del-negocio]')
