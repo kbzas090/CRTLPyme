@@ -18,11 +18,13 @@ import {
   Settings,
   Home,
   Shield,
+  CreditCard,
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin-saas', icon: Home },
   { name: 'Tenants', href: '/admin-saas/tenants', icon: Building2 },
+  { name: 'Planes', href: '/admin-saas/plans', icon: CreditCard },
   { name: 'Estadísticas', href: '/admin-saas/stats', icon: BarChart3 },
 ];
 

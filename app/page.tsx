@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ShoppingCart, Package, BarChart3, Users, CreditCard, Smartphone, CheckCircle, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import PricingPlans from "@/components/landing/PricingPlans"
 
 export default function HomePage() {
   return (
@@ -147,6 +148,21 @@ export default function HomePage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              Planes diseñados para tu negocio
+            </h3>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Elige el plan que mejor se adapte a las necesidades de tu empresa
+            </p>
+          </div>
+          <PricingPlans />
         </div>
       </section>
 
