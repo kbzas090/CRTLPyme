@@ -6,8 +6,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient, PaymentStatus, SubscriptionStatus } from '@prisma/client';
+import { PrismaClient, PaymentStatus, SubscriptionStatus, AccountStatus } from '@prisma/client';
 import { commitTransaction, isTransactionApproved, getResponseCodeDescription } from '@/lib/transbank';
+import { sendWelcomeEmail, sendPaymentSuccessEmail } from '@/lib/sendgrid';
 
 const prisma = new PrismaClient();
 
@@ -98,14 +99,18 @@ export async function GET(request: NextRequest) {
     // Si fue aprobado, activar la suscripción
     if (approved) {
       const subscriptionStatus: SubscriptionStatus = 
-        payment.subscription.plan.trialDays > 0 ? 'TRIALING' : 'ACTIVE';
+        payment.subscription.plan.trialDays > 0 ? 'TRIAL' : 'ACTIVE';
 
       const now = new Date();
-      const periodDays = payment.subscription.plan.billingCycle === 'YEARLY' ? 365 : 30;
+      const periodDays = payment.subscription.plan.billingCycle === 'YEARLY' ? 365 : 
+                         payment.subscription.plan.billingCycle === 'QUARTERLY' ? 90 : 30;
       const trialEnd = payment.subscription.plan.trialDays > 0
         ? new Date(now.getTime() + payment.subscription.plan.trialDays * 24 * 60 * 60 * 1000)
         : null;
       const currentPeriodEnd = new Date(
+        now.getTime() + periodDays * 24 * 60 * 60 * 1000
+      );
+      const nextBillingDate = new Date(
         now.getTime() + periodDays * 24 * 60 * 60 * 1000
       );
 
@@ -113,14 +118,51 @@ export async function GET(request: NextRequest) {
         where: { id: payment.subscriptionId },
         data: {
           status: subscriptionStatus,
-          currentPeriodStart: now,
-          currentPeriodEnd: currentPeriodEnd,
-          trialEnd: trialEnd,
-          cancelAtPeriodEnd: false,
+          startDate: now,
+          endDate: currentPeriodEnd,
+          nextBillingDate: nextBillingDate,
+          lastBillingDate: now,
+          trialEndsAt: trialEnd,
+          autoRenew: true,
         },
       });
 
       console.log('✅ Suscripción activada:', payment.subscriptionId, '- Estado:', subscriptionStatus);
+
+      // Activate tenant account
+      const tenantAccountStatus: AccountStatus = 
+        payment.subscription.plan.trialDays > 0 ? 'TRIAL' : 'ACTIVE';
+      
+      await prisma.tenant.update({
+        where: { id: payment.subscription.tenantId },
+        data: {
+          isActive: true,
+          accountStatus: tenantAccountStatus,
+          onboardingCompleted: true,
+          lastActivityAt: now,
+        },
+      });
+
+      console.log('✅ Tenant account activated:', payment.subscription.tenantId, '- Status:', tenantAccountStatus);
+
+      // Create audit log for account activation
+      await prisma.auditLog.create({
+        data: {
+          action: 'UPDATE',
+          entity: 'Tenant',
+          entityId: payment.subscription.tenantId,
+          oldValues: {
+            isActive: false,
+            accountStatus: 'SUSPENDED',
+          },
+          newValues: {
+            isActive: true,
+            accountStatus: tenantAccountStatus,
+            onboardingCompleted: true,
+          },
+          tenantId: payment.subscription.tenantId,
+        },
+      });
 
       // Registrar webhook
       await prisma.paymentWebhook.create({
@@ -132,8 +174,31 @@ export async function GET(request: NextRequest) {
         },
       });
 
-      // TODO: Enviar email de confirmación usando SendGrid
-      console.log('📧 TODO: Enviar email de confirmación a:', payment.subscription.tenant.email);
+      // Send welcome email (non-blocking)
+      try {
+        await sendWelcomeEmail(
+          payment.subscription.tenant.email,
+          payment.subscription.tenant.businessName,
+          payment.subscription.plan.name
+        );
+        console.log('✅ Welcome email sent to:', payment.subscription.tenant.email);
+      } catch (emailError) {
+        console.error('⚠️ Failed to send welcome email:', emailError);
+      }
+
+      // Send payment success email (non-blocking)
+      try {
+        await sendPaymentSuccessEmail(
+          payment.subscription.tenant.email,
+          payment.subscription.tenant.businessName,
+          Number(payment.amount),
+          payment.subscription.plan.name,
+          nextBillingDate
+        );
+        console.log('✅ Payment success email sent to:', payment.subscription.tenant.email);
+      } catch (emailError) {
+        console.error('⚠️ Failed to send payment success email:', emailError);
+      }
 
       // Redirigir a página de éxito
       return NextResponse.redirect(
@@ -149,10 +214,36 @@ export async function GET(request: NextRequest) {
         data: {
           status: 'CANCELLED',
           cancelledAt: new Date(),
+          cancellationReason: `Payment rejected: ${responseDescription}`,
         },
       });
 
       console.log('❌ Suscripción cancelada por pago rechazado:', payment.subscriptionId);
+
+      // Keep tenant account suspended
+      await prisma.tenant.update({
+        where: { id: payment.subscription.tenantId },
+        data: {
+          accountStatus: 'SUSPENDED',
+          isActive: false,
+        },
+      });
+
+      console.log('❌ Tenant account remains suspended:', payment.subscription.tenantId);
+
+      // Create audit log for failed payment
+      await prisma.auditLog.create({
+        data: {
+          action: 'UPDATE',
+          entity: 'Subscription',
+          entityId: payment.subscriptionId,
+          newValues: {
+            status: 'CANCELLED',
+            reason: responseDescription,
+          },
+          tenantId: payment.subscription.tenantId,
+        },
+      });
 
       // Registrar webhook
       await prisma.paymentWebhook.create({

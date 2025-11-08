@@ -20,8 +20,8 @@ export default function HomePage() {
             <Link href="/auth/login">
               <Button variant="outline">Iniciar Sesión</Button>
             </Link>
-            <Link href="/auth/signup">
-              <Button>Empezar Gratis</Button>
+            <Link href="/demo">
+              <Button>Prueba Gratis 14 Días</Button>
             </Link>
           </div>
         </div>
@@ -41,14 +41,14 @@ export default function HomePage() {
               Un sistema de ventas ágil y fácil de usar, diseñado para tiendas de abarrotes, kioscos y pequeños comercios. Viene con productos precargados con código de barras y herramientas inteligentes que calculan automáticamente tu punto de equilibrio.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <Link href="/auth/signup">
+              <Link href="/demo">
                 <Button size="lg" className="text-lg px-8">
-                  Prueba Gratis 30 Días <ArrowRight className="ml-2 h-5 w-5" />
+                  Prueba Gratis 14 Días <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="#demo">
+              <Link href="/onboarding">
                 <Button size="lg" variant="outline" className="text-lg px-8">
-                  Ver Demo
+                  Contratar Ahora
                 </Button>
               </Link>
             </div>
