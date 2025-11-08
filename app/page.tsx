@@ -224,7 +224,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 CRTLPyme. Proyecto de Titulación - Ingeniería en Informática</p>
+            <p>&copy; 2025 CRTLPyme. Proyecto de Titulación - Ingeniería en Informática</p>
           </div>
         </div>
       </footer>

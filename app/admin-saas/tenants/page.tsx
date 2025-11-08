@@ -131,7 +131,7 @@ export default function TenantsListPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Gestión de Tenants</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Gestor de clientes</h1>
         <p className="mt-2 text-gray-600">
           Administra todos los clientes del sistema CRTLPyme
         </p>

@@ -210,7 +210,7 @@ export default function TermsPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2024 CRTLPyme. Proyecto de Titulación - Ingeniería en Informática</p>
+          <p>&copy; 2025 CRTLPyme. Proyecto de Titulación - Ingeniería en Informática</p>
           <div className="mt-4 space-x-4">
             <Link href="/terms" className="text-gray-400 hover:text-white text-sm">
               Términos de Servicio
