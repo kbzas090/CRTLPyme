@@ -42,6 +42,7 @@ model Tenant {
   cashSessions            CashSession[]
   fixedExpenses           FixedExpense[]
   stockAdjustments        StockAdjustment[]
+  inventoryMovements      InventoryMovement[]
   auditLogs               AuditLog[]
   subscriptions           Subscription[]
   tenantManagement        TenantManagement?
@@ -67,11 +68,12 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  sales            Sale[]
-  cashSessions     CashSession[]
-  stockAdjustments StockAdjustment[]
-  auditLogs        AuditLog[]
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sales              Sale[]
+  cashSessions       CashSession[]
+  stockAdjustments   StockAdjustment[]
+  inventoryMovements InventoryMovement[]
+  auditLogs          AuditLog[]
 
   @@index([tenantId])
   @@map("users")
@@ -122,10 +124,11 @@ model TenantInventory {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  masterProduct    MasterProduct     @relation(fields: [masterProductId], references: [id])
-  saleItems        SaleItem[]
-  stockAdjustments StockAdjustment[]
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  masterProduct      MasterProduct       @relation(fields: [masterProductId], references: [id])
+  saleItems          SaleItem[]
+  stockAdjustments   StockAdjustment[]
+  inventoryMovements InventoryMovement[]
 
   @@unique([tenantId, masterProductId])
   @@index([tenantId])
@@ -177,6 +180,28 @@ model StockAdjustment {
 
   @@index([tenantId, tenantInventoryId])
   @@map("stock_adjustments")
+}
+
+model InventoryMovement {
+  id                String       @id @default(cuid())
+  tenantInventoryId String // referencia al inventario del tenant
+  type              MovementType // ENTRY, EXIT, ADJUSTMENT
+  quantity          Int // cantidad movida (positivo para entradas, negativo para salidas)
+  reason            String? // motivo del movimiento
+  notes             String? // notas adicionales
+  createdBy         String // userId que registró el movimiento
+  tenantId          String
+  createdAt         DateTime     @default(now())
+
+  // Relations
+  tenantInventory TenantInventory @relation(fields: [tenantInventoryId], references: [id])
+  user            User            @relation(fields: [createdBy], references: [id])
+  tenant          Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, tenantInventoryId])
+  @@index([tenantId, type])
+  @@index([tenantId, createdAt])
+  @@map("inventory_movements")
 }
 
 // ============ SALES & CASH MANAGEMENT ============
@@ -710,6 +735,12 @@ enum AdjustmentType {
   LOSS // Merma
   CORRECTION // Corrección de inventario
   RETURN // Devolución
+}
+
+enum MovementType {
+  ENTRY // Entrada de stock
+  EXIT // Salida de stock
+  ADJUSTMENT // Ajuste de inventario
 }
 
 enum ExpenseFrequency {
