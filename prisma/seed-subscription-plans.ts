@@ -1,9 +1,9 @@
 /**
  * Script de inicialización de planes de suscripción para CRTLPyme SaaS
  * 
- * Este script crea los 8 planes de suscripción iniciales:
+ * Este script crea los 7 planes de suscripción iniciales:
  * - 4 planes mensuales (FREE, BASIC, PROFESSIONAL, ENTERPRISE)
- * - 4 planes anuales con descuento (BASIC, PROFESSIONAL, ENTERPRISE, PREMIUM)
+ * - 3 planes anuales con descuento (BASIC 20%, PROFESSIONAL 20%, ENTERPRISE 25%)
  */
 
 import { PrismaClient, BillingCycle } from '@prisma/client';
@@ -172,8 +172,8 @@ const subscriptionPlans = [
   },
   {
     name: 'Plan Empresarial - Anual',
-    description: 'Ahorra 20% pagando anualmente',
-    price: 767904, // 79990 * 12 * 0.8
+    description: 'Ahorra 25% pagando anualmente',
+    price: 719928, // 79990 * 12 * 0.75 (25% descuento)
     billingCycle: 'YEARLY' as BillingCycle,
     trialDays: 30,
     isVisible: true,
@@ -192,35 +192,8 @@ const subscriptionPlans = [
       'Backup en tiempo real',
       'Personalización del sistema',
       'Capacitación incluida',
-      '⭐ 20% de descuento',
-      '⭐ 2 meses gratis'
-    ]),
-    maxUsers: null,
-    maxProducts: null,
-    maxSales: null,
-    isActive: true,
-  },
-  {
-    name: 'Plan Premium - Anual',
-    description: 'La solución más completa con todo incluido',
-    price: 1199904, // 124990 * 12 * 0.8
-    billingCycle: 'YEARLY' as BillingCycle,
-    trialDays: 30,
-    isVisible: true,
-    sortOrder: 8,
-    features: JSON.stringify([
-      '✨ Todo lo del Plan Empresarial',
-      '✨ Módulo de Contabilidad integrado',
-      '✨ Módulo de RRHH',
-      '✨ Módulo de Compras y Proveedores',
-      '✨ CRM avanzado',
-      '✨ Business Intelligence',
-      '✨ Integraciones personalizadas',
-      '✨ Desarrollo de módulos a medida',
-      '✨ Consultor dedicado',
-      '✨ SLA garantizado 99.9%',
-      '⭐ 20% de descuento',
-      '⭐ 2 meses gratis'
+      '⭐ 25% de descuento',
+      '⭐ 3 meses gratis'
     ]),
     maxUsers: null,
     maxProducts: null,

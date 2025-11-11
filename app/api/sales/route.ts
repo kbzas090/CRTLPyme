@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { z } from 'zod'
+import { canPerformAction } from '@/lib/subscription-middleware'
 
 // Schema de validación para crear venta
 const createSaleSchema = z.object({
@@ -115,6 +116,19 @@ export async function POST(request: NextRequest) {
     if (!['ADMIN', 'CAJA'].includes(session.user.role)) {
       return NextResponse.json(
         { error: 'No tienes permisos para crear ventas' },
+        { status: 403 }
+      )
+    }
+
+    // VALIDACIÓN DE LÍMITES DE SUSCRIPCIÓN
+    const limitCheck = await canPerformAction(session.user.tenantId, 'create_sale')
+    if (!limitCheck.allowed) {
+      return NextResponse.json(
+        { 
+          error: limitCheck.message,
+          limitExceeded: true,
+          upgradeRequired: true 
+        },
         { status: 403 }
       )
     }

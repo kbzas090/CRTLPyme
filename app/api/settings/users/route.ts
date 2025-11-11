@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import bcrypt from 'bcryptjs'
+import { canPerformAction } from '@/lib/subscription-middleware'
 
 /**
  * GET /api/settings/users
@@ -81,6 +82,20 @@ export async function POST(request: NextRequest) {
   if (session.user.role !== 'ADMIN') {
     return NextResponse.json(
       { success: false, error: 'Acceso denegado. Solo administradores.' },
+      { status: 403 }
+    )
+  }
+
+  // VALIDACIÓN DE LÍMITES DE SUSCRIPCIÓN
+  const limitCheck = await canPerformAction(session.user.tenantId, 'create_user')
+  if (!limitCheck.allowed) {
+    return NextResponse.json(
+      { 
+        success: false,
+        error: limitCheck.message,
+        limitExceeded: true,
+        upgradeRequired: true 
+      },
       { status: 403 }
     )
   }
