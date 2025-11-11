@@ -23,9 +23,12 @@ interface Plan {
   sortOrder: number;
 }
 
+type BillingCycle = 'MONTHLY' | 'YEARLY';
+
 export default function PricingPlans() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeCycle, setActiveCycle] = useState<BillingCycle>('MONTHLY');
 
   useEffect(() => {
     loadPlans();
@@ -34,7 +37,7 @@ export default function PricingPlans() {
   const loadPlans = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/public/plans');
+      const response = await fetch('/api/subscription-plans');
       if (response.ok) {
         const data = await response.json();
         // Only show visible and active plans, sorted by order
@@ -67,6 +70,22 @@ export default function PricingPlans() {
     return labels[cycle] || cycle.toLowerCase();
   };
 
+  // Filter plans based on active billing cycle
+  const getFilteredPlans = () => {
+    return plans.filter((plan: Plan) => {
+      if (activeCycle === 'MONTHLY') {
+        return plan.billingCycle === 'MONTHLY';
+      } else {
+        return plan.billingCycle === 'YEARLY';
+      }
+    });
+  };
+
+  // Get the most popular plan (typically the second one in each category)
+  const getMostPopularIndex = (filteredPlans: Plan[]) => {
+    return filteredPlans.length > 1 ? 1 : -1;
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -83,112 +102,197 @@ export default function PricingPlans() {
     );
   }
 
+  const filteredPlans = getFilteredPlans();
+  const mostPopularIndex = getMostPopularIndex(filteredPlans);
+
   return (
-    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-      {plans.map((plan, index) => (
-        <Card 
-          key={plan.id} 
-          className={`hover:shadow-xl transition-all duration-300 ${
-            index === 1 ? 'border-blue-500 border-2 scale-105' : ''
-          }`}
-        >
-          {index === 1 && (
-            <div className="bg-blue-500 text-white text-center py-2 rounded-t-lg">
-              <span className="text-sm font-semibold">MÁS POPULAR</span>
-            </div>
-          )}
-          <CardHeader>
-            <CardTitle className="text-2xl">{plan.name}</CardTitle>
-            {plan.description && (
-              <CardDescription className="mt-2 text-base">
-                {plan.description}
-              </CardDescription>
-            )}
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Price */}
-            <div className="border-b pb-6">
-              <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-bold text-gray-900">
-                  {formatCurrency(Number(plan.price))}
-                </span>
-              </div>
-              <p className="text-gray-500 mt-1">
-                por {getBillingCycleLabel(plan.billingCycle)}
-              </p>
-              {plan.trialDays > 0 && (
-                <Badge className="mt-3 bg-green-100 text-green-700 hover:bg-green-100">
-                  {plan.trialDays} días de prueba gratis
-                </Badge>
-              )}
-            </div>
+    <div className="max-w-6xl mx-auto">
+      {/* Elegant Billing Cycle Tabs */}
+      <div className="flex flex-col items-center mb-12">
+        {/* Tab Container */}
+        <div className="relative flex bg-gray-50 rounded-2xl p-1.5 shadow-inner border border-gray-200">
+          {/* Background highlight that moves */}
+          <div 
+            className={`absolute top-1.5 bottom-1.5 bg-white rounded-xl shadow-lg border-2 transition-all duration-300 ease-out ${
+              activeCycle === 'MONTHLY' 
+                ? 'left-1.5 right-1/2 mr-0.5 border-cyan-400' 
+                : 'right-1.5 left-1/2 ml-0.5 border-cyan-400'
+            }`}
+          />
+          
+          {/* Monthly Tab */}
+          <button
+            onClick={() => setActiveCycle('MONTHLY')}
+            className={`relative z-10 px-8 py-4 rounded-xl font-semibold transition-all duration-300 text-base min-w-[140px] ${
+              activeCycle === 'MONTHLY'
+                ? 'text-cyan-600 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Mensual
+          </button>
+          
+          {/* Annual Tab */}
+          <button
+            onClick={() => setActiveCycle('YEARLY')}
+            className={`relative z-10 px-8 py-4 rounded-xl font-semibold transition-all duration-300 text-base min-w-[140px] flex items-center justify-center gap-2 ${
+              activeCycle === 'YEARLY'
+                ? 'text-cyan-600 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <span>Anual</span>
+            <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs px-2.5 py-0.5 rounded-full font-medium shadow-sm">
+              -25%
+            </Badge>
+          </button>
+        </div>
+        
+        {/* Informational Text */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600 font-medium">
+            {activeCycle === 'YEARLY' 
+              ? '✨ Los planes anuales incluyen 2 meses adicionales gratis'
+              : 'Cambia a facturación anual y ahorra hasta un 25%'
+            }
+          </p>
+        </div>
+      </div>
 
-            {/* Features */}
-            <div className="space-y-3">
-              {/* Limits */}
-              {plan.maxUsers !== null && (
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">
-                    Hasta {plan.maxUsers} usuarios
-                  </span>
+      {/* Plans Grid */}
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-all duration-500 ease-in-out">
+        {filteredPlans.map((plan, index) => {
+          const isPopular = index === mostPopularIndex;
+          
+          return (
+            <Card 
+              key={`${plan.id}-${activeCycle}`}
+              className={`hover:shadow-xl transition-all duration-300 relative ${
+                isPopular ? 'border-blue-500 border-2 transform scale-105' : 'border-gray-200'
+              }`}
+            >
+              {isPopular && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-blue-500 text-white px-4 py-1 text-sm font-semibold">
+                    MÁS POPULAR
+                  </Badge>
                 </div>
               )}
-              {plan.maxProducts !== null && (
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">
-                    Hasta {plan.maxProducts} productos
-                  </span>
+              
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
+                {plan.description && (
+                  <CardDescription className="text-sm text-gray-600 mt-2">
+                    {plan.description}
+                  </CardDescription>
+                )}
+              </CardHeader>
+              
+              <CardContent className="space-y-6">
+                {/* Price Section */}
+                <div className="border-b pb-6">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-gray-900">
+                      {formatCurrency(Number(plan.price))}
+                    </span>
+                  </div>
+                  <p className="text-gray-500 text-sm mt-1">
+                    por {getBillingCycleLabel(plan.billingCycle)}
+                  </p>
+                  {plan.trialDays > 0 && (
+                    <Badge className="mt-3 bg-green-100 text-green-700 hover:bg-green-100 text-xs">
+                      {plan.trialDays} días gratis
+                    </Badge>
+                  )}
                 </div>
-              )}
-              {plan.maxSales !== null && (
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">
-                    Hasta {plan.maxSales} ventas/mes
-                  </span>
-                </div>
-              )}
 
-              {/* Additional Features */}
-              {plan.features && Array.isArray(plan.features) && plan.features.length > 0 && (
-                <>
-                  {plan.features.map((feature: string, featureIndex: number) => (
-                    <div key={featureIndex} className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-gray-700">{feature}</span>
+                {/* Features Section */}
+                <div className="space-y-3 min-h-[200px]">
+                  {/* User Limits */}
+                  {plan.maxUsers !== null && (
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-xs text-gray-700">
+                        Hasta {plan.maxUsers} usuarios
+                      </span>
                     </div>
-                  ))}
-                </>
-              )}
+                  )}
+                  
+                  {/* Product Limits */}
+                  {plan.maxProducts !== null && (
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-xs text-gray-700">
+                        Hasta {plan.maxProducts} productos
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Sales Limits */}
+                  {plan.maxSales !== null && (
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-xs text-gray-700">
+                        Hasta {plan.maxSales} ventas/mes
+                      </span>
+                    </div>
+                  )}
 
-              {/* Unlimited badge if no limits */}
-              {plan.maxUsers === null && plan.maxProducts === null && plan.maxSales === null && (
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700 font-semibold">
-                    Todo ilimitado
-                  </span>
+                  {/* Additional Features */}
+                  {plan.features && (() => {
+                    try {
+                      const features = typeof plan.features === 'string' 
+                        ? JSON.parse(plan.features) 
+                        : plan.features;
+                      
+                      if (Array.isArray(features)) {
+                        return features.map((feature: string, featureIndex: number) => (
+                          <div key={featureIndex} className="flex items-start gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-xs text-gray-700">{feature}</span>
+                          </div>
+                        ));
+                      }
+                    } catch (error) {
+                      console.error('Error parsing features:', error);
+                      return null;
+                    }
+                    return null;
+                  })()}
+
+                  {/* Unlimited Features */}
+                  {plan.maxUsers === null && plan.maxProducts === null && plan.maxSales === null && (
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-xs text-gray-700 font-semibold">
+                        Todo ilimitado
+                      </span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* CTA Button */}
-            <div className="pt-4">
-              <Link href="/onboarding" className="block">
-                <Button 
-                  className="w-full" 
-                  size="lg"
-                  variant={index === 1 ? 'default' : 'outline'}
-                >
-                  Comenzar ahora
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+                {/* CTA Button */}
+                <div className="pt-4">
+                  <Link href="/onboarding" className="block">
+                    <Button 
+                      className="w-full" 
+                      size="lg"
+                      variant={isPopular ? 'default' : 'outline'}
+                    >
+                      {plan.price === 0 ? 'Comenzar Gratis' : 'Comenzar Ahora'}
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+      
+      {/* Additional Info */}
+      <div className="text-center mt-12 text-sm text-gray-500">
+        <p>Todos los planes incluyen 14 días de prueba gratuita • Sin compromiso • Cancela cuando quieras</p>
+      </div>
     </div>
   );
 }
