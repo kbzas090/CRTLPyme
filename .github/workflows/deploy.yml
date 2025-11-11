@@ -61,7 +61,15 @@ jobs:
           docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }}:latest
 
-      # 7. Deploy a Cloud Run
+      # 7. Deploy a Cloud Run - Limpiar secrets antiguos primero
+      - name: Clear old secrets configuration
+        run: |
+          echo "Clearing old secrets configuration..."
+          gcloud run services update ${{ env.SERVICE_NAME }} \
+            --region ${{ env.REGION }} \
+            --clear-secrets || echo "No secrets to clear"
+      
+      # 8. Deploy a Cloud Run con nuevas variables
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
