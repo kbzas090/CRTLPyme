@@ -11,7 +11,7 @@ on:
 # Variables de entorno globales
 env:
   PROJECT_ID: crtlpyme-477300
-  SERVICE_NAME: crtlpyme-app
+  SERVICE_NAME: crtlpyme
   REGION: us-central1
   IMAGE_NAME: crtlpyme
 

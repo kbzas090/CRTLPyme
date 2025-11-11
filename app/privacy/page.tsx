@@ -250,7 +250,7 @@ export default function PrivacyPage() {
               <ul className="list-none mb-4 space-y-2">
                 <li><strong>Email de Privacidad:</strong> privacidad@crtlpyme.cl</li>
                 <li><strong>Soporte General:</strong> soporte@crtlpyme.cl</li>
-                <li><strong>Sitio web:</strong> https://crtlpyme-app-399088129827.us-central1.run.app</li>
+                <li><strong>Sitio web:</strong> https://crtlpyme-399088129827.us-central1.run.app</li>
               </ul>
               <p className="mb-4">
                 Responderemos a sus solicitudes dentro de 30 días.

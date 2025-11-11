@@ -183,7 +183,7 @@ export default function TermsPage() {
               </p>
               <ul className="list-none mb-4 space-y-2">
                 <li><strong>Email:</strong> soporte@crtlpyme.cl</li>
-                <li><strong>Sitio web:</strong> https://crtlpyme-app-399088129827.us-central1.run.app</li>
+                <li><strong>Sitio web:</strong> https://crtlpyme-399088129827.us-central1.run.app</li>
               </ul>
             </section>
 
