@@ -41,10 +41,21 @@ export async function GET() {
       }))
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching public plans:', error);
+    console.error('Error details:', {
+      message: error?.message,
+      code: error?.code,
+      stack: error?.stack,
+      name: error?.name,
+    });
     return NextResponse.json(
-      { error: 'Error fetching plans' },
+      { 
+        error: 'Error fetching plans',
+        details: error?.message || 'Unknown error',
+        code: error?.code || 'UNKNOWN',
+        name: error?.name || 'Unknown'
+      },
       { status: 500 }
     );
   }

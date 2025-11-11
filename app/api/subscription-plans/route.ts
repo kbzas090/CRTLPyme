@@ -54,10 +54,19 @@ export async function GET(request: NextRequest) {
       plans: plansWithStats,
       total: plansWithStats.length,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error al listar planes:', error);
+    console.error('Error details:', {
+      message: error?.message,
+      code: error?.code,
+      stack: error?.stack,
+    });
     return NextResponse.json(
-      { error: 'Error al obtener planes de suscripción' },
+      { 
+        error: 'Error al obtener planes de suscripción',
+        details: error?.message || 'Unknown error',
+        code: error?.code || 'UNKNOWN'
+      },
       { status: 500 }
     );
   }
