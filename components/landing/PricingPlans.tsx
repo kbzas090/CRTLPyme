@@ -23,7 +23,7 @@ interface Plan {
   sortOrder: number;
 }
 
-type BillingCycle = 'MONTHLY' | 'YEARLY';
+type BillingCycle = 'MONTHLY' | 'ANNUAL';
 
 export default function PricingPlans() {
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -64,7 +64,7 @@ export default function PricingPlans() {
   const getBillingCycleLabel = (cycle: string) => {
     const labels: { [key: string]: string } = {
       MONTHLY: 'mes',
-      YEARLY: 'año',
+      ANNUAL: 'año',
       QUARTERLY: 'trimestre',
     };
     return labels[cycle] || cycle.toLowerCase();
@@ -76,7 +76,7 @@ export default function PricingPlans() {
       if (activeCycle === 'MONTHLY') {
         return plan.billingCycle === 'MONTHLY';
       } else {
-        return plan.billingCycle === 'YEARLY';
+        return plan.billingCycle === 'ANNUAL';
       }
     });
   };
@@ -134,9 +134,9 @@ export default function PricingPlans() {
           
           {/* Annual Tab */}
           <button
-            onClick={() => setActiveCycle('YEARLY')}
+            onClick={() => setActiveCycle('ANNUAL')}
             className={`relative z-10 px-8 py-4 rounded-xl font-semibold transition-all duration-300 text-base min-w-[140px] flex items-center justify-center gap-2 ${
-              activeCycle === 'YEARLY'
+              activeCycle === 'ANNUAL'
                 ? 'text-cyan-600 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
@@ -151,7 +151,7 @@ export default function PricingPlans() {
         {/* Informational Text */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600 font-medium">
-            {activeCycle === 'YEARLY' 
+            {activeCycle === 'ANNUAL' 
               ? '✨ Los planes anuales incluyen 2 meses adicionales gratis'
               : 'Cambia a facturación anual y ahorra hasta un 25%'
             }

@@ -1,9 +1,9 @@
 /**
  * Script de inicialización de planes de suscripción para CRTLPyme SaaS
  * 
- * Este script crea los 7 planes de suscripción iniciales:
+ * Este script crea los 8 planes de suscripción iniciales:
  * - 4 planes mensuales (FREE, BASIC, PROFESSIONAL, ENTERPRISE)
- * - 3 planes anuales con descuento (BASIC 20%, PROFESSIONAL 20%, ENTERPRISE 25%)
+ * - 4 planes anuales (FREE, BASIC 20%, PROFESSIONAL 20%, ENTERPRISE 25%)
  */
 
 import { PrismaClient, BillingCycle } from '@prisma/client';
@@ -115,16 +115,38 @@ const subscriptionPlans = [
   },
 
   // ========================================
-  // PLANES ANUALES (con 20% de descuento)
+  // PLANES ANUALES (con descuento)
   // ========================================
+  {
+    name: 'Plan Gratuito - Anual',
+    description: 'Prueba extendida por un año completo',
+    price: 0,
+    billingCycle: 'ANNUAL' as BillingCycle,
+    trialDays: 0,
+    isVisible: true,
+    sortOrder: 5,
+    features: JSON.stringify([
+      '1 Usuario',
+      '50 Productos',
+      '100 Ventas/mes',
+      'Soporte por email',
+      'Reportes básicos',
+      '1 Caja registradora',
+      '⭐ Gratis por 1 año'
+    ]),
+    maxUsers: 1,
+    maxProducts: 50,
+    maxSales: 100,
+    isActive: true,
+  },
   {
     name: 'Plan Básico - Anual',
     description: 'Ahorra 20% pagando anualmente',
     price: 191904, // 19990 * 12 * 0.8
-    billingCycle: 'YEARLY' as BillingCycle,
+    billingCycle: 'ANNUAL' as BillingCycle,
     trialDays: 30,
     isVisible: true,
-    sortOrder: 5,
+    sortOrder: 6,
     features: JSON.stringify([
       '3 Usuarios',
       '500 Productos',
@@ -146,10 +168,10 @@ const subscriptionPlans = [
     name: 'Plan Profesional - Anual',
     description: 'Ahorra 20% pagando anualmente',
     price: 383904, // 39990 * 12 * 0.8
-    billingCycle: 'YEARLY' as BillingCycle,
+    billingCycle: 'ANNUAL' as BillingCycle,
     trialDays: 30,
     isVisible: true,
-    sortOrder: 6,
+    sortOrder: 7,
     features: JSON.stringify([
       '10 Usuarios',
       '2000 Productos',
@@ -174,10 +196,10 @@ const subscriptionPlans = [
     name: 'Plan Empresarial - Anual',
     description: 'Ahorra 25% pagando anualmente',
     price: 719928, // 79990 * 12 * 0.75 (25% descuento)
-    billingCycle: 'YEARLY' as BillingCycle,
+    billingCycle: 'ANNUAL' as BillingCycle,
     trialDays: 30,
     isVisible: true,
-    sortOrder: 7,
+    sortOrder: 8,
     features: JSON.stringify([
       'Usuarios ilimitados',
       'Productos ilimitados',
