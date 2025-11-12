@@ -31,16 +31,16 @@ steps:
       # Configuración de variables de entorno desde secrets
       - '--set-secrets=DATABASE_URL=DATABASE_URL:latest'
       - '--set-secrets=NEXTAUTH_SECRET=NEXTAUTH_SECRET:latest'
-      - '--set-secrets=NEXTAUTH_URL=NEXTAUTH_URL:latest'
       - '--set-secrets=SENDGRID_API_KEY=SENDGRID_API_KEY:latest'
       - '--set-secrets=SENDGRID_FROM_EMAIL=SENDGRID_FROM_EMAIL:latest'
       - '--set-secrets=TRANSBANK_API_KEY=transbank-api-key:latest'
       - '--set-secrets=TRANSBANK_COMMERCE_CODE=transbank-commerce-code:latest'
       - '--set-secrets=TRANSBANK_ENVIRONMENT=TRANSBANK_ENVIRONMENT:latest'
-      # Variables de entorno directas
+      # Variables de entorno directas (including NEXTAUTH_URL)
       - '--set-env-vars=NODE_ENV=production'
       - '--set-env-vars=NEXT_PUBLIC_APP_NAME=CRTLPyme'
       - '--set-env-vars=GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID'
+      - '--set-env-vars=NEXTAUTH_URL=https://crtlpyme-ean57to77a-uc.a.run.app'
 
 images:
   - 'gcr.io/$PROJECT_ID/crtlpyme:$COMMIT_SHA'
