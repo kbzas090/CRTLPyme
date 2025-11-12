@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
@@ -122,7 +122,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/' })
+    router.push('/auth/signout')
   }
 
   return (

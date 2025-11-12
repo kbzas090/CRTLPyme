@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import {
@@ -76,11 +76,8 @@ export default function AdminNavBar() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const handleLogout = async () => {
-    await signOut({ 
-      callbackUrl: '/',
-      redirect: true 
-    })
+  const handleLogout = () => {
+    router.push('/auth/signout')
   }
 
   const getInitials = (firstName?: string, lastName?: string) => {
