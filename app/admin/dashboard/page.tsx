@@ -108,9 +108,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-4 lg:space-y-6">
+    <div className="space-y-4 lg:space-y-6 max-w-full overflow-x-hidden">
       {/* Header */}
-      <div className="space-y-1">
+      <div className="space-y-1 px-4 sm:px-0">
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
           Bienvenido, {session.user.firstName} {session.user.lastName}
         </h1>
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Tarjetas de estadísticas */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-4 sm:px-0 max-w-full">
         {/* Total Productos */}
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -189,11 +189,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* Módulos disponibles */}
-      <div className="space-y-3 lg:space-y-4">
+      <div className="space-y-3 lg:space-y-4 px-4 sm:px-0">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           Módulos del Sistema
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-full">
           {/* Punto de Venta */}
           <Card className="hover:shadow-lg transition-shadow border-green-200 bg-green-50">
             <CardHeader className="pb-3 sm:pb-4">

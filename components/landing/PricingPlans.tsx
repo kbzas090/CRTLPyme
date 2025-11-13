@@ -106,11 +106,11 @@ export default function PricingPlans() {
   const mostPopularIndex = getMostPopularIndex(filteredPlans);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto w-full overflow-x-hidden">
       {/* Elegant Billing Cycle Tabs */}
-      <div className="flex flex-col items-center mb-12">
+      <div className="flex flex-col items-center mb-12 px-4">
         {/* Tab Container */}
-        <div className="relative flex bg-gray-50 rounded-2xl p-1.5 shadow-inner border border-gray-200">
+        <div className="relative flex bg-gray-50 rounded-2xl p-1.5 shadow-inner border border-gray-200 max-w-full">
           {/* Background highlight that moves */}
           <div 
             className={`absolute top-1.5 bottom-1.5 bg-white rounded-xl shadow-lg border-2 transition-all duration-300 ease-out ${
@@ -123,7 +123,7 @@ export default function PricingPlans() {
           {/* Monthly Tab */}
           <button
             onClick={() => setActiveCycle('MONTHLY')}
-            className={`relative z-10 px-8 py-4 rounded-xl font-semibold transition-all duration-300 text-base min-w-[140px] ${
+            className={`relative z-10 px-4 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 text-sm sm:text-base min-w-[120px] sm:min-w-[140px] touch-manipulation ${
               activeCycle === 'MONTHLY'
                 ? 'text-cyan-600 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
@@ -135,14 +135,14 @@ export default function PricingPlans() {
           {/* Annual Tab */}
           <button
             onClick={() => setActiveCycle('ANNUAL')}
-            className={`relative z-10 px-8 py-4 rounded-xl font-semibold transition-all duration-300 text-base min-w-[140px] flex items-center justify-center gap-2 ${
+            className={`relative z-10 px-4 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 text-sm sm:text-base min-w-[120px] sm:min-w-[140px] flex items-center justify-center gap-1 sm:gap-2 touch-manipulation ${
               activeCycle === 'ANNUAL'
                 ? 'text-cyan-600 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             <span>Anual</span>
-            <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs px-2.5 py-0.5 rounded-full font-medium shadow-sm">
+            <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-medium shadow-sm">
               -25%
             </Badge>
           </button>
@@ -160,14 +160,14 @@ export default function PricingPlans() {
       </div>
 
       {/* Plans Grid */}
-      <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-all duration-500 ease-in-out">
+      <div className="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-all duration-500 ease-in-out px-4 max-w-full overflow-x-hidden">
         {filteredPlans.map((plan, index) => {
           const isPopular = index === mostPopularIndex;
           
           return (
             <Card 
               key={`${plan.id}-${activeCycle}`}
-              className={`hover:shadow-xl transition-all duration-300 relative ${
+              className={`hover:shadow-xl transition-all duration-300 relative max-w-full overflow-hidden ${
                 isPopular ? 'border-blue-500 border-2 sm:transform sm:scale-105' : 'border-gray-200'
               }`}
             >

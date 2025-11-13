@@ -131,9 +131,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row overflow-x-hidden">
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white border-b px-4 py-3 flex items-center justify-between">
+      <div className="lg:hidden bg-white border-b px-4 py-3 flex items-center justify-between w-full">
         <div className="flex items-center gap-2">
           <Store className="h-6 w-6 text-blue-600" />
           <div>
@@ -193,7 +193,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
+            <SheetContent side="right" className="w-[min(300px,80vw)] sm:w-[min(350px,85vw)] max-w-sm p-0 z-50">
               <div className="flex flex-col h-full">
                 {/* Mobile Menu Header */}
                 <div className="flex items-center space-x-2 px-6 py-4 border-b">

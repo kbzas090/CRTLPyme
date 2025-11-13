@@ -9,9 +9,9 @@ import { MobileNav } from "@/components/mobile/MobileNav"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-x-hidden">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50 w-full">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           {/* Mobile Navigation & Logo */}
           <div className="flex items-center space-x-3 md:space-x-4">
@@ -49,12 +49,16 @@ export default function HomePage() {
           </div>
 
           {/* Mobile Auth Buttons */}
-          <div className="flex md:hidden items-center space-x-2">
-            <Link href="/auth/login">
-              <Button variant="outline" size="sm">Login</Button>
+          <div className="flex md:hidden items-center space-x-2 max-w-[150px] overflow-hidden">
+            <Link href="/auth/login" className="flex-1 min-w-0">
+              <Button variant="outline" size="sm" className="w-full text-xs px-2 min-h-[36px] touch-manipulation">
+                Login
+              </Button>
             </Link>
-            <Link href="/demo">
-              <Button size="sm" className="hidden sm:inline-flex">Demo</Button>
+            <Link href="/demo" className="hidden xs:block flex-1 min-w-0">
+              <Button size="sm" className="w-full text-xs px-2 min-h-[36px] touch-manipulation">
+                Demo
+              </Button>
             </Link>
           </div>
         </div>

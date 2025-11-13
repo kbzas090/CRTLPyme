@@ -52,7 +52,7 @@ export function MobileNav({ navigation = [], onSignOut, user, showAuth = false }
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="pr-0 w-[300px] sm:w-[350px]">
+      <SheetContent side="left" className="pr-0 w-[min(300px,80vw)] sm:w-[min(350px,85vw)] max-w-sm z-50">
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center space-x-2 px-6 py-4 border-b">

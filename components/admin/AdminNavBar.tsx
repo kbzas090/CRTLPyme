@@ -96,9 +96,9 @@ export default function AdminNavBar() {
   })
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-16 min-w-0">
           {/* Logo y nombre */}
           <div className="flex items-center">
             <Link href="/admin/dashboard" className="flex items-center space-x-2">
@@ -214,8 +214,8 @@ export default function AdminNavBar() {
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className="md:hidden border-t border-gray-200 bg-white absolute top-full left-0 right-0 z-40 shadow-lg max-h-screen overflow-y-auto">
+          <div className="px-2 pt-2 pb-3 space-y-1 max-w-full">
             {filteredNavItems.map((item) => {
               const Icon = item.icon
               const active = isActive(item.href)
