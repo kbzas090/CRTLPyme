@@ -1,51 +1,37 @@
-FROM node:20-alpine AS base
+# Simplified single-stage Dockerfile for better compatibility
+FROM node:20-alpine
 
-# Instalar dependencias
-FROM base AS deps
+# Install dependencies
 RUN apk add --no-cache libc6-compat openssl
+
+# Set working directory
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-# Clean install with legacy peer deps and no audit to avoid failing on vulnerabilities
-RUN npm ci --legacy-peer-deps --no-audit --no-fund || npm install --legacy-peer-deps --no-audit --no-fund
-
-# Generar Prisma Client
+# Copy package files
+COPY package*.json ./
 COPY prisma ./prisma/
+
+# Install dependencies and generate Prisma client
+RUN npm install --legacy-peer-deps --no-audit --no-fund
 RUN npx prisma generate
 
-# Builder
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy application code
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN npx prisma generate
+# Build the application
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# Runner
-FROM base AS runner
-WORKDIR /app
+# Create user for security
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN apk add --no-cache openssl
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copiar archivos del build
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/prisma ./prisma
-
+# Set correct permissions
+RUN chown -R nextjs:nodejs /app
 USER nextjs
 
+# Expose port
 EXPOSE 3000
 
-ENV PORT 3000
-
-CMD ["node", "server.js"]
+# Start the application
+CMD ["npm", "start"]
