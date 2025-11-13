@@ -13,13 +13,13 @@ import { renewSubscription } from '@/lib/subscription-service';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error } = await verifyAdminSaaSAccess();
   if (error) return error;
 
   try {
-    const result = await renewSubscription(params.id);
+    const result = await renewSubscription((await params).id);
 
     if (!result.success) {
       return NextResponse.json(

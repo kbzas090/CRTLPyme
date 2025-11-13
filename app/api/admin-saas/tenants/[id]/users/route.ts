@@ -14,7 +14,7 @@ import { verifyAdminSaaSAccess } from '@/lib/admin-auth';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -22,7 +22,7 @@ export async function GET(
   try {
     const users = await prisma.user.findMany({
       where: {
-        tenantId: params.id,
+        tenantId: (await params).id,
       },
       select: {
         id: true,

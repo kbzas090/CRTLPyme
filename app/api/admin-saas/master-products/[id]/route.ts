@@ -44,7 +44,7 @@ export async function GET(
     }
 
     const masterProduct = await prisma.masterProduct.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         tenantInventories: {
           select: {
@@ -121,7 +121,7 @@ export async function PUT(
     }
 
     const masterProduct = await prisma.masterProduct.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
 
     if (!masterProduct) {
@@ -164,7 +164,7 @@ export async function PUT(
 
     // Actualizar producto maestro
     const updatedMasterProduct = await prisma.masterProduct.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: validatedData,
     })
 
@@ -214,7 +214,7 @@ export async function DELETE(
     }
 
     const masterProduct = await prisma.masterProduct.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         tenantInventories: true,
       },
@@ -242,7 +242,7 @@ export async function DELETE(
 
     // Soft delete: marcar como inactivo
     const deletedMasterProduct = await prisma.masterProduct.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: { isActive: false },
     })
 

@@ -14,7 +14,7 @@ import { sendAccountSuspendedEmail } from '@/lib/sendgrid';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -32,7 +32,7 @@ export async function POST(
 
     // Verificar que el tenant existe
     const tenant = await prisma.tenant.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!tenant) {
@@ -44,7 +44,7 @@ export async function POST(
 
     // Suspender el tenant
     const updatedTenant = await prisma.tenant.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         isActive: false,
         accountStatus: 'SUSPENDED',
@@ -54,7 +54,7 @@ export async function POST(
     // Suspender sus suscripciones activas
     await prisma.subscription.updateMany({
       where: {
-        tenantId: params.id,
+        tenantId: (await params).id,
         status: {
           in: ['ACTIVE', 'TRIAL'],
         },
@@ -69,7 +69,7 @@ export async function POST(
       data: {
         action: 'TENANT_SUSPENDED',
         entity: 'Tenant',
-        entityId: params.id,
+        entityId: (await params).id,
         oldValues: {
           isActive: tenant.isActive,
           accountStatus: tenant.accountStatus,
@@ -79,7 +79,7 @@ export async function POST(
           accountStatus: 'SUSPENDED',
           reason,
         },
-        tenantId: params.id,
+        tenantId: (await params).id,
       },
     });
 

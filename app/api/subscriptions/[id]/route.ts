@@ -15,7 +15,7 @@ import { sendPlanChangeEmail } from '@/lib/sendgrid';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
@@ -28,7 +28,7 @@ export async function GET(
 
   try {
     const subscription = await prisma.subscription.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         plan: true,
         tenant: true,
@@ -62,7 +62,7 @@ export async function GET(
     // Calcular estadísticas
     const totalPaid = await prisma.subscriptionPayment.aggregate({
       where: {
-        subscriptionId: params.id,
+        subscriptionId: (await params).id,
         status: 'APPROVED',
       },
       _sum: {
@@ -73,7 +73,7 @@ export async function GET(
 
     const failedPayments = await prisma.subscriptionPayment.count({
       where: {
-        subscriptionId: params.id,
+        subscriptionId: (await params).id,
         status: 'FAILED',
       },
     });
@@ -103,7 +103,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -123,7 +123,7 @@ export async function PUT(
 
     // Verificar que la suscripción existe
     const existingSubscription = await prisma.subscription.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         plan: true,
         tenant: true,
@@ -177,7 +177,7 @@ export async function PUT(
 
     // Actualizar la suscripción
     const updatedSubscription = await prisma.subscription.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: updateData,
       include: {
         plan: true,
@@ -215,7 +215,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -226,7 +226,7 @@ export async function DELETE(
 
     // Verificar que la suscripción existe
     const existingSubscription = await prisma.subscription.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!existingSubscription) {
@@ -238,7 +238,7 @@ export async function DELETE(
 
     // Cancelar la suscripción
     const cancelledSubscription = await prisma.subscription.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         status: 'CANCELLED',
         cancelledAt: new Date(),

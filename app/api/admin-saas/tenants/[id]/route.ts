@@ -14,14 +14,14 @@ import { verifyAdminSaaSAccess } from '@/lib/admin-auth';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
 
   try {
     const tenant = await prisma.tenant.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         users: {
           select: {
@@ -74,7 +74,7 @@ export async function GET(
     // Obtener estadísticas de ventas
     const salesStats = await prisma.sale.aggregate({
       where: {
-        tenantId: params.id,
+        tenantId: (await params).id,
         status: 'COMPLETED',
       },
       _sum: {
@@ -86,7 +86,7 @@ export async function GET(
     // Obtener ventas recientes
     const recentSales = await prisma.sale.findMany({
       where: {
-        tenantId: params.id,
+        tenantId: (await params).id,
         status: 'COMPLETED',
       },
       orderBy: {
@@ -136,7 +136,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -146,7 +146,7 @@ export async function PUT(
     const { businessName, email, phone, address, planType, maxCashiers, extraCashiers, isActive } = body;
 
     const tenant = await prisma.tenant.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!tenant) {
@@ -157,7 +157,7 @@ export async function PUT(
     }
 
     const updatedTenant = await prisma.tenant.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         ...(businessName && { businessName }),
         ...(email && { email }),
@@ -189,14 +189,14 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
 
   try {
     const tenant = await prisma.tenant.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!tenant) {
@@ -208,7 +208,7 @@ export async function DELETE(
 
     // Soft delete: marcar como inactivo
     const updatedTenant = await prisma.tenant.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         isActive: false,
       },

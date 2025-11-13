@@ -14,7 +14,7 @@ import { sendPlanChangeEmail } from '@/lib/sendgrid';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -32,7 +32,7 @@ export async function POST(
 
     // Verificar que el tenant existe
     const tenant = await prisma.tenant.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         subscriptions: {
           where: {
@@ -101,7 +101,7 @@ export async function POST(
     }
 
     await prisma.tenant.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         planType: tenantPlanType,
       },
@@ -122,7 +122,7 @@ export async function POST(
           planName: newPlanName,
           reason,
         },
-        tenantId: params.id,
+        tenantId: (await params).id,
       },
     });
 

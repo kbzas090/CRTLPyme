@@ -42,7 +42,7 @@ export async function GET(
 
     const inventoryItem = await prisma.tenantInventory.findFirst({
       where: {
-        id: params.id,
+        id: (await params).id,
         tenantId: session.user.tenantId,
       },
       include: {
@@ -111,7 +111,7 @@ export async function PUT(
     // Verificar que el item existe y pertenece al tenant
     const existingItem = await prisma.tenantInventory.findFirst({
       where: {
-        id: params.id,
+        id: (await params).id,
         tenantId: session.user.tenantId,
       },
     })
@@ -128,7 +128,7 @@ export async function PUT(
 
     // Actualizar inventario
     const updatedItem = await prisma.tenantInventory.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: validatedData,
       include: {
         masterProduct: true,
@@ -196,7 +196,7 @@ export async function DELETE(
     // Verificar que el item existe y pertenece al tenant
     const existingItem = await prisma.tenantInventory.findFirst({
       where: {
-        id: params.id,
+        id: (await params).id,
         tenantId: session.user.tenantId,
       },
     })
@@ -210,7 +210,7 @@ export async function DELETE(
 
     // Soft delete: marcar como inactivo
     const deletedItem = await prisma.tenantInventory.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: { isActive: false },
     })
 

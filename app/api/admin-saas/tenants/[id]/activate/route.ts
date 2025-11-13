@@ -14,7 +14,7 @@ import { sendAccountReactivatedEmail } from '@/lib/sendgrid';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -22,7 +22,7 @@ export async function POST(
   try {
     // Verificar que el tenant existe
     const tenant = await prisma.tenant.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!tenant) {
@@ -34,7 +34,7 @@ export async function POST(
 
     // Activar el tenant
     const updatedTenant = await prisma.tenant.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         isActive: true,
         accountStatus: 'ACTIVE',
@@ -45,7 +45,7 @@ export async function POST(
     // Activar sus suscripciones si las tiene
     await prisma.subscription.updateMany({
       where: {
-        tenantId: params.id,
+        tenantId: (await params).id,
         status: 'SUSPENDED',
       },
       data: {
@@ -58,12 +58,12 @@ export async function POST(
       data: {
         action: 'TENANT_ACTIVATED',
         entity: 'Tenant',
-        entityId: params.id,
+        entityId: (await params).id,
         newValues: {
           isActive: true,
           accountStatus: 'ACTIVE',
         },
-        tenantId: params.id,
+        tenantId: (await params).id,
       },
     });
 

@@ -15,7 +15,7 @@ import { cancelSubscription } from '@/lib/subscription-service';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
@@ -38,7 +38,7 @@ export async function POST(
       // Verify the subscription belongs to the user's tenant
       const { prisma } = await import('@/lib/db');
       const subscription = await prisma.subscription.findUnique({
-        where: { id: params.id },
+        where: { id: (await params).id },
       });
 
       if (!subscription || subscription.tenantId !== session.user.tenantId) {
@@ -50,7 +50,7 @@ export async function POST(
     }
 
     const result = await cancelSubscription(
-      params.id,
+      (await params).id,
       reason,
       immediate || false
     );

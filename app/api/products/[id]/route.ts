@@ -37,7 +37,7 @@ export async function GET(
 
     const product = await prisma.product.findFirst({
       where: {
-        id: params.id,
+        id: (await params).id,
         tenantId: session.user.tenantId,
       },
     })
@@ -86,7 +86,7 @@ export async function PUT(
     // Verificar que el producto existe y pertenece al tenant
     const existingProduct = await prisma.product.findFirst({
       where: {
-        id: params.id,
+        id: (await params).id,
         tenantId: session.user.tenantId,
       },
     })
@@ -122,7 +122,7 @@ export async function PUT(
 
     // Actualizar producto
     const updatedProduct = await prisma.product.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: validatedData,
     })
 
@@ -183,7 +183,7 @@ export async function DELETE(
     // Verificar que el producto existe y pertenece al tenant
     const existingProduct = await prisma.product.findFirst({
       where: {
-        id: params.id,
+        id: (await params).id,
         tenantId: session.user.tenantId,
       },
     })
@@ -197,7 +197,7 @@ export async function DELETE(
 
     // Soft delete: marcar como inactivo
     const deletedProduct = await prisma.product.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: { isActive: false },
     })
 

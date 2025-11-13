@@ -13,11 +13,11 @@ import { verifyAdminSaaSAccess } from '@/lib/admin-auth';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const plan = await prisma.subscriptionPlan.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         _count: {
           select: {
@@ -37,7 +37,7 @@ export async function GET(
     // Obtener estadísticas del plan
     const activeSubscriptions = await prisma.subscription.count({
       where: {
-        planId: params.id,
+        planId: (await params).id,
         status: 'ACTIVE',
       },
     });
@@ -45,7 +45,7 @@ export async function GET(
     const totalRevenue = await prisma.subscriptionPayment.aggregate({
       where: {
         subscription: {
-          planId: params.id,
+          planId: (await params).id,
         },
         status: 'APPROVED',
       },
@@ -76,7 +76,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -100,7 +100,7 @@ export async function PUT(
 
     // Verificar que el plan existe
     const existingPlan = await prisma.subscriptionPlan.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!existingPlan) {
@@ -112,7 +112,7 @@ export async function PUT(
 
     // Actualizar el plan
     const updatedPlan = await prisma.subscriptionPlan.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         ...(name && { name }),
         ...(description !== undefined && { description }),
@@ -149,7 +149,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { error, session } = await verifyAdminSaaSAccess();
   if (error) return error;
@@ -157,7 +157,7 @@ export async function DELETE(
   try {
     // Verificar que el plan existe
     const existingPlan = await prisma.subscriptionPlan.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         _count: {
           select: {
@@ -177,7 +177,7 @@ export async function DELETE(
     // Verificar si hay suscripciones activas
     const activeSubscriptions = await prisma.subscription.count({
       where: {
-        planId: params.id,
+        planId: (await params).id,
         status: 'ACTIVE',
       },
     });
@@ -194,7 +194,7 @@ export async function DELETE(
 
     // Desactivar el plan
     const updatedPlan = await prisma.subscriptionPlan.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         isActive: false,
         isVisible: false,
