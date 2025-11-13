@@ -45,20 +45,44 @@ export default function AdminDashboard() {
 
   const loadDashboardStats = async () => {
     try {
-      // Obtener productos para calcular estadísticas
-      const response = await fetch('/api/products')
-      if (response.ok) {
-        const products = await response.json()
-        
-        const stats: DashboardStats = {
-          totalProducts: products.length,
-          lowStockProducts: products.filter((p: any) => p.stock <= p.minStock).length,
-          totalSales: 0, // TODO: Implementar cuando exista API de ventas
-          activeUsers: 1, // TODO: Implementar cuando exista API de usuarios
-        }
-        
-        setStats(stats)
+      // Obtener inventario y ventas en paralelo
+      const [inventoryRes, salesRes, usersRes] = await Promise.all([
+        fetch('/api/inventory'),
+        fetch('/api/sales/stats?period=month'),
+        fetch('/api/users/stats')
+      ])
+
+      // Procesar inventario
+      let totalProducts = 0
+      let lowStockProducts = 0
+      if (inventoryRes.ok) {
+        const inventoryData = await inventoryRes.json()
+        totalProducts = inventoryData.stats?.totalItems || 0
+        lowStockProducts = inventoryData.stats?.lowStockCount || 0
       }
+
+      // Procesar ventas
+      let totalSales = 0
+      if (salesRes.ok) {
+        const salesData = await salesRes.json()
+        totalSales = salesData.totalRevenue || 0
+      }
+
+      // Procesar usuarios
+      let activeUsers = 1
+      if (usersRes.ok) {
+        const usersData = await usersRes.json()
+        activeUsers = usersData.activeUsers || 1
+      }
+
+      const dashboardStats: DashboardStats = {
+        totalProducts,
+        lowStockProducts,
+        totalSales,
+        activeUsers,
+      }
+      
+      setStats(dashboardStats)
     } catch (error) {
       console.error('Error al cargar estadísticas:', error)
     } finally {
@@ -131,7 +155,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Ventas (placeholder) */}
+        {/* Ventas del Mes */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -140,14 +164,14 @@ export default function AdminDashboard() {
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats?.totalSales || 0}</div>
+            <div className="text-2xl font-bold">${stats?.totalSales?.toLocaleString('es-CL') || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Próximamente disponible
+              Ingresos del mes actual
             </p>
           </CardContent>
         </Card>
 
-        {/* Usuarios (placeholder) */}
+        {/* Usuarios Activos */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
