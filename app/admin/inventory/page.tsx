@@ -65,7 +65,7 @@ const productSchema = z.object({
 
 type ProductFormData = z.infer<typeof productSchema>
 
-interface Product {
+interface MasterProduct {
   id: string
   sku: string
   barcode?: string
@@ -73,13 +73,24 @@ interface Product {
   description?: string
   category: string
   brand?: string
+  suggestedPrice: number
+  unit: string
+  imageUrl?: string
+}
+
+interface Product {
+  id: string
+  customSku?: string
   costPrice: number
   salePrice: number
   stock: number
   minStock: number
   isActive: boolean
+  location?: string
+  customNotes?: string
   createdAt: string
   updatedAt: string
+  masterProduct: MasterProduct
 }
 
 export default function InventoryPage() {
@@ -126,10 +137,11 @@ export default function InventoryPage() {
     if (searchTerm) {
       const filtered = products.filter(
         (p) =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (p.barcode && p.barcode.toLowerCase().includes(searchTerm.toLowerCase()))
+          p.masterProduct.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.masterProduct.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.masterProduct.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (p.masterProduct.barcode && p.masterProduct.barcode.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (p.customSku && p.customSku.toLowerCase().includes(searchTerm.toLowerCase()))
       )
       setFilteredProducts(filtered)
     } else {
@@ -139,17 +151,18 @@ export default function InventoryPage() {
 
   const loadProducts = async () => {
     try {
-      const response = await fetch('/api/products')
+      const response = await fetch('/api/inventory')
       if (response.ok) {
         const data = await response.json()
-        setProducts(data)
-        setFilteredProducts(data)
+        // La API de inventory devuelve { inventory: [], total: number, stats: {...} }
+        setProducts(data.inventory || [])
+        setFilteredProducts(data.inventory || [])
       } else {
-        toast.error('Error al cargar productos')
+        toast.error('Error al cargar inventario')
       }
     } catch (error) {
-      console.error('Error al cargar productos:', error)
-      toast.error('Error al cargar productos')
+      console.error('Error al cargar inventario:', error)
+      toast.error('Error al cargar inventario')
     } finally {
       setIsLoading(false)
     }
@@ -175,12 +188,12 @@ export default function InventoryPage() {
   const openEditDialog = (product: Product) => {
     setEditingProduct(product)
     reset({
-      sku: product.sku,
-      barcode: product.barcode || '',
-      name: product.name,
-      description: product.description || '',
-      category: product.category,
-      brand: product.brand || '',
+      sku: product.customSku || product.masterProduct.sku,
+      barcode: product.masterProduct.barcode || '',
+      name: product.masterProduct.name,
+      description: product.masterProduct.description || '',
+      category: product.masterProduct.category,
+      brand: product.masterProduct.brand || '',
       costPrice: product.costPrice.toString(),
       salePrice: product.salePrice.toString(),
       stock: product.stock.toString(),
@@ -193,20 +206,26 @@ export default function InventoryPage() {
     setIsSaving(true)
 
     try {
+      // Solo permitir editar para actualizar precios y stock
+      if (!editingProduct) {
+        toast.error('Use "Agregar del Pool" para añadir nuevos productos')
+        setIsSaving(false)
+        return
+      }
+
       // Convertir strings a números
       const productData = {
-        ...data,
         costPrice: parseFloat(data.costPrice),
         salePrice: parseFloat(data.salePrice),
         stock: parseInt(data.stock),
         minStock: parseInt(data.minStock),
+        customSku: data.sku !== editingProduct.masterProduct.sku ? data.sku : null,
+        location: editingProduct.location,
+        customNotes: editingProduct.customNotes,
       }
 
-      const url = editingProduct
-        ? `/api/products/${editingProduct.id}`
-        : '/api/products'
-      
-      const method = editingProduct ? 'PUT' : 'POST'
+      const url = `/api/inventory/${editingProduct.id}`
+      const method = 'PUT'
 
       const response = await fetch(url, {
         method,
@@ -215,11 +234,7 @@ export default function InventoryPage() {
       })
 
       if (response.ok) {
-        toast.success(
-          editingProduct
-            ? 'Producto actualizado correctamente'
-            : 'Producto creado correctamente'
-        )
+        toast.success('Producto actualizado correctamente')
         setIsDialogOpen(false)
         loadProducts()
       } else {
@@ -245,12 +260,12 @@ export default function InventoryPage() {
     setIsDeleting(true)
 
     try {
-      const response = await fetch(`/api/products/${productToDelete.id}`, {
+      const response = await fetch(`/api/inventory/${productToDelete.id}`, {
         method: 'DELETE',
       })
 
       if (response.ok) {
-        toast.success('Producto eliminado correctamente')
+        toast.success('Producto eliminado del inventario')
         setIsDeleteDialogOpen(false)
         loadProducts()
       } else {
@@ -298,9 +313,9 @@ export default function InventoryPage() {
             Gestiona tus productos y stock
           </p>
         </div>
-        <Button onClick={openCreateDialog}>
+        <Button onClick={() => router.push('/admin/inventory/add-from-pool')}>
           <Plus className="mr-2 h-4 w-4" />
-          Nuevo Producto
+          Agregar del Pool
         </Button>
       </div>
 
@@ -366,21 +381,23 @@ export default function InventoryPage() {
                 ) : (
                   filteredProducts.map((product) => (
                     <TableRow key={product.id}>
-                      <TableCell className="font-medium">{product.sku}</TableCell>
+                      <TableCell className="font-medium">
+                        {product.customSku || product.masterProduct.sku}
+                      </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-medium">{product.name}</div>
-                          {product.brand && (
-                            <div className="text-sm text-muted-foreground">{product.brand}</div>
+                          <div className="font-medium">{product.masterProduct.name}</div>
+                          {product.masterProduct.brand && (
+                            <div className="text-sm text-muted-foreground">{product.masterProduct.brand}</div>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>{product.category}</TableCell>
+                      <TableCell>{product.masterProduct.category}</TableCell>
                       <TableCell className="text-right">
-                        ${product.costPrice.toLocaleString('es-CL')}
+                        ${Number(product.costPrice).toLocaleString('es-CL')}
                       </TableCell>
                       <TableCell className="text-right">
-                        ${product.salePrice.toLocaleString('es-CL')}
+                        ${Number(product.salePrice).toLocaleString('es-CL')}
                       </TableCell>
                       <TableCell className="text-center">
                         <div className="flex items-center justify-center gap-1">
@@ -595,7 +612,7 @@ export default function InventoryPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción eliminará el producto "{productToDelete?.name}". 
+              Esta acción eliminará el producto "{productToDelete?.masterProduct?.name}" de tu inventario. 
               Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
