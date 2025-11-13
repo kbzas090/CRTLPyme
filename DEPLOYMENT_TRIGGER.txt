@@ -1,0 +1,2 @@
+Deployment trigger - November 13, 2025
+Ensuring latest pricing component code is deployed to Cloud Run
