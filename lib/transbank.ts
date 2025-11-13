@@ -216,6 +216,12 @@ export function formatAmount(amount: number): number {
   return Math.round(amount);
 }
 
+/**
+ * Alias para compatibilidad con funciones de suscripción
+ */
+export const processSubscriptionPayment = createTransaction;
+export const confirmSubscriptionPayment = commitTransaction;
+
 export default {
   getWebpayPlus,
   createTransaction,
@@ -225,4 +231,6 @@ export default {
   getResponseCodeDescription,
   generateBuyOrder,
   formatAmount,
+  processSubscriptionPayment,
+  confirmSubscriptionPayment,
 };

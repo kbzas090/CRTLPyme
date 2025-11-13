@@ -1,0 +1,144 @@
+
+> pos-saas-chile@0.1.0 build
+> next build
+
+   ▲ Next.js 15.0.3
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+   Generating static pages (0/84) ...
+API key does not start with "SG.".
+API key does not start with "SG.".
+   Generating static pages (21/84) 
+API key does not start with "SG.".
+   Generating static pages (42/84) 
+   Generating static pages (63/84) 
+ ✓ Generating static pages (84/84)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                   Size     First Load JS
+┌ ○ /                                         5.06 kB         137 kB
+├ ○ /_not-found                               905 B           101 kB
+├ ○ /admin-saas                               4.09 kB         130 kB
+├ ○ /admin-saas/master-products               6.72 kB         149 kB
+├ ○ /admin-saas/plans                         5.83 kB         152 kB
+├ ○ /admin-saas/revenue                       4.02 kB         255 kB
+├ ○ /admin-saas/stats                         4.1 kB          112 kB
+├ ○ /admin-saas/subscriptions                 2.5 kB          112 kB
+├ ƒ /admin-saas/subscriptions/[id]            3.15 kB         113 kB
+├ ○ /admin-saas/tenants                       4.9 kB          122 kB
+├ ƒ /admin-saas/tenants/[id]                  8.02 kB         129 kB
+├ ○ /admin/cash-session                       7.13 kB         175 kB
+├ ○ /admin/dashboard                          4.67 kB         130 kB
+├ ○ /admin/inventory                          7.35 kB         170 kB
+├ ○ /admin/inventory/add-from-pool            3.3 kB          104 kB
+├ ○ /admin/inventory/movements                8.47 kB         197 kB
+├ ○ /admin/pos                                14.1 kB         181 kB
+├ ○ /admin/reports                            3.99 kB         130 kB
+├ ○ /admin/reports/customers                  5.29 kB         229 kB
+├ ○ /admin/reports/products                   5.13 kB         229 kB
+├ ○ /admin/reports/sales                      5.3 kB          267 kB
+├ ○ /admin/sales                              8.23 kB         155 kB
+├ ○ /admin/settings                           8.48 kB         167 kB
+├ ƒ /api/admin-saas/master-products           302 B           101 kB
+├ ƒ /api/admin-saas/master-products/[id]      302 B           101 kB
+├ ƒ /api/admin-saas/metrics                   302 B           101 kB
+├ ƒ /api/admin-saas/stats                     302 B           101 kB
+├ ƒ /api/admin-saas/tenants                   302 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]              302 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/activate     302 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/change-plan  302 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/products     302 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/suspend      302 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/users        302 B           101 kB
+├ ƒ /api/auth/[...nextauth]                   302 B           101 kB
+├ ƒ /api/auth/register                        302 B           101 kB
+├ ƒ /api/cash-sessions                        302 B           101 kB
+├ ƒ /api/cash-sessions/[id]/close             302 B           101 kB
+├ ƒ /api/cash-sessions/active                 302 B           101 kB
+├ ƒ /api/cron/subscription-tasks              302 B           101 kB
+├ ƒ /api/demo                                 302 B           101 kB
+├ ƒ /api/init-db                              302 B           101 kB
+├ ƒ /api/inventory                            302 B           101 kB
+├ ƒ /api/inventory/[id]                       302 B           101 kB
+├ ƒ /api/inventory/available-products         302 B           101 kB
+├ ƒ /api/inventory/movements                  302 B           101 kB
+├ ƒ /api/onboarding                           302 B           101 kB
+├ ƒ /api/payments/confirm                     302 B           101 kB
+├ ƒ /api/payments/history                     302 B           101 kB
+├ ƒ /api/payments/initiate                    302 B           101 kB
+├ ƒ /api/products                             302 B           101 kB
+├ ƒ /api/products/[id]                        302 B           101 kB
+├ ƒ /api/public/plans                         302 B           101 kB
+├ ƒ /api/reports/customers                    302 B           101 kB
+├ ƒ /api/reports/export                       302 B           101 kB
+├ ƒ /api/reports/products                     302 B           101 kB
+├ ƒ /api/reports/sales                        302 B           101 kB
+├ ƒ /api/saas/metrics                         302 B           101 kB
+├ ƒ /api/saas/plans                           302 B           101 kB
+├ ƒ /api/saas/plans/[id]                      302 B           101 kB
+├ ƒ /api/saas/revenue                         302 B           101 kB
+├ ƒ /api/saas/subscriptions                   302 B           101 kB
+├ ƒ /api/saas/subscriptions/recent            302 B           101 kB
+├ ƒ /api/saas/subscriptions/renewals          302 B           101 kB
+├ ƒ /api/sales                                302 B           101 kB
+├ ƒ /api/sales/[id]                           302 B           101 kB
+├ ƒ /api/sales/stats                          302 B           101 kB
+├ ƒ /api/settings/company                     302 B           101 kB
+├ ƒ /api/settings/notifications               302 B           101 kB
+├ ƒ /api/settings/pos                         302 B           101 kB
+├ ƒ /api/settings/subscription                302 B           101 kB
+├ ƒ /api/settings/subscription/cancel         302 B           101 kB
+├ ƒ /api/settings/subscription/upgrade        302 B           101 kB
+├ ƒ /api/settings/users                       302 B           101 kB
+├ ƒ /api/subscription-plans                   302 B           101 kB
+├ ƒ /api/subscription-plans/[id]              302 B           101 kB
+├ ƒ /api/subscriptions                        302 B           101 kB
+├ ƒ /api/subscriptions/[id]                   302 B           101 kB
+├ ƒ /api/subscriptions/[id]/cancel            302 B           101 kB
+├ ƒ /api/subscriptions/[id]/change-plan       302 B           101 kB
+├ ƒ /api/subscriptions/[id]/reactivate        302 B           101 kB
+├ ƒ /api/subscriptions/[id]/renew             302 B           101 kB
+├ ƒ /api/subscriptions/payment/callback       302 B           101 kB
+├ ƒ /api/subscriptions/payment/init           302 B           101 kB
+├ ƒ /api/subscriptions/plans                  302 B           101 kB
+├ ƒ /api/subscriptions/status                 302 B           101 kB
+├ ƒ /api/users/stats                          302 B           101 kB
+├ ○ /auth/login                               3.92 kB         151 kB
+├ ○ /auth/register                            4.27 kB         142 kB
+├ ○ /auth/signout                             2.61 kB         119 kB
+├ ○ /demo                                     4.96 kB         122 kB
+├ ○ /onboarding                               6.66 kB         123 kB
+├ ○ /privacy                                  180 B           110 kB
+├ ○ /provider/products                        565 B           101 kB
+├ ○ /saas-admin.deprecated                    7.38 kB         259 kB
+├ ○ /saas-admin.deprecated/plans              4.29 kB         112 kB
+├ ○ /saas-admin.deprecated/revenue            4.02 kB         255 kB
+├ ○ /saas-admin.deprecated/subscriptions      4.72 kB         144 kB
+├ ○ /subscription                             2.72 kB         121 kB
+├ ○ /subscriptions/payment/error              4.02 kB         112 kB
+├ ○ /subscriptions/payment/success            3.33 kB         111 kB
+├ ○ /subscriptions/plans                      7.45 kB         129 kB
+└ ○ /terms                                    180 B           110 kB
++ First Load JS shared by all                 100 kB
+  ├ chunks/1517-b212199291cb530e.js           45.9 kB
+  ├ chunks/4bd1b696-4236da724bcd130d.js       52.5 kB
+  └ other shared chunks (total)               1.93 kB
+
+
+ƒ Middleware                                  57.5 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
