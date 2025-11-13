@@ -160,7 +160,7 @@ export default function PricingPlans() {
       </div>
 
       {/* Plans Grid */}
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-all duration-500 ease-in-out">
+      <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-all duration-500 ease-in-out">
         {filteredPlans.map((plan, index) => {
           const isPopular = index === mostPopularIndex;
           
@@ -168,12 +168,12 @@ export default function PricingPlans() {
             <Card 
               key={`${plan.id}-${activeCycle}`}
               className={`hover:shadow-xl transition-all duration-300 relative ${
-                isPopular ? 'border-blue-500 border-2 transform scale-105' : 'border-gray-200'
+                isPopular ? 'border-blue-500 border-2 sm:transform sm:scale-105' : 'border-gray-200'
               }`}
             >
               {isPopular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-blue-500 text-white px-4 py-1 text-sm font-semibold">
+                <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-blue-500 text-white px-3 sm:px-4 py-1 text-xs sm:text-sm font-semibold">
                     MÁS POPULAR
                   </Badge>
                 </div>
@@ -273,9 +273,9 @@ export default function PricingPlans() {
 
                 {/* CTA Button */}
                 <div className="pt-4">
-                  <Link href="/onboarding" className="block">
+                  <Link href={`/onboarding?plan=${plan.id}`} className="block">
                     <Button 
-                      className="w-full" 
+                      className="w-full min-h-[48px] touch-manipulation text-sm sm:text-base" 
                       size="lg"
                       variant={isPopular ? 'default' : 'outline'}
                     >

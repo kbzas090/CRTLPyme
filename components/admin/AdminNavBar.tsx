@@ -120,7 +120,7 @@ export default function AdminNavBar() {
                   href={item.href}
                   className={`
                     flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium
-                    transition-colors duration-200
+                    transition-colors duration-200 min-h-[40px]
                     ${
                       active
                         ? 'bg-blue-50 text-blue-700'
@@ -129,7 +129,7 @@ export default function AdminNavBar() {
                   `}
                 >
                   <Icon className="h-4 w-4" />
-                  <span>{item.name}</span>
+                  <span className="hidden lg:inline">{item.name}</span>
                 </Link>
               )
             })}
@@ -141,20 +141,20 @@ export default function AdminNavBar() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center space-x-2 hover:bg-gray-100"
+                  className="flex items-center space-x-2 hover:bg-gray-100 min-h-[40px] touch-manipulation"
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-blue-600 text-white">
                       {getInitials(session?.user?.firstName, session?.user?.lastName)}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="hidden md:block text-left">
+                  <div className="hidden lg:block text-left">
                     <p className="text-sm font-medium text-gray-700">
                       {session?.user?.firstName} {session?.user?.lastName}
                     </p>
                     <p className="text-xs text-gray-500">{session?.user?.role}</p>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                  <ChevronDown className="h-4 w-4 text-gray-500 hidden md:block" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -197,6 +197,7 @@ export default function AdminNavBar() {
               <Button
                 variant="ghost"
                 size="icon"
+                className="min-h-[44px] min-w-[44px] touch-manipulation"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {isMobileMenuOpen ? (
@@ -204,6 +205,7 @@ export default function AdminNavBar() {
                 ) : (
                   <Menu className="h-6 w-6" />
                 )}
+                <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </div>
           </div>
@@ -223,10 +225,11 @@ export default function AdminNavBar() {
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`
-                    flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium
+                    flex items-center space-x-3 px-4 py-3 rounded-md text-base font-medium
+                    transition-colors min-h-[48px] touch-manipulation
                     ${
                       active
-                        ? 'bg-blue-50 text-blue-700'
+                        ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                     }
                   `}
