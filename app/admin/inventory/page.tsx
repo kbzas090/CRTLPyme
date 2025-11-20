@@ -213,15 +213,58 @@ export default function InventoryPage() {
         return
       }
 
-      // Convertir strings a números
-      const productData = {
-        costPrice: parseFloat(data.costPrice),
-        salePrice: parseFloat(data.salePrice),
-        stock: parseInt(data.stock),
-        minStock: parseInt(data.minStock),
-        customSku: data.sku !== editingProduct.masterProduct.sku ? data.sku : null,
-        location: editingProduct.location,
-        customNotes: editingProduct.customNotes,
+      // Convertir strings a números y validar
+      const costPrice = parseFloat(data.costPrice)
+      const salePrice = parseFloat(data.salePrice)
+      const stock = parseInt(data.stock)
+      const minStock = parseInt(data.minStock)
+
+      // Validar que los números sean válidos
+      if (isNaN(costPrice) || costPrice < 0) {
+        toast.error('El precio de compra debe ser un número válido')
+        setIsSaving(false)
+        return
+      }
+
+      if (isNaN(salePrice) || salePrice < 0) {
+        toast.error('El precio de venta debe ser un número válido')
+        setIsSaving(false)
+        return
+      }
+
+      if (isNaN(stock) || stock < 0) {
+        toast.error('El stock debe ser un número válido')
+        setIsSaving(false)
+        return
+      }
+
+      if (isNaN(minStock) || minStock < 0) {
+        toast.error('El stock mínimo debe ser un número válido')
+        setIsSaving(false)
+        return
+      }
+
+      // Preparar datos para enviar (solo incluir campos que han cambiado y son válidos)
+      const productData: any = {
+        costPrice,
+        salePrice,
+        stock,
+        minStock,
+      }
+
+      // Agregar customSku solo si es diferente al SKU del producto maestro
+      if (data.sku && data.sku !== editingProduct.masterProduct.sku) {
+        productData.customSku = data.sku
+      }
+
+      // Agregar location solo si tiene valor
+      if (editingProduct.location) {
+        productData.location = editingProduct.location
+      }
+
+      // Agregar customNotes solo si tiene valor
+      if (editingProduct.customNotes) {
+        productData.customNotes = editingProduct.customNotes
       }
 
       const url = `/api/inventory/${editingProduct.id}`
@@ -239,7 +282,14 @@ export default function InventoryPage() {
         loadProducts()
       } else {
         const error = await response.json()
-        toast.error(error.error || 'Error al guardar producto')
+        // Mostrar detalles específicos si hay errores de validación
+        if (error.details && Array.isArray(error.details)) {
+          error.details.forEach((detail: any) => {
+            toast.error(`${detail.path?.join('.')}: ${detail.message}`)
+          })
+        } else {
+          toast.error(error.error || 'Error al guardar producto')
+        }
       }
     } catch (error) {
       console.error('Error al guardar producto:', error)
@@ -313,10 +363,19 @@ export default function InventoryPage() {
             Gestiona tus productos y stock
           </p>
         </div>
-        <Button onClick={() => router.push('/admin/inventory/add-from-pool')}>
-          <Plus className="mr-2 h-4 w-4" />
-          Agregar del Pool
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => router.push('/admin/inventory/movements')}
+          >
+            <Package className="mr-2 h-4 w-4" />
+            Movimientos
+          </Button>
+          <Button onClick={() => router.push('/admin/inventory/add-from-pool')}>
+            <Plus className="mr-2 h-4 w-4" />
+            Agregar del Pool
+          </Button>
+        </div>
       </div>
 
       {/* Barra de búsqueda y estadísticas */}

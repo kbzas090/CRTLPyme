@@ -32,6 +32,7 @@ export default function AddFromPoolPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedProduct, setSelectedProduct] = useState<MasterProduct | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   
   // Form state
   const [formData, setFormData] = useState({
@@ -90,6 +91,8 @@ export default function AddFromPoolPage() {
     
     if (!selectedProduct) return
 
+    setIsSubmitting(true)
+
     try {
       const response = await fetch('/api/inventory', {
         method: 'POST',
@@ -105,12 +108,29 @@ export default function AddFromPoolPage() {
         throw new Error(data.error || 'Error al agregar producto')
       }
 
-      alert('✅ Producto agregado a tu inventario')
+      // Usar toast nativo de window para no depender de sonner
+      if (typeof window !== 'undefined') {
+        const toast = document.createElement('div')
+        toast.textContent = '✅ Producto agregado a tu inventario'
+        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; z-index: 9999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'
+        document.body.appendChild(toast)
+        setTimeout(() => toast.remove(), 3000)
+      }
+      
       setShowAddForm(false)
       setSelectedProduct(null)
       fetchAvailableProducts() // Recargar lista
     } catch (err) {
-      alert('❌ ' + (err instanceof Error ? err.message : 'Error desconocido'))
+      // Usar toast nativo de window para errores
+      if (typeof window !== 'undefined') {
+        const toast = document.createElement('div')
+        toast.textContent = '❌ ' + (err instanceof Error ? err.message : 'Error desconocido')
+        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 16px 24px; border-radius: 8px; z-index: 9999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'
+        document.body.appendChild(toast)
+        setTimeout(() => toast.remove(), 3000)
+      }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -344,15 +364,24 @@ export default function AddFromPoolPage() {
                     setShowAddForm(false)
                     setSelectedProduct(null)
                   }}
-                  className="flex-1 px-4 py-2 border rounded-md hover:bg-muted"
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 border rounded-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Agregar al Inventario
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                      Agregando...
+                    </span>
+                  ) : (
+                    'Agregar al Inventario'
+                  )}
                 </button>
               </div>
             </form>
