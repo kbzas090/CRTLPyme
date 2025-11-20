@@ -35,8 +35,13 @@ export async function GET(request: NextRequest) {
       _count: true,
     });
 
-    // Contar productos totales
-    const totalProducts = await prisma.product.count({
+    // ✅ CORRECTO - Mostrar items en inventarios de tenants
+    const totalInventoryItems = await prisma.tenantInventory.count({
+      where: { isActive: true },
+    });
+
+    // ✅ También obtener productos maestros del pool
+    const totalMasterProducts = await prisma.masterProduct.count({
       where: { isActive: true },
     });
 
@@ -118,7 +123,8 @@ export async function GET(request: NextRequest) {
         tenantsTotal: tenantsActive + tenantsInactive,
         recentTenants,
         totalUsers,
-        totalProducts,
+        totalInventoryItems,  // Items en inventarios de tenants
+        totalMasterProducts,  // Productos en el pool maestro
         totalSales: salesStats._count,
         totalSalesAmount: salesStats._sum.total || 0,
       },

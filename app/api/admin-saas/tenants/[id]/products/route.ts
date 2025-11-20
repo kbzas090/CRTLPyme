@@ -23,7 +23,8 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const activeOnly = searchParams.get('activeOnly') === 'true';
 
-    const products = await prisma.product.findMany({
+    // ✅ CORRECTO - Usar TenantInventory en lugar de Product
+    const products = await prisma.tenantInventory.findMany({
       where: {
         tenantId: (await params).id,
         ...(activeOnly && { isActive: true }),
@@ -37,7 +38,7 @@ export async function GET(
         brand: true,
         costPrice: true,
         salePrice: true,
-        stock: true,
+        quantity: true,  // ✅ quantity en lugar de stock
         minStock: true,
         isActive: true,
         createdAt: true,
@@ -50,7 +51,7 @@ export async function GET(
 
     // Calcular productos con stock bajo
     const lowStockProducts = products.filter(
-      p => p.isActive && p.stock <= p.minStock
+      p => p.isActive && p.quantity <= p.minStock  // ✅ quantity en lugar de stock
     );
 
     return NextResponse.json({

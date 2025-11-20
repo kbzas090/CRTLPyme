@@ -29,7 +29,8 @@ interface Stats {
     tenantsTotal: number;
     recentTenants: number;
     totalUsers: number;
-    totalProducts: number;
+    totalInventoryItems: number;  // ✅ Items en inventarios de tenants
+    totalMasterProducts: number;  // ✅ Productos en el pool maestro
     totalSales: number;
     totalSalesAmount: number;
   };
@@ -159,11 +160,11 @@ export default function AdminSaaSDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Total Productos</CardTitle>
+            <CardTitle className="text-sm font-medium">Items en Inventarios</CardTitle>
             <Package className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.overview.totalProducts}</div>
+            <div className="text-2xl font-bold">{stats.overview.totalInventoryItems.toLocaleString('es-CL')}</div>
             <p className="text-xs text-gray-500">
               En catálogos de clientes
             </p>
@@ -183,6 +184,20 @@ export default function AdminSaaSDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Métrica adicional: Pool Maestro */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+          <CardTitle className="text-sm font-medium">Pool Maestro de Productos</CardTitle>
+          <Package className="h-4 w-4 text-orange-600" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.overview.totalMasterProducts.toLocaleString('es-CL')}</div>
+          <p className="text-xs text-gray-500">
+            Productos disponibles para que los clientes agreguen a sus inventarios
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Distribución de planes y roles */}
       <div className="grid gap-4 md:grid-cols-2">

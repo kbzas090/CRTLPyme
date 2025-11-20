@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         _count: {
           select: {
             users: true,
-            products: true,
+            tenantInventory: true,  // ✅ Usar tenantInventory en lugar de products
             sales: true,
           },
         },
@@ -56,12 +56,12 @@ export async function GET(request: NextRequest) {
           },
         });
 
-        // Obtener productos con stock bajo
-        const lowStockCount = await prisma.product.count({
+        // ✅ Obtener productos con stock bajo desde TenantInventory
+        const lowStockCount = await prisma.tenantInventory.count({
           where: {
             tenantId: tenant.id,
-            stock: {
-              lte: prisma.product.fields.minStock,
+            quantity: {
+              lte: prisma.tenantInventory.fields.minStock,
             },
             isActive: true,
           },
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
           updatedAt: tenant.updatedAt,
           stats: {
             totalUsers: tenant._count.users,
-            totalProducts: tenant._count.products,
+            totalProducts: tenant._count.tenantInventory,  // ✅ Usar tenantInventory
             totalSales: tenant._count.sales,
             salesAmount: salesTotal._sum.total || 0,
             lowStockProducts: lowStockCount,
