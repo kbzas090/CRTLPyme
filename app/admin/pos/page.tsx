@@ -195,7 +195,7 @@ export default function POSPage() {
       const newItem: CartItem = {
         product,
         quantity: 1,
-        subtotal: product.salePrice,
+        subtotal: Number(product.salePrice), // Convertir Decimal a número
       }
       setCart([...cart, newItem])
       toast.success(`${product.masterProduct.name} agregado al carrito`)
@@ -222,7 +222,7 @@ export default function POSPage() {
           ? {
               ...item,
               quantity: newQuantity,
-              subtotal: item.product.salePrice * newQuantity,
+              subtotal: Number(item.product.salePrice) * newQuantity, // Convertir Decimal a número
             }
           : item
       )
@@ -315,13 +315,15 @@ export default function POSPage() {
     }
   }
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | string) => {
+    // Convertir a número para manejar Decimals serializados como strings
+    const numAmount = typeof amount === 'string' ? Number(amount) : amount
     return new Intl.NumberFormat('es-CL', {
       style: 'currency',
       currency: 'CLP',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount)
+    }).format(numAmount)
   }
 
   const printReceipt = () => {
@@ -664,7 +666,11 @@ export default function POSPage() {
             >
               Cancelar
             </Button>
-            <Button onClick={processSale} disabled={isProcessing}>
+            <Button 
+              type="button"
+              onClick={processSale} 
+              disabled={isProcessing}
+            >
               {isProcessing ? 'Procesando...' : 'Confirmar Venta'}
             </Button>
           </DialogFooter>
