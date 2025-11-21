@@ -225,8 +225,8 @@ export async function POST(request: NextRequest) {
       return {
         tenantInventoryId: item.tenantInventoryId,
         quantity: item.quantity,
-        unitPrice: inventoryItem.salePrice,
-        unitCost: inventoryItem.costPrice,
+        unitPrice: Number(inventoryItem.salePrice),
+        unitCost: Number(inventoryItem.costPrice),
         subtotal: itemSubtotal,
       }
     })
