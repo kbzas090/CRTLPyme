@@ -94,7 +94,9 @@ export async function GET(request: NextRequest) {
         const salesData = reportData.rows.map((row: any[], index: number) => ({
           id: index.toString(),
           saleNumber: row[0],
-          total: parseFloat(row[5].replace(/[^0-9.-]+/g, '')),
+          // Eliminar TODOS los caracteres no numéricos (incluyendo puntos de miles)
+          // Formato CLP: $123.456 → 123456
+          total: parseFloat(row[5].replace(/\D/g, '')),
           paymentMethod: row[3],
           createdAt: row[1],
           userName: row[2],
@@ -107,8 +109,9 @@ export async function GET(request: NextRequest) {
           name: row[1],
           category: row[2],
           stock: parseInt(row[4]),
-          salePrice: parseFloat(row[7].replace(/[^0-9.-]+/g, '')),
-          costPrice: parseFloat(row[6].replace(/[^0-9.-]+/g, '')),
+          // Eliminar TODOS los caracteres no numéricos para parsear precios en CLP
+          salePrice: parseFloat(row[7].replace(/\D/g, '')),
+          costPrice: parseFloat(row[6].replace(/\D/g, '')),
         }));
         pdfBase64 = generateProductsReportPDF(productsData, filters, businessName);
       } else if (reportType === 'customers') {
@@ -118,7 +121,8 @@ export async function GET(request: NextRequest) {
           email: row[1],
           phone: row[2],
           address: row[3] || null,
-          createdAt: row[7] || new Date().toISOString(),
+          // Fecha está en índice 4, no 7 (el array tiene solo 5 elementos)
+          createdAt: row[4] || new Date().toISOString(),
         }));
         pdfBase64 = generateCustomersReportPDF(customersData, filters, businessName);
       } else {
