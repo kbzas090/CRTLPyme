@@ -31,6 +31,8 @@ export async function GET(request: NextRequest) {
   const tenantId = searchParams.get('tenantId') || session.user.tenantId;
   const category = searchParams.get('category');
   const lowStock = searchParams.get('lowStock') === 'true';
+  const startDate = searchParams.get('startDate');
+  const endDate = searchParams.get('endDate');
 
   // Verify access to tenant
   if (tenantId !== session.user.tenantId && session.user.role !== 'PROVEEDOR') {
@@ -46,6 +48,21 @@ export async function GET(request: NextRequest) {
       tenantId,
       isActive: true,
     };
+
+    // Aplicar filtros de fecha si se proporcionan
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      
+      if (startDate) {
+        filter.createdAt.gte = new Date(startDate);
+      }
+      
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filter.createdAt.lte = end;
+      }
+    }
 
     // Obtener inventario
     const inventory = await prisma.tenantInventory.findMany({

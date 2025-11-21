@@ -30,6 +30,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const tenantId = searchParams.get('tenantId') || session.user.tenantId;
   const minPurchases = searchParams.get('minPurchases');
+  const startDate = searchParams.get('startDate');
+  const endDate = searchParams.get('endDate');
 
   // Verify access to tenant
   if (tenantId !== session.user.tenantId && session.user.role !== 'PROVEEDOR') {
@@ -40,12 +42,30 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Construir filtros de fecha para clientes
+    const customerFilter: any = {
+      tenantId,
+      isActive: true,
+    };
+
+    // Aplicar filtros de fecha si se proporcionan
+    if (startDate || endDate) {
+      customerFilter.createdAt = {};
+      
+      if (startDate) {
+        customerFilter.createdAt.gte = new Date(startDate);
+      }
+      
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        customerFilter.createdAt.lte = end;
+      }
+    }
+
     // Obtener clientes con sus compras
     const customers = await prisma.customer.findMany({
-      where: {
-        tenantId,
-        isActive: true,
-      },
+      where: customerFilter,
       include: {
         sales: {
           where: {

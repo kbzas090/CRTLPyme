@@ -54,11 +54,11 @@ export async function GET(request: NextRequest) {
         filename = `reporte-ventas-${Date.now()}`;
         break;
       case 'products':
-        reportData = await generateProductsReport(tenantId);
+        reportData = await generateProductsReport(tenantId, startDate, endDate);
         filename = `reporte-productos-${Date.now()}`;
         break;
       case 'customers':
-        reportData = await generateCustomersReport(tenantId);
+        reportData = await generateCustomersReport(tenantId, startDate, endDate);
         filename = `reporte-clientes-${Date.now()}`;
         break;
       default:
@@ -122,12 +122,30 @@ export async function GET(request: NextRequest) {
         }));
         pdfBase64 = generateSalesReportPDF(salesData, filters, businessName);
       } else if (reportType === 'products') {
+        // Construir filtros para productos
+        const productsFilter: any = {
+          tenantId,
+          isActive: true,
+        };
+
+        // Aplicar filtros de fecha si se proporcionan
+        if (startDate || endDate) {
+          productsFilter.createdAt = {};
+          
+          if (startDate) {
+            productsFilter.createdAt.gte = new Date(startDate);
+          }
+          
+          if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            productsFilter.createdAt.lte = end;
+          }
+        }
+
         // Obtener los datos originales de productos sin formatear
         const productsRaw = await prisma.tenantInventory.findMany({
-          where: {
-            tenantId,
-            isActive: true,
-          },
+          where: productsFilter,
           include: {
             masterProduct: true,
           },
@@ -144,11 +162,29 @@ export async function GET(request: NextRequest) {
         }));
         pdfBase64 = generateProductsReportPDF(productsData, filters, businessName);
       } else if (reportType === 'customers') {
+        // Construir filtros para clientes
+        const customersFilter: any = {
+          tenantId,
+        };
+
+        // Aplicar filtros de fecha si se proporcionan
+        if (startDate || endDate) {
+          customersFilter.createdAt = {};
+          
+          if (startDate) {
+            customersFilter.createdAt.gte = new Date(startDate);
+          }
+          
+          if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            customersFilter.createdAt.lte = end;
+          }
+        }
+
         // Obtener los datos originales de clientes sin formatear
         const customersRaw = await prisma.customer.findMany({
-          where: {
-            tenantId,
-          },
+          where: customersFilter,
           orderBy: {
             createdAt: 'desc',
           },
@@ -277,12 +313,30 @@ async function generateSalesReport(tenantId: string, startDate: string | null, e
   };
 }
 
-async function generateProductsReport(tenantId: string) {
+async function generateProductsReport(tenantId: string, startDate: string | null, endDate: string | null) {
+  // Construir filtros
+  const filter: any = {
+    tenantId,
+    isActive: true,
+  };
+
+  // Aplicar filtros de fecha si se proporcionan
+  if (startDate || endDate) {
+    filter.createdAt = {};
+    
+    if (startDate) {
+      filter.createdAt.gte = new Date(startDate);
+    }
+    
+    if (endDate) {
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      filter.createdAt.lte = end;
+    }
+  }
+
   const inventory = await prisma.tenantInventory.findMany({
-    where: {
-      tenantId,
-      isActive: true,
-    },
+    where: filter,
     include: {
       masterProduct: true,
     },
@@ -338,11 +392,29 @@ async function generateProductsReport(tenantId: string) {
   };
 }
 
-async function generateCustomersReport(tenantId: string) {
+async function generateCustomersReport(tenantId: string, startDate: string | null, endDate: string | null) {
+  // Construir filtros
+  const filter: any = {
+    tenantId,
+  };
+
+  // Aplicar filtros de fecha si se proporcionan
+  if (startDate || endDate) {
+    filter.createdAt = {};
+    
+    if (startDate) {
+      filter.createdAt.gte = new Date(startDate);
+    }
+    
+    if (endDate) {
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      filter.createdAt.lte = end;
+    }
+  }
+
   const customers = await prisma.customer.findMany({
-    where: {
-      tenantId,
-    },
+    where: filter,
     orderBy: {
       createdAt: 'desc',
     },
