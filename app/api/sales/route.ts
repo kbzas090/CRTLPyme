@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/db'
 import { Prisma } from '@prisma/client'
 import { canPerformAction } from '@/lib/subscription-middleware'
 
@@ -141,12 +141,12 @@ export async function POST(request: Request) {
         )
       }
 
-      if (inventory.currentStock < item.quantity) {
+      if (inventory.stock < item.quantity) {
         console.log('🔴 [SALES API] ERROR: Stock insuficiente:', {
           productId: inventory.masterProduct.id,
           productName: inventory.masterProduct.name,
           requested: item.quantity,
-          available: inventory.currentStock
+          available: inventory.stock
         })
         return NextResponse.json(
           { error: `Stock insuficiente para ${inventory.masterProduct.name}` },
@@ -256,7 +256,7 @@ export async function POST(request: Request) {
         await tx.tenantInventory.update({
           where: { id: item.tenantInventoryId },
           data: {
-            currentStock: {
+            stock: {
               decrement: item.quantity
             }
           }
