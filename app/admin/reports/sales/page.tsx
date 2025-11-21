@@ -72,6 +72,18 @@ interface SalesReport {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+// Función para traducir métodos de pago
+const translatePaymentMethod = (method: string): string => {
+  const translations: Record<string, string> = {
+    'CASH': 'Efectivo',
+    'CARD': 'Tarjeta',
+    'TRANSFER': 'Transferencia',
+    'DEBIT': 'Débito',
+    'CREDIT': 'Crédito',
+  };
+  return translations[method] || method;
+};
+
 export default function SalesReportPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -322,7 +334,7 @@ export default function SalesReportPage() {
                   cy="50%"
                   labelLine={false}
                   label={({ method, percent }) =>
-                    `${method}: ${(percent * 100).toFixed(0)}%`
+                    `${translatePaymentMethod(method)}: ${(percent * 100).toFixed(0)}%`
                   }
                   outerRadius={80}
                   fill="#8884d8"

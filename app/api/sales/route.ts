@@ -83,13 +83,13 @@ export async function POST(request: Request) {
     console.log('🟦 [SALES API] PASO 6: Verificando límites de suscripción...')
     
     try {
-      const canCreate = await canPerformAction(user.tenantId, 'sales')
+      const canCreate = await canPerformAction(user.tenantId, 'create_sale')
       console.log('✅ [SALES API] Resultado de canPerformAction:', canCreate)
       
-      if (!canCreate) {
+      if (!canCreate.allowed) {
         console.log('🔴 [SALES API] ERROR: Límite de suscripción alcanzado')
         return NextResponse.json(
-          { error: 'Has alcanzado el límite de ventas de tu plan' },
+          { error: canCreate.message || 'Has alcanzado el límite de ventas de tu plan' },
           { status: 403 }
         )
       }

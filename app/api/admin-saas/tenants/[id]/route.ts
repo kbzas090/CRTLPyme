@@ -55,6 +55,18 @@ export async function GET(
             isActive: true,
           },
         },
+        subscriptions: {
+          where: {
+            status: 'ACTIVE',
+          },
+          include: {
+            plan: true,
+          },
+          orderBy: {
+            startDate: 'desc',
+          },
+          take: 1,
+        },
         _count: {
           select: {
             sales: true,
@@ -108,9 +120,15 @@ export async function GET(
       },
     });
 
+    // Obtener la suscripción activa (si existe)
+    const activeSubscription = tenant.subscriptions && tenant.subscriptions.length > 0 
+      ? tenant.subscriptions[0] 
+      : null;
+
     return NextResponse.json({
       tenant: {
         ...tenant,
+        subscription: activeSubscription,
         stats: {
           totalSales: salesStats._count,
           salesAmount: salesStats._sum.total || 0,

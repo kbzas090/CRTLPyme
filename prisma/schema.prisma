@@ -21,6 +21,7 @@ model Tenant {
   planType      PlanType @default(BASIC)
   maxCashiers   Int      @default(2)
   extraCashiers Int      @default(0)
+  currentPlanId String?
 
   // SaaS Admin Fields
   accountStatus       AccountStatus @default(ACTIVE)
@@ -52,6 +53,7 @@ model Tenant {
   notificationPreferences NotificationPreference[]
   notificationHistory     NotificationHistory[]
   customers               Customer[]
+  paymentTransactions     PaymentTransaction[]
 
   @@map("tenants")
 }
@@ -357,6 +359,7 @@ model SubscriptionPlan {
   // Relations
   subscriptions       Subscription[]
   subscriptionMetrics SubscriptionMetrics[]
+  paymentTransactions PaymentTransaction[]
 
   @@map("subscription_plans")
 }
@@ -889,4 +892,26 @@ enum RefundStatus {
   APPROVED
   REJECTED
   COMPLETED
+}
+
+// ============ PAYMENT TRANSACTION MODEL ============
+
+model PaymentTransaction {
+  id            String            @id @default(cuid())
+  tenantId      String
+  planId        String
+  amount        Decimal           @db.Decimal(10, 2)
+  status        String            // PENDING, COMPLETED, FAILED
+  provider      String            // TRANSBANK, etc
+  transactionId String            @unique
+  metadata      Json?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  
+  tenant        Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan          SubscriptionPlan  @relation(fields: [planId], references: [id])
+  
+  @@index([tenantId])
+  @@index([transactionId])
+  @@map("payment_transactions")
 }

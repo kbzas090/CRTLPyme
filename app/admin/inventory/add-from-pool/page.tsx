@@ -111,8 +111,8 @@ export default function AddFromPoolPage() {
       // Usar toast nativo de window para no depender de sonner
       if (typeof window !== 'undefined') {
         const toast = document.createElement('div')
-        toast.textContent = '✅ Producto agregado a tu inventario'
-        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; z-index: 9999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'
+        toast.textContent = 'Producto agregado exitosamente'
+        toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; z-index: 9999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); font-weight: 600;'
         document.body.appendChild(toast)
         setTimeout(() => toast.remove(), 3000)
       }
@@ -237,7 +237,7 @@ export default function AddFromPoolPage() {
                   <div>
                     <p className="text-xs text-muted-foreground">Precio Sugerido</p>
                     <p className="text-lg font-bold text-primary">
-                      ${Number(product.suggestedPrice).toLocaleString('es-CL')}
+                      ${Math.round(Number(product.suggestedPrice)).toLocaleString('es-CL')}
                     </p>
                   </div>
                   <button

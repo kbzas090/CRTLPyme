@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   Building2,
   Users,
@@ -25,8 +26,35 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle,
+  CreditCard,
+  Loader2,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
+
+interface SubscriptionPlan {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  billingCycle: string;
+  features: string[];
+  maxUsers: number | null;
+  maxProducts: number | null;
+  maxSales: number | null;
+  isActive: boolean;
+  isVisible: boolean;
+}
+
+interface TenantSubscription {
+  id: string;
+  planId: string;
+  status: string;
+  startDate: string;
+  endDate: string | null;
+  nextBillingDate: string | null;
+  plan: SubscriptionPlan;
+}
 
 interface TenantDetail {
   id: string;
@@ -41,6 +69,7 @@ interface TenantDetail {
   extraCashiers: number;
   createdAt: string;
   updatedAt: string;
+  subscription?: TenantSubscription;
   stats: {
     totalSales: number;
     salesAmount: number;
@@ -91,9 +120,14 @@ interface TenantDetail {
 export default function TenantDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const [tenant, setTenant] = useState<TenantDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [availablePlans, setAvailablePlans] = useState<SubscriptionPlan[]>([]);
+  const [isChangePlanDialogOpen, setIsChangePlanDialogOpen] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   useEffect(() => {
     if (params.id) {
@@ -116,6 +150,85 @@ export default function TenantDetailPage() {
       setError(err instanceof Error ? err.message : 'Error desconocido');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadAvailablePlans = async () => {
+    try {
+      const response = await fetch('/api/saas/plans');
+      if (response.ok) {
+        const data = await response.json();
+        // Filtrar solo planes activos
+        setAvailablePlans(data.plans.filter((p: SubscriptionPlan) => p.isActive));
+      }
+    } catch (error) {
+      console.error('Error loading plans:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudieron cargar los planes disponibles',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleOpenChangePlanDialog = () => {
+    loadAvailablePlans();
+    setIsChangePlanDialogOpen(true);
+  };
+
+  const handleChangePlan = async (planId: string) => {
+    if (!tenant) return;
+
+    setIsProcessingPayment(true);
+    setSelectedPlanId(planId);
+
+    try {
+      // Crear la transacción de pago con Transbank
+      const response = await fetch('/api/payments/transbank/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tenantId: tenant.id,
+          planId: planId,
+          amount: availablePlans.find(p => p.id === planId)?.price || 0,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al crear la transacción de pago');
+      }
+
+      const data = await response.json();
+
+      // Redirigir a Transbank
+      if (data.url && data.token) {
+        // Crear un formulario para enviar el token a Transbank
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = data.url;
+
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = 'token_ws';
+        tokenInput.value = data.token;
+        form.appendChild(tokenInput);
+
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        throw new Error('No se recibió la URL de pago');
+      }
+    } catch (error) {
+      console.error('Error al iniciar pago:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo iniciar el proceso de pago',
+        variant: 'destructive',
+      });
+      setIsProcessingPayment(false);
+      setSelectedPlanId(null);
     }
   };
 
@@ -155,6 +268,15 @@ export default function TenantDetailPage() {
       default:
         return 'outline';
     }
+  };
+
+  const getBillingCycleLabel = (cycle: string) => {
+    const labels: { [key: string]: string } = {
+      MONTHLY: 'Mensual',
+      YEARLY: 'Anual',
+      QUARTERLY: 'Trimestral',
+    };
+    return labels[cycle] || cycle;
   };
 
   if (isLoading) {
@@ -277,6 +399,98 @@ export default function TenantDetailPage() {
               </div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Suscripción y Plan */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Plan de Suscripción</CardTitle>
+              <CardDescription>Información del plan actual y opciones de cambio</CardDescription>
+            </div>
+            <Button onClick={handleOpenChangePlanDialog}>
+              <CreditCard className="mr-2 h-4 w-4" />
+              Cambiar Plan
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {tenant.subscription ? (
+            <div className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <p className="text-sm text-gray-500">Plan Actual</p>
+                  <p className="text-xl font-bold">{tenant.subscription.plan.name}</p>
+                  {tenant.subscription.plan.description && (
+                    <p className="text-sm text-gray-600 mt-1">{tenant.subscription.plan.description}</p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Precio</p>
+                  <p className="text-xl font-bold text-green-600">
+                    {formatCurrency(tenant.subscription.plan.price)}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {getBillingCycleLabel(tenant.subscription.plan.billingCycle)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Estado</p>
+                  <Badge variant={tenant.subscription.status === 'ACTIVE' ? 'default' : 'secondary'} className="mt-1">
+                    {tenant.subscription.status === 'ACTIVE' ? 'Activa' : tenant.subscription.status}
+                  </Badge>
+                  {tenant.subscription.nextBillingDate && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Próximo pago: {formatDate(tenant.subscription.nextBillingDate)}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {tenant.subscription.plan.features && tenant.subscription.plan.features.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">Características del Plan:</p>
+                  <ul className="grid gap-2 md:grid-cols-2">
+                    {tenant.subscription.plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="border-t pt-4">
+                <p className="text-sm font-medium text-gray-700 mb-2">Límites del Plan:</p>
+                <div className="grid gap-2 md:grid-cols-3 text-sm">
+                  <div>
+                    <span className="text-gray-500">Usuarios:</span>{' '}
+                    <span className="font-medium">{tenant.subscription.plan.maxUsers || 'Ilimitado'}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Productos:</span>{' '}
+                    <span className="font-medium">{tenant.subscription.plan.maxProducts || 'Ilimitado'}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Ventas/mes:</span>{' '}
+                    <span className="font-medium">{tenant.subscription.plan.maxSales || 'Ilimitado'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+              <p className="text-gray-600 mb-4">Este tenant no tiene una suscripción activa</p>
+              <Button onClick={handleOpenChangePlanDialog}>
+                <CreditCard className="mr-2 h-4 w-4" />
+                Asignar Plan
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -549,6 +763,136 @@ export default function TenantDetailPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Diálogo de Cambio de Plan */}
+      <Dialog open={isChangePlanDialogOpen} onOpenChange={setIsChangePlanDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Cambiar Plan de Suscripción</DialogTitle>
+            <DialogDescription>
+              Selecciona un nuevo plan para el cliente. Se iniciará el proceso de pago con Transbank.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {availablePlans.length === 0 ? (
+              <div className="text-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">Cargando planes disponibles...</p>
+              </div>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2">
+                {availablePlans.map((plan) => (
+                  <Card 
+                    key={plan.id} 
+                    className={`hover:shadow-lg transition-shadow ${
+                      tenant?.subscription?.planId === plan.id ? 'border-blue-500 border-2' : ''
+                    }`}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{plan.name}</CardTitle>
+                          {plan.description && (
+                            <CardDescription className="mt-1">{plan.description}</CardDescription>
+                          )}
+                        </div>
+                        {tenant?.subscription?.planId === plan.id && (
+                          <Badge>Plan Actual</Badge>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Precio */}
+                      <div className="border-b pb-3">
+                        <div className="text-2xl font-bold text-gray-900">
+                          {formatCurrency(Number(plan.price))}
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {getBillingCycleLabel(plan.billingCycle)}
+                        </p>
+                      </div>
+
+                      {/* Características */}
+                      {plan.features && plan.features.length > 0 && (
+                        <div className="space-y-2">
+                          {plan.features.slice(0, 5).map((feature, index) => (
+                            <div key={index} className="flex items-start gap-2 text-sm">
+                              <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-600">{feature}</span>
+                            </div>
+                          ))}
+                          {plan.features.length > 5 && (
+                            <p className="text-xs text-gray-500 pl-6">
+                              +{plan.features.length - 5} características más
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Límites */}
+                      <div className="border-t pt-3 space-y-1 text-sm">
+                        {plan.maxUsers && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-500">Usuarios:</span>
+                            <span className="font-medium">{plan.maxUsers}</span>
+                          </div>
+                        )}
+                        {plan.maxProducts && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-500">Productos:</span>
+                            <span className="font-medium">{plan.maxProducts}</span>
+                          </div>
+                        )}
+                        {plan.maxSales && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-500">Ventas/mes:</span>
+                            <span className="font-medium">{plan.maxSales}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Botón de acción */}
+                      <Button
+                        className="w-full"
+                        onClick={() => handleChangePlan(plan.id)}
+                        disabled={
+                          isProcessingPayment || 
+                          tenant?.subscription?.planId === plan.id
+                        }
+                      >
+                        {isProcessingPayment && selectedPlanId === plan.id ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Procesando...
+                          </>
+                        ) : tenant?.subscription?.planId === plan.id ? (
+                          'Plan Actual'
+                        ) : (
+                          <>
+                            <CreditCard className="mr-2 h-4 w-4" />
+                            Seleccionar Plan
+                          </>
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsChangePlanDialogOpen(false)}
+              disabled={isProcessingPayment}
+            >
+              Cancelar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

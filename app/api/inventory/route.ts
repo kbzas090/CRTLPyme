@@ -173,27 +173,50 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Agregar al inventario
-    const inventoryItem = await prisma.tenantInventory.create({
-      data: {
-        ...validatedData,
-        tenantId: user.tenantId,
-      },
-      include: {
-        masterProduct: true,
-      },
-    })
+    // Agregar al inventario y crear movimiento en una transacción
+    const inventoryItem = await prisma.$transaction(async (tx) => {
+      // Crear item de inventario
+      const newItem = await tx.tenantInventory.create({
+        data: {
+          ...validatedData,
+          tenantId: user.tenantId,
+        },
+        include: {
+          masterProduct: true,
+        },
+      })
 
-    // Registrar en auditoría
-    await prisma.auditLog.create({
-      data: {
-        action: 'CREATE',
-        entity: 'TenantInventory',
-        entityId: inventoryItem.id,
-        newValues: inventoryItem,
-        userId: session.user.id,
-        tenantId: user.tenantId,
-      },
+      // Si hay stock inicial, crear movimiento de entrada
+      if (validatedData.stock > 0) {
+        await tx.inventoryMovement.create({
+          data: {
+            tenantId: user.tenantId,
+            type: 'ENTRY',
+            quantity: validatedData.stock,
+            reason: 'Stock inicial al agregar producto',
+            createdBy: user.id,
+            tenantInventory: {
+              connect: {
+                id: newItem.id
+              }
+            }
+          }
+        })
+      }
+
+      // Registrar en auditoría
+      await tx.auditLog.create({
+        data: {
+          action: 'CREATE',
+          entity: 'TenantInventory',
+          entityId: newItem.id,
+          newValues: newItem,
+          userId: user.id,
+          tenantId: user.tenantId,
+        },
+      })
+
+      return newItem
     })
 
     return NextResponse.json(inventoryItem, { status: 201 })

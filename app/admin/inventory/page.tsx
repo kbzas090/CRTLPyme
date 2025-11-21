@@ -453,10 +453,10 @@ export default function InventoryPage() {
                       </TableCell>
                       <TableCell>{product.masterProduct.category}</TableCell>
                       <TableCell className="text-right">
-                        ${Number(product.costPrice).toLocaleString('es-CL')}
+                        ${Math.round(Number(product.costPrice)).toLocaleString('es-CL')}
                       </TableCell>
                       <TableCell className="text-right">
-                        ${Number(product.salePrice).toLocaleString('es-CL')}
+                        ${Math.round(Number(product.salePrice)).toLocaleString('es-CL')}
                       </TableCell>
                       <TableCell className="text-center">
                         <div className="flex items-center justify-center gap-1">
