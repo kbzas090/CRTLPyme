@@ -268,11 +268,8 @@ export async function POST(request: Request) {
           }
         })
 
-        // ⚠️ TEMPORAL: inventoryMovement DESHABILITADO
-        // La tabla 'inventory_movements' no existe en producción.
-        // Se deshabilitó temporalmente para que las ventas funcionen.
-        // TODO: Implementar migración o eliminar feature completa.
-        /*
+        // ✅ Registrar movimiento de inventario
+        console.log(`🟦 [SALES API] Registrando movimiento de inventario para item ${item.tenantInventoryId}...`)
         await tx.inventoryMovement.create({
           data: {
             tenantId: user.tenantId,
@@ -283,7 +280,7 @@ export async function POST(request: Request) {
             createdBy: user.id
           }
         })
-        */
+        console.log(`✅ [SALES API] Movimiento de inventario registrado`)
       }
 
       console.log('✅ [SALES API] Stock actualizado')
