@@ -83,7 +83,13 @@ jobs:
             --min-instances 0 \
             --max-instances 10 \
             --port 3000 \
-            --set-env-vars="NODE_ENV=production,NEXT_PUBLIC_APP_NAME=CRTLPyme,GOOGLE_CLOUD_PROJECT_ID=${{ env.PROJECT_ID }},DATABASE_URL=${{ secrets.DATABASE_URL }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }},NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }},TRANSBANK_ENVIRONMENT=${{ secrets.TRANSBANK_ENVIRONMENT }}"
+            --update-env-vars NODE_ENV=production \
+            --update-env-vars NEXT_PUBLIC_APP_NAME=CRTLPyme \
+            --update-env-vars GOOGLE_CLOUD_PROJECT_ID=${{ env.PROJECT_ID }} \
+            --update-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --update-env-vars NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
+            --update-env-vars NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
+            --update-env-vars TRANSBANK_ENVIRONMENT=${{ secrets.TRANSBANK_ENVIRONMENT }}
 
       # 8. Mostrar URL del servicio
       - name: Show service URL
