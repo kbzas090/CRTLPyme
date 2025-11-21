@@ -326,17 +326,22 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ POST /api/sales: Transacción completada exitosamente')
 
-    // Registrar en auditoría
-    await prisma.auditLog.create({
-      data: {
-        action: 'CREATE',
-        entity: 'Sale',
-        entityId: sale.id,
-        newValues: sale,
-        userId: session.user.id,
-        tenantId: session.user.tenantId,
-      },
-    })
+    // Registrar en auditoría (serializar correctamente el objeto)
+    try {
+      await prisma.auditLog.create({
+        data: {
+          action: 'CREATE',
+          entity: 'Sale',
+          entityId: sale.id,
+          newValues: JSON.parse(JSON.stringify(sale)),
+          userId: session.user.id,
+          tenantId: session.user.tenantId,
+        },
+      })
+    } catch (auditError) {
+      console.error('⚠️ Error al crear log de auditoría (no crítico):', auditError)
+      // No fallar la venta si falla el audit log
+    }
 
     return NextResponse.json(sale, { status: 201 })
   } catch (error) {
