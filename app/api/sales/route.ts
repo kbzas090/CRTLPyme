@@ -266,7 +266,7 @@ export async function POST(request: Request) {
         await tx.inventoryMovement.create({
           data: {
             tenantId: user.tenantId,
-            tenantInventoryId: item.tenantInventoryId,
+            tenantInventory: { connect: { id: item.tenantInventoryId } },
             type: 'SALE',
             quantity: -item.quantity,
             reason: `Venta ${saleNumber}`,
