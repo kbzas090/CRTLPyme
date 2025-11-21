@@ -91,14 +91,30 @@ export async function GET(request: NextRequest) {
       let pdfBase64: string;
       
       if (reportType === 'sales') {
+        // Construir filtros para ventas
+        const salesFilter: any = {
+          tenantId,
+          status: 'COMPLETED',
+        };
+
+        // Aplicar filtros de fecha si se proporcionan
+        if (startDate || endDate) {
+          salesFilter.createdAt = {};
+          
+          if (startDate) {
+            salesFilter.createdAt.gte = new Date(startDate);
+          }
+          
+          if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            salesFilter.createdAt.lte = end;
+          }
+        }
+
         // Obtener los datos originales de ventas sin formatear
         const salesRaw = await prisma.sale.findMany({
-          where: {
-            tenantId,
-            status: 'COMPLETED',
-            ...(startDate && { createdAt: { gte: new Date(startDate) } }),
-            ...(endDate && { createdAt: { lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)) } }),
-          },
+          where: salesFilter,
           include: {
             user: {
               select: {
