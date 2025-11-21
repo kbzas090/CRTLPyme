@@ -185,25 +185,30 @@ export async function POST(request: Request) {
       itemsCount: saleItems.length
     })
 
-    // PASO 10: Generar número de venta
-    console.log('🟦 [SALES API] PASO 10: Generando número de venta...')
-    
-    const lastSale = await prisma.sale.findFirst({
-      where: { tenantId: user.tenantId },
-      orderBy: { createdAt: 'desc' }
-    })
-
-    const saleNumber = lastSale
-      ? `V-${String(parseInt(lastSale.saleNumber.split('-')[1]) + 1).padStart(6, '0')}`
-      : 'V-000001'
-
-    console.log('✅ [SALES API] Número de venta generado:', saleNumber)
-
-    // PASO 11: Crear venta en transacción
-    console.log('🟦 [SALES API] PASO 11: Creando venta en base de datos...')
+    // PASO 10 y 11: Crear venta en transacción (con generación de número dentro de TX)
+    console.log('🟦 [SALES API] PASO 10-11: Creando venta en base de datos (con generación de número)...')
     
     const sale = await prisma.$transaction(async (tx) => {
       console.log('🟦 [SALES API] Transacción iniciada')
+      
+      // Generar número de venta DENTRO de la transacción para evitar duplicados
+      console.log('🟦 [SALES API] Generando número de venta...')
+      
+      const lastSale = await tx.sale.findFirst({
+        where: { tenantId: user.tenantId },
+        orderBy: { saleNumber: 'desc' },
+        select: { saleNumber: true }
+      })
+
+      let saleNumber: string
+      if (lastSale) {
+        const lastNumber = parseInt(lastSale.saleNumber.split('-')[1])
+        saleNumber = `V-${String(lastNumber + 1).padStart(6, '0')}`
+      } else {
+        saleNumber = 'V-000001'
+      }
+
+      console.log('✅ [SALES API] Número de venta generado:', saleNumber)
       
       // Crear venta
       console.log('🟦 [SALES API] Creando registro de venta...')
