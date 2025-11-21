@@ -91,38 +91,76 @@ export async function GET(request: NextRequest) {
       let pdfBase64: string;
       
       if (reportType === 'sales') {
-        const salesData = reportData.rows.map((row: any[], index: number) => ({
-          id: index.toString(),
-          saleNumber: row[0],
-          // Eliminar TODOS los caracteres no numéricos (incluyendo puntos de miles)
-          // Formato CLP: $123.456 → 123456
-          total: parseFloat(row[5].replace(/\D/g, '')),
-          paymentMethod: row[3],
-          createdAt: row[1],
-          userName: row[2],
+        // Obtener los datos originales de ventas sin formatear
+        const salesRaw = await prisma.sale.findMany({
+          where: {
+            tenantId,
+            status: 'COMPLETED',
+            ...(startDate && { createdAt: { gte: new Date(startDate) } }),
+            ...(endDate && { createdAt: { lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)) } }),
+          },
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+        
+        const salesData = salesRaw.map((sale) => ({
+          id: sale.id,
+          saleNumber: sale.saleNumber,
+          total: Number(sale.total),
+          paymentMethod: sale.paymentMethod,
+          createdAt: sale.createdAt.toISOString(),
+          userName: `${sale.user.firstName} ${sale.user.lastName}`,
         }));
         pdfBase64 = generateSalesReportPDF(salesData, filters, businessName);
       } else if (reportType === 'products') {
-        const productsData = reportData.rows.map((row: any[], index: number) => ({
-          id: index.toString(),
-          sku: row[0],
-          name: row[1],
-          category: row[2],
-          stock: parseInt(row[4]),
-          // Eliminar TODOS los caracteres no numéricos para parsear precios en CLP
-          salePrice: parseFloat(row[7].replace(/\D/g, '')),
-          costPrice: parseFloat(row[6].replace(/\D/g, '')),
+        // Obtener los datos originales de productos sin formatear
+        const productsRaw = await prisma.tenantInventory.findMany({
+          where: {
+            tenantId,
+            isActive: true,
+          },
+          include: {
+            masterProduct: true,
+          },
+        });
+        
+        const productsData = productsRaw.map((item) => ({
+          id: item.id,
+          sku: item.customSku || item.masterProduct.sku,
+          name: item.masterProduct.name,
+          category: item.masterProduct.category,
+          stock: item.stock,
+          salePrice: Number(item.salePrice),
+          costPrice: Number(item.costPrice),
         }));
         pdfBase64 = generateProductsReportPDF(productsData, filters, businessName);
       } else if (reportType === 'customers') {
-        const customersData = reportData.rows.map((row: any[], index: number) => ({
-          id: index.toString(),
-          name: row[0],
-          email: row[1],
-          phone: row[2],
-          address: row[3] || null,
-          // Fecha está en índice 4, no 7 (el array tiene solo 5 elementos)
-          createdAt: row[4] || new Date().toISOString(),
+        // Obtener los datos originales de clientes sin formatear
+        const customersRaw = await prisma.customer.findMany({
+          where: {
+            tenantId,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+        
+        const customersData = customersRaw.map((customer) => ({
+          id: customer.id,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone,
+          address: customer.address,
+          createdAt: customer.createdAt.toISOString(),
         }));
         pdfBase64 = generateCustomersReportPDF(customersData, filters, businessName);
       } else {
