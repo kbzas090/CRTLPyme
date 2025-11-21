@@ -327,7 +327,118 @@ export default function POSPage() {
   }
 
   const printReceipt = () => {
-    window.print()
+    if (!completedSale) return
+    
+    // Crear ventana de impresión con formato específico para recibo
+    const printWindow = window.open('', '', 'width=300,height=600')
+    if (!printWindow) {
+      toast.error('No se pudo abrir la ventana de impresión. Verifica los permisos del navegador.')
+      return
+    }
+    
+    const receiptHTML = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Recibo de Venta - ${completedSale.saleNumber}</title>
+          <meta charset="utf-8">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+              font-family: 'Courier New', monospace;
+              font-size: 12px;
+              padding: 10px;
+              max-width: 280px;
+              margin: 0 auto;
+            }
+            .center { text-align: center; }
+            .bold { font-weight: bold; }
+            .border-top { border-top: 1px dashed #000; padding-top: 8px; margin-top: 8px; }
+            .border-bottom { border-bottom: 1px dashed #000; padding-bottom: 8px; margin-bottom: 8px; }
+            .spacer { margin: 8px 0; }
+            .flex { display: flex; justify-content: space-between; margin: 4px 0; }
+            .large { font-size: 14px; }
+            .small { font-size: 10px; }
+            .product-name { font-weight: bold; margin-bottom: 2px; }
+            .product-detail { font-size: 10px; color: #666; margin-left: 8px; }
+            @media print {
+              body { padding: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="center border-bottom">
+            <div class="bold" style="font-size: 16px;">CRTLPyme</div>
+            <div class="small">Sistema de Gestión</div>
+            <div class="small">Punto de Venta</div>
+          </div>
+          
+          <div class="border-bottom">
+            <div class="center bold">COMPROBANTE DE VENTA</div>
+            <div class="flex small">
+              <span>N° Venta:</span>
+              <span class="bold">${completedSale.saleNumber}</span>
+            </div>
+            <div class="flex small">
+              <span>Fecha:</span>
+              <span>${format(new Date(completedSale.createdAt), "dd/MM/yyyy HH:mm", { locale: es })}</span>
+            </div>
+            <div class="flex small">
+              <span>Atendió:</span>
+              <span>${completedSale.user.firstName} ${completedSale.user.lastName}</span>
+            </div>
+          </div>
+          
+          <div class="border-bottom">
+            ${completedSale.items.map(item => `
+              <div style="margin: 8px 0;">
+                <div class="product-name">${item.tenantInventory.masterProduct.name}</div>
+                <div class="flex product-detail">
+                  <span>${item.quantity} x ${formatCurrency(Number(item.unitPrice))}</span>
+                  <span class="bold">${formatCurrency(Number(item.subtotal))}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="border-bottom">
+            <div class="flex">
+              <span>Subtotal:</span>
+              <span>${formatCurrency(Number(completedSale.subtotal))}</span>
+            </div>
+            <div class="flex">
+              <span>IVA (19%):</span>
+              <span>${formatCurrency(Number(completedSale.tax))}</span>
+            </div>
+            <div class="flex bold large spacer">
+              <span>TOTAL:</span>
+              <span>${formatCurrency(Number(completedSale.total))}</span>
+            </div>
+          </div>
+          
+          <div class="center small">
+            <div style="margin: 4px 0;">Método de pago: <span class="bold">${completedSale.paymentMethod === 'CASH' ? 'Efectivo' : completedSale.paymentMethod}</span></div>
+            <div class="spacer"></div>
+            <div>¡Gracias por su compra!</div>
+            <div class="spacer"></div>
+            <div style="color: #999;">ID: ${completedSale.id}</div>
+          </div>
+        </body>
+      </html>
+    `
+    
+    printWindow.document.write(receiptHTML)
+    printWindow.document.close()
+    
+    // Esperar a que cargue el contenido antes de imprimir
+    printWindow.onload = () => {
+      printWindow.focus()
+      printWindow.print()
+      // Cerrar la ventana después de imprimir (opcional)
+      setTimeout(() => {
+        printWindow.close()
+      }, 100)
+    }
   }
 
   if (status === 'loading' || isLoading) {

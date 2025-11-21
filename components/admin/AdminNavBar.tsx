@@ -76,7 +76,25 @@ export default function AdminNavBar() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Verificar si hay una sesión de caja abierta antes de cerrar sesión
+    try {
+      const response = await fetch('/api/cash-sessions/current')
+      if (response.ok) {
+        const data = await response.json()
+        
+        // Si hay una sesión de caja abierta, mostrar alerta
+        if (data.session && data.session.status === 'OPEN') {
+          alert('⚠️ No puedes cerrar sesión mientras tengas una caja abierta.\n\nPor favor, cierra tu sesión de caja primero en la sección "Sesión de Caja".')
+          return
+        }
+      }
+    } catch (error) {
+      console.error('Error al verificar sesión de caja:', error)
+      // En caso de error en la verificación, permitir cerrar sesión
+    }
+    
+    // Si no hay caja abierta o hay error, permitir cerrar sesión
     router.push('/auth/signout')
   }
 
