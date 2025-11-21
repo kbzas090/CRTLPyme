@@ -240,6 +240,12 @@ export async function POST(request: Request) {
               }
             }
           },
+          user: {
+            select: {
+              firstName: true,
+              lastName: true
+            }
+          },
           cashSession: {
             include: {
               user: true
@@ -317,10 +323,8 @@ export async function POST(request: Request) {
 
     console.log('🟦 [SALES API] ========== FIN EXITOSO ==========')
 
-    return NextResponse.json({
-      success: true,
-      sale
-    })
+    // Devolver solo el objeto sale (sin wrapper) para compatibilidad con frontend
+    return NextResponse.json(sale)
 
   } catch (error: any) {
     console.error('🔴 [SALES API] ========== ERROR CRÍTICO ==========')
