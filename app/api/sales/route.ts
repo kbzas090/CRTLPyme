@@ -266,11 +266,11 @@ export async function POST(request: Request) {
         await tx.inventoryMovement.create({
           data: {
             tenantId: user.tenantId,
-            tenantInventory: { connect: { id: item.tenantInventoryId } },
-            type: 'SALE',
+            tenantInventoryId: item.tenantInventoryId,
+            type: 'EXIT',
             quantity: -item.quantity,
             reason: `Venta ${saleNumber}`,
-            userId: user.id
+            createdBy: user.id
           }
         })
       }

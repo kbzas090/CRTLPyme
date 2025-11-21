@@ -1,0 +1,68 @@
+--- Dockerfile.working.4d4471d	2025-11-20 22:19:01.812000000 +0000
++++ Dockerfile	2025-11-13 17:13:24.669000000 +0000
+@@ -1,50 +1,26 @@
+-FROM node:18-alpine AS base
++# Ultra-simple Dockerfile - no user switching, minimal complexity
++FROM node:20-alpine
+ 
+-# Instalar dependencias
+-FROM base AS deps
+-RUN apk add --no-cache libc6-compat openssl
+-WORKDIR /app
+-
+-COPY package.json package-lock.json* ./
+-RUN npm ci --legacy-peer-deps
+-
+-# Generar Prisma Client
+-COPY prisma ./prisma/
+-RUN npx prisma generate
++# Install system dependencies
++RUN apk add --no-cache libc6-compat openssl curl
+ 
+-# Builder
+-FROM base AS builder
++# Set working directory
+ WORKDIR /app
+-COPY --from=deps /app/node_modules ./node_modules
++
++# Copy all files
+ COPY . .
+ 
+-ENV NEXT_TELEMETRY_DISABLED 1
++# Install dependencies
++RUN npm install --legacy-peer-deps
+ 
++# Generate Prisma client
+ RUN npx prisma generate
+-RUN npm run build
+ 
+-# Runner
+-FROM base AS runner
+-WORKDIR /app
+-
+-ENV NODE_ENV production
+-ENV NEXT_TELEMETRY_DISABLED 1
+-
+-RUN apk add --no-cache openssl
+-RUN addgroup --system --gid 1001 nodejs
+-RUN adduser --system --uid 1001 nextjs
+-
+-# Copiar archivos del build
+-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+-COPY --from=builder /app/prisma ./prisma
+-
+-USER nextjs
++# Build the application
++RUN npm run build
+ 
++# Expose port
+ EXPOSE 3000
+ 
+-ENV PORT 3000
+-
+-CMD ["node", "server.js"]
++# Start the application using Next.js start
++CMD ["npm", "start"]
