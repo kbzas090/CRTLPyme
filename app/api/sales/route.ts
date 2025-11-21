@@ -1,358 +1,386 @@
-
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/db'
-import { z } from 'zod'
+import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { canPerformAction } from '@/lib/subscription-middleware'
 
-// Schema de validación para crear venta
-const createSaleSchema = z.object({
-  items: z.array(z.object({
-    tenantInventoryId: z.string(),
-    quantity: z.number().int().positive(),
-  })).min(1, 'Debe incluir al menos un producto'),
-  paymentMethod: z.enum(['CASH', 'DEBIT', 'CREDIT', 'TRANSFER']),
-  cashReceived: z.number().optional(),
-})
-
-// GET: Listar ventas
-export async function GET(request: NextRequest) {
+export async function POST(request: Request) {
+  console.log('🟦 [SALES API] ========== INICIO ==========')
+  
   try {
+    // PASO 1: Autenticación
+    console.log('🟦 [SALES API] PASO 1: Verificando autenticación...')
     const session = await getServerSession(authOptions)
     
-    if (!session?.user) {
+    if (!session?.user?.email) {
+      console.log('🔴 [SALES API] ERROR: Usuario no autenticado')
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
+    
+    console.log('✅ [SALES API] Usuario autenticado:', session.user.email)
 
-    const { searchParams } = new URL(request.url)
-    const cashSessionId = searchParams.get('cashSessionId')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const startDate = searchParams.get('startDate')
-    const endDate = searchParams.get('endDate')
-
-    const where: any = {
-      tenantId: session.user.tenantId,
-    }
-
-    if (cashSessionId) {
-      where.cashSessionId = cashSessionId
-    }
-
-    if (startDate) {
-      where.createdAt = {
-        ...where.createdAt,
-        gte: new Date(startDate),
-      }
-    }
-
-    if (endDate) {
-      where.createdAt = {
-        ...where.createdAt,
-        lte: new Date(endDate),
-      }
-    }
-
-    // Si es CAJA, solo ver sus ventas
-    if (session.user.role === 'CAJA') {
-      where.userId = session.user.id
-    }
-
-    const sales = await prisma.sale.findMany({
-      where,
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-        items: {
-          include: {
-            tenantInventory: {
-              select: {
-                id: true,
-                customSku: true,
-                masterProduct: {
-                  select: {
-                    id: true,
-                    name: true,
-                    sku: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        cashSession: {
-          select: {
-            id: true,
-            openedAt: true,
-          },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
+    // PASO 2: Obtener usuario y tenant
+    console.log('🟦 [SALES API] PASO 2: Obteniendo datos de usuario...')
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { tenant: true }
     })
 
-    return NextResponse.json(sales)
-  } catch (error) {
-    console.error('Error al obtener ventas:', error)
-    return NextResponse.json({ error: 'Error al obtener ventas' }, { status: 500 })
-  }
-}
-
-// POST: Crear venta
-export async function POST(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      console.error('❌ POST /api/sales: No autorizado - no hay sesión')
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    if (!user?.tenantId) {
+      console.log('🔴 [SALES API] ERROR: Usuario sin tenant')
+      return NextResponse.json({ error: 'Usuario sin tenant' }, { status: 400 })
     }
 
-    console.log('📝 POST /api/sales: Usuario:', session.user.email, 'Role:', session.user.role)
+    console.log('✅ [SALES API] Usuario encontrado:', {
+      id: user.id,
+      name: user.name,
+      tenantId: user.tenantId
+    })
 
-    // Verificar permisos (ADMIN y CAJA pueden crear ventas)
-    if (!['ADMIN', 'CAJA'].includes(session.user.role)) {
-      console.error('❌ POST /api/sales: Usuario sin permisos:', session.user.role)
-      return NextResponse.json(
-        { error: 'No tienes permisos para crear ventas' },
-        { status: 403 }
-      )
-    }
-
-    // VALIDACIÓN DE LÍMITES DE SUSCRIPCIÓN
-    const limitCheck = await canPerformAction(session.user.tenantId, 'create_sale')
-    if (!limitCheck.allowed) {
-      console.warn('⚠️ POST /api/sales: Límite de suscripción alcanzado para tenant:', session.user.tenantId)
-      return NextResponse.json(
-        { 
-          error: limitCheck.message,
-          limitExceeded: true,
-          upgradeRequired: true 
-        },
-        { status: 403 }
-      )
-    }
-
+    // PASO 3: Parsear body
+    console.log('🟦 [SALES API] PASO 3: Parseando request body...')
     const body = await request.json()
-    console.log('📦 POST /api/sales: Body recibido:', JSON.stringify(body, null, 2))
+    console.log('✅ [SALES API] Body recibido:', JSON.stringify(body, null, 2))
+
+    const { items, paymentMethod, cashReceived } = body
+
+    // PASO 4: Validaciones básicas
+    console.log('🟦 [SALES API] PASO 4: Validando datos...')
     
-    const validatedData = createSaleSchema.parse(body)
-    console.log('✅ POST /api/sales: Datos validados correctamente')
-
-    // Verificar que haya una sesión de caja abierta
-    const activeSession = await prisma.cashSession.findFirst({
-      where: {
-        userId: session.user.id,
-        tenantId: session.user.tenantId,
-        status: 'OPEN',
-      },
-    })
-
-    if (!activeSession) {
-      console.error('❌ POST /api/sales: No hay sesión de caja abierta para usuario:', session.user.id)
-      return NextResponse.json(
-        { error: 'Debes abrir una sesión de caja antes de realizar ventas' },
-        { status: 400 }
-      )
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      console.log('🔴 [SALES API] ERROR: Items inválidos')
+      return NextResponse.json({ error: 'Items es requerido' }, { status: 400 })
     }
 
-    console.log('✅ POST /api/sales: Sesión de caja encontrada:', activeSession.id)
+    if (!paymentMethod) {
+      console.log('🔴 [SALES API] ERROR: Método de pago faltante')
+      return NextResponse.json({ error: 'Método de pago es requerido' }, { status: 400 })
+    }
 
-    // Obtener inventario del tenant y verificar stock
-    const inventoryIds = validatedData.items.map(item => item.tenantInventoryId)
-    console.log('🔍 POST /api/sales: Buscando productos en inventario:', inventoryIds)
+    console.log('✅ [SALES API] Validaciones básicas OK')
+
+    // PASO 5: Verificar sesión de caja
+    console.log('🟦 [SALES API] PASO 5: Verificando sesión de caja...')
+    const currentSession = await prisma.cashSession.findFirst({
+      where: {
+        userId: user.id,
+        status: 'OPEN'
+      }
+    })
+
+    if (!currentSession) {
+      console.log('🔴 [SALES API] ERROR: No hay sesión de caja abierta')
+      return NextResponse.json({ error: 'No hay sesión de caja abierta' }, { status: 400 })
+    }
+
+    console.log('✅ [SALES API] Sesión de caja encontrada:', {
+      id: currentSession.id,
+      openingAmount: currentSession.openingAmount
+    })
+
+    // PASO 6: Verificar límites de suscripción
+    console.log('🟦 [SALES API] PASO 6: Verificando límites de suscripción...')
     
-    const inventoryItems = await prisma.tenantInventory.findMany({
+    try {
+      const canCreate = await canPerformAction(user.tenantId, 'sales')
+      console.log('✅ [SALES API] Resultado de canPerformAction:', canCreate)
+      
+      if (!canCreate) {
+        console.log('🔴 [SALES API] ERROR: Límite de suscripción alcanzado')
+        return NextResponse.json(
+          { error: 'Has alcanzado el límite de ventas de tu plan' },
+          { status: 403 }
+        )
+      }
+    } catch (subError: any) {
+      console.error('🔴 [SALES API] ERROR en canPerformAction:', subError)
+      console.error('🔴 [SALES API] Stack trace:', subError.stack)
+      throw subError
+    }
+
+    console.log('✅ [SALES API] Límites de suscripción OK')
+
+    // PASO 7: Obtener inventarios y calcular totales
+    console.log('🟦 [SALES API] PASO 7: Obteniendo inventarios...')
+    
+    const inventoryIds = items.map((item: any) => item.tenantInventoryId)
+    console.log('🟦 [SALES API] IDs de inventario:', inventoryIds)
+    
+    const inventories = await prisma.tenantInventory.findMany({
       where: {
         id: { in: inventoryIds },
-        tenantId: session.user.tenantId,
-        isActive: true,
+        tenantId: user.tenantId
       },
       include: {
-        masterProduct: {
-          select: {
-            id: true,
-            name: true,
-            sku: true,
-          },
-        },
-      },
+        masterProduct: true
+      }
     })
 
-    console.log('📦 POST /api/sales: Productos encontrados:', inventoryItems.length)
+    console.log('✅ [SALES API] Inventarios encontrados:', inventories.length)
 
-    if (inventoryItems.length !== validatedData.items.length) {
-      console.error('❌ POST /api/sales: Algunos productos no existen. Esperados:', validatedData.items.length, 'Encontrados:', inventoryItems.length)
+    if (inventories.length !== items.length) {
+      console.log('🔴 [SALES API] ERROR: Algunos productos no encontrados')
       return NextResponse.json(
-        { error: 'Algunos productos no existen o están inactivos' },
-        { status: 400 }
+        { error: 'Algunos productos no fueron encontrados' },
+        { status: 404 }
       )
     }
 
-    // Verificar stock suficiente
-    for (const item of validatedData.items) {
-      const inventoryItem = inventoryItems.find(p => p.id === item.tenantInventoryId)
-      if (!inventoryItem) {
-        console.error('❌ POST /api/sales: Producto no encontrado:', item.tenantInventoryId)
+    // PASO 8: Validar stock
+    console.log('🟦 [SALES API] PASO 8: Validando stock...')
+    
+    for (const item of items) {
+      const inventory = inventories.find(inv => inv.id === item.tenantInventoryId)
+      
+      if (!inventory) {
+        console.log('🔴 [SALES API] ERROR: Inventario no encontrado:', item.tenantInventoryId)
         return NextResponse.json(
-          { error: `Producto no encontrado en inventario: ${item.tenantInventoryId}` },
-          { status: 400 }
+          { error: `Producto no encontrado: ${item.tenantInventoryId}` },
+          { status: 404 }
         )
       }
-      if (inventoryItem.stock < item.quantity) {
-        console.error('❌ POST /api/sales: Stock insuficiente para', inventoryItem.masterProduct.name, 'Solicitado:', item.quantity, 'Disponible:', inventoryItem.stock)
+
+      if (inventory.currentStock < item.quantity) {
+        console.log('🔴 [SALES API] ERROR: Stock insuficiente:', {
+          productId: inventory.masterProduct.id,
+          productName: inventory.masterProduct.name,
+          requested: item.quantity,
+          available: inventory.currentStock
+        })
         return NextResponse.json(
-          { error: `Stock insuficiente para ${inventoryItem.masterProduct.name}. Disponible: ${inventoryItem.stock}` },
+          { error: `Stock insuficiente para ${inventory.masterProduct.name}` },
           { status: 400 }
         )
       }
     }
 
-    console.log('✅ POST /api/sales: Todos los productos tienen stock suficiente')
+    console.log('✅ [SALES API] Stock suficiente para todos los productos')
 
-    // Calcular totales
+    // PASO 9: Calcular totales
+    console.log('🟦 [SALES API] PASO 9: Calculando totales...')
+    
     let subtotal = 0
-    const saleItems = validatedData.items.map(item => {
-      const inventoryItem = inventoryItems.find(p => p.id === item.tenantInventoryId)!
-      const itemSubtotal = Number(inventoryItem.salePrice) * item.quantity
+    const saleItems = items.map((item: any) => {
+      const inventory = inventories.find(inv => inv.id === item.tenantInventoryId)!
+      const itemSubtotal = Number(inventory.salePrice) * item.quantity
       subtotal += itemSubtotal
-      
+
       return {
         tenantInventoryId: item.tenantInventoryId,
         quantity: item.quantity,
-        unitPrice: Number(inventoryItem.salePrice),
-        unitCost: Number(inventoryItem.costPrice),
-        subtotal: itemSubtotal,
+        unitPrice: Number(inventory.salePrice),
+        unitCost: Number(inventory.costPrice),
+        subtotal: itemSubtotal
       }
     })
 
-    const tax = subtotal * 0.19 // IVA 19%
+    const tax = subtotal * 0.19
     const total = subtotal + tax
 
-    // Calcular cambio si es pago en efectivo
-    let change: number | null = null
-    if (validatedData.paymentMethod === 'CASH' && validatedData.cashReceived) {
-      change = validatedData.cashReceived - total
-      if (change < 0) {
-        return NextResponse.json(
-          { error: 'El monto recibido es insuficiente' },
-          { status: 400 }
-        )
-      }
-    }
-
-    // Generar número de venta
-    const lastSale = await prisma.sale.findFirst({
-      where: { tenantId: session.user.tenantId },
-      orderBy: { saleNumber: 'desc' },
-      select: { saleNumber: true },
+    console.log('✅ [SALES API] Totales calculados:', {
+      subtotal,
+      tax,
+      total,
+      itemsCount: saleItems.length
     })
 
-    const nextNumber = lastSale 
-      ? parseInt(lastSale.saleNumber) + 1 
-      : 1
-    const saleNumber = nextNumber.toString().padStart(8, '0')
-    console.log('🔢 POST /api/sales: Número de venta generado:', saleNumber)
+    // PASO 10: Generar número de venta
+    console.log('🟦 [SALES API] PASO 10: Generando número de venta...')
+    
+    const lastSale = await prisma.sale.findFirst({
+      where: { tenantId: user.tenantId },
+      orderBy: { createdAt: 'desc' }
+    })
 
-    // Crear venta en transacción
-    console.log('💾 POST /api/sales: Iniciando transacción de base de datos...')
+    const saleNumber = lastSale
+      ? `V-${String(parseInt(lastSale.saleNumber.split('-')[1]) + 1).padStart(6, '0')}`
+      : 'V-000001'
+
+    console.log('✅ [SALES API] Número de venta generado:', saleNumber)
+
+    // PASO 11: Crear venta en transacción
+    console.log('🟦 [SALES API] PASO 11: Creando venta en base de datos...')
+    
     const sale = await prisma.$transaction(async (tx) => {
+      console.log('🟦 [SALES API] Transacción iniciada')
+      
       // Crear venta
+      console.log('🟦 [SALES API] Creando registro de venta...')
       const newSale = await tx.sale.create({
         data: {
           saleNumber,
-          subtotal,
-          tax,
-          total,
-          paymentMethod: validatedData.paymentMethod,
-          cashReceived: validatedData.cashReceived,
-          change,
+          tenantId: user.tenantId,
+          cashSessionId: currentSession.id,
+          userId: user.id,
+          subtotal: new Prisma.Decimal(subtotal),
+          tax: new Prisma.Decimal(tax),
+          total: new Prisma.Decimal(total),
+          paymentMethod,
+          cashReceived: cashReceived ? new Prisma.Decimal(cashReceived) : null,
           status: 'COMPLETED',
-          userId: session.user.id,
-          tenantId: session.user.tenantId,
-          cashSessionId: activeSession.id,
           items: {
             create: saleItems.map(item => ({
-              ...item,
-              tenantId: session.user.tenantId,
-            })),
-          },
+              tenantInventoryId: item.tenantInventoryId,
+              quantity: item.quantity,
+              unitPrice: new Prisma.Decimal(item.unitPrice),
+              unitCost: new Prisma.Decimal(item.unitCost),
+              subtotal: new Prisma.Decimal(item.subtotal),
+              tenantId: user.tenantId
+            }))
+          }
         },
         include: {
           items: {
             include: {
               tenantInventory: {
                 include: {
-                  masterProduct: true,
-                },
-              },
-            },
+                  masterProduct: true
+                }
+              }
+            }
           },
-          user: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
-          },
-        },
+          cashSession: {
+            include: {
+              user: true
+            }
+          }
+        }
       })
 
-      console.log('✅ POST /api/sales: Venta creada con ID:', newSale.id)
+      console.log('✅ [SALES API] Venta creada:', newSale.id)
 
-      // Actualizar stock en TenantInventory
-      console.log('📦 POST /api/sales: Actualizando stock de productos...')
-      for (const item of validatedData.items) {
+      // Actualizar stock
+      console.log('🟦 [SALES API] Actualizando stock...')
+      for (const item of saleItems) {
         await tx.tenantInventory.update({
-          where: { 
-            id: item.tenantInventoryId,
-          },
+          where: { id: item.tenantInventoryId },
           data: {
-            stock: {
-              decrement: item.quantity,
-            },
-          },
+            currentStock: {
+              decrement: item.quantity
+            }
+          }
+        })
+
+        // Registrar movimiento
+        await tx.inventoryMovement.create({
+          data: {
+            tenantId: user.tenantId,
+            tenantInventoryId: item.tenantInventoryId,
+            type: 'SALE',
+            quantity: -item.quantity,
+            reason: `Venta ${saleNumber}`,
+            userId: user.id
+          }
         })
       }
 
-      console.log('✅ POST /api/sales: Stock actualizado correctamente')
+      console.log('✅ [SALES API] Stock actualizado')
+
+      // Actualizar sesión de caja
+      console.log('🟦 [SALES API] Actualizando sesión de caja...')
+      await tx.cashSession.update({
+        where: { id: currentSession.id },
+        data: {
+          totalSales: {
+            increment: new Prisma.Decimal(total)
+          }
+        }
+      })
+
+      console.log('✅ [SALES API] Sesión de caja actualizada')
+      console.log('✅ [SALES API] Transacción completada')
 
       return newSale
     })
 
-    console.log('✅ POST /api/sales: Transacción completada exitosamente')
+    console.log('✅ [SALES API] Venta completada exitosamente')
 
-    // Registrar en auditoría (serializar correctamente el objeto)
+    // PASO 12: Crear audit log
+    console.log('🟦 [SALES API] PASO 12: Creando audit log...')
+    
     try {
+      const serializedSale = JSON.parse(JSON.stringify(sale))
+      
       await prisma.auditLog.create({
         data: {
-          action: 'CREATE',
-          entity: 'Sale',
+          tenantId: user.tenantId,
+          userId: user.id,
+          action: 'CREATE_SALE',
+          entityType: 'Sale',
           entityId: sale.id,
-          newValues: JSON.parse(JSON.stringify(sale)),
-          userId: session.user.id,
-          tenantId: session.user.tenantId,
-        },
+          details: serializedSale
+        }
       })
-    } catch (auditError) {
-      console.error('⚠️ Error al crear log de auditoría (no crítico):', auditError)
-      // No fallar la venta si falla el audit log
+      
+      console.log('✅ [SALES API] Audit log creado')
+    } catch (auditError: any) {
+      console.error('⚠️ [SALES API] Error al crear audit log (no crítico):', auditError.message)
     }
 
-    return NextResponse.json(sale, { status: 201 })
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Datos inválidos', details: error.errors },
-        { status: 400 }
-      )
+    console.log('🟦 [SALES API] ========== FIN EXITOSO ==========')
+
+    return NextResponse.json({
+      success: true,
+      sale
+    })
+
+  } catch (error: any) {
+    console.error('🔴 [SALES API] ========== ERROR CRÍTICO ==========')
+    console.error('🔴 [SALES API] Mensaje:', error.message)
+    console.error('🔴 [SALES API] Stack trace:', error.stack)
+    console.error('🔴 [SALES API] Error completo:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
+    
+    return NextResponse.json(
+      { error: error.message || 'Error al crear venta' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    console.error('Error al crear venta:', error)
-    return NextResponse.json({ error: 'Error al crear venta' }, { status: 500 })
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email }
+    })
+
+    if (!user?.tenantId) {
+      return NextResponse.json({ error: 'Usuario sin tenant' }, { status: 400 })
+    }
+
+    const sales = await prisma.sale.findMany({
+      where: { tenantId: user.tenantId },
+      include: {
+        items: {
+          include: {
+            tenantInventory: {
+              include: {
+                masterProduct: true
+              }
+            }
+          }
+        },
+        user: true,
+        cashSession: {
+          include: {
+            user: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    })
+
+    return NextResponse.json({ sales })
+  } catch (error: any) {
+    console.error('Error al obtener ventas:', error)
+    return NextResponse.json(
+      { error: 'Error al obtener ventas' },
+      { status: 500 }
+    )
   }
 }
