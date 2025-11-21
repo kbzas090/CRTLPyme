@@ -9,7 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { generateExcel, generateCSV, formatCurrency, formatDate } from '@/lib/report-generator';
-import { generateSalesReportPDF, generateProductsReportPDF, generateCustomersReportPDF } from '@/lib/pdf-generator';
+import { generateSalesReportPDF, generateProductsReportPDF, generateCustomersReportPDF, generateInventoryMovementsReportPDF } from '@/lib/pdf-generator';
 
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -31,10 +31,11 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const tenantId = searchParams.get('tenantId') || session.user.tenantId;
-  const reportType = searchParams.get('type') || 'sales'; // sales, products, customers
+  const reportType = searchParams.get('type') || 'sales'; // sales, products, customers, inventory-movements
   const format = searchParams.get('format') || 'excel'; // excel, csv, pdf
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
+  const movementType = searchParams.get('movementType'); // Para filtrar tipo de movimiento
 
   // Verify access to tenant
   if (tenantId !== session.user.tenantId && session.user.role !== 'PROVEEDOR') {
@@ -60,6 +61,10 @@ export async function GET(request: NextRequest) {
       case 'customers':
         reportData = await generateCustomersReport(tenantId, startDate, endDate);
         filename = `reporte-clientes-${Date.now()}`;
+        break;
+      case 'inventory-movements':
+        reportData = await generateInventoryMovementsReport(tenantId, startDate, endDate, movementType);
+        filename = `reporte-movimientos-inventario-${Date.now()}`;
         break;
       default:
         return NextResponse.json(
@@ -215,6 +220,18 @@ export async function GET(request: NextRequest) {
           createdAt: customer.createdAt.toISOString(),
         }));
         pdfBase64 = generateCustomersReportPDF(customersData, filters, businessName);
+      } else if (reportType === 'inventory-movements') {
+        const movementsData = reportData.rows.map((row: any[], index: number) => ({
+          id: index.toString(),
+          createdAt: row[0],
+          productName: row[1],
+          productSku: row[2],
+          type: row[3],
+          quantity: parseInt(row[4]),
+          userName: row[5],
+          reason: row[6] || null,
+        }));
+        pdfBase64 = generateInventoryMovementsReportPDF(movementsData, filters, businessName);
       } else {
         return NextResponse.json(
           { error: 'Tipo de reporte no soportado para PDF' },
@@ -458,6 +475,111 @@ async function generateCustomersReport(tenantId: string, startDate: string | nul
     rows,
     summary: {
       'Total de Clientes': customers.length,
+    },
+  };
+}
+
+async function generateInventoryMovementsReport(
+  tenantId: string,
+  startDate: string | null,
+  endDate: string | null,
+  movementType: string | null
+) {
+  const dateFilter: any = {
+    tenantId,
+  };
+
+  if (movementType) {
+    dateFilter.type = movementType;
+  }
+
+  if (startDate) {
+    dateFilter.createdAt = {
+      ...dateFilter.createdAt,
+      gte: new Date(startDate),
+    };
+  }
+
+  if (endDate) {
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    dateFilter.createdAt = {
+      ...dateFilter.createdAt,
+      lte: end,
+    };
+  }
+
+  const movements = await prisma.inventoryMovement.findMany({
+    where: dateFilter,
+    include: {
+      tenantInventory: {
+        include: {
+          masterProduct: true,
+        },
+      },
+      user: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  const headers = [
+    'Fecha',
+    'Producto',
+    'SKU',
+    'Tipo',
+    'Cantidad',
+    'Usuario',
+    'Motivo',
+  ];
+
+  const MOVEMENT_TYPE_LABELS: Record<string, string> = {
+    ENTRY: 'Entrada',
+    EXIT: 'Salida',
+    ADJUSTMENT: 'Ajuste',
+  };
+
+  const rows = movements.map((movement) => [
+    formatDate(movement.createdAt),
+    movement.tenantInventory.masterProduct.name,
+    movement.tenantInventory.customSku || movement.tenantInventory.masterProduct.sku,
+    MOVEMENT_TYPE_LABELS[movement.type] || movement.type,
+    movement.quantity.toString(),
+    `${movement.user.firstName} ${movement.user.lastName}`,
+    movement.reason || movement.notes || 'N/A',
+  ]);
+
+  const totalMovements = movements.length;
+  const entriesCount = movements.filter(m => m.type === 'ENTRY').length;
+  const exitsCount = movements.filter(m => m.type === 'EXIT').length;
+  const adjustmentsCount = movements.filter(m => m.type === 'ADJUSTMENT').length;
+
+  const totalEntryQuantity = movements
+    .filter(m => m.type === 'ENTRY')
+    .reduce((sum, m) => sum + Math.abs(m.quantity), 0);
+  
+  const totalExitQuantity = movements
+    .filter(m => m.type === 'EXIT')
+    .reduce((sum, m) => sum + Math.abs(m.quantity), 0);
+
+  return {
+    title: 'Reporte de Movimientos de Inventario',
+    headers,
+    rows,
+    summary: {
+      'Total de Movimientos': totalMovements,
+      'Entradas': entriesCount,
+      'Salidas': exitsCount,
+      'Ajustes': adjustmentsCount,
+      'Total Entradas (unidades)': totalEntryQuantity,
+      'Total Salidas (unidades)': totalExitQuantity,
+      'Cambio Neto': totalEntryQuantity - totalExitQuantity,
     },
   };
 }

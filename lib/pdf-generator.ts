@@ -30,6 +30,17 @@ interface CustomerReportData {
   createdAt: string;
 }
 
+interface InventoryMovementReportData {
+  id: string;
+  createdAt: string;
+  productName: string;
+  productSku: string;
+  type: string;
+  quantity: number;
+  userName: string;
+  reason: string | null;
+}
+
 interface ReportFilters {
   startDate?: string;
   endDate?: string;
@@ -312,6 +323,113 @@ export function generateCustomersReportPDF(
       2: { cellWidth: 30 },
       3: { cellWidth: 45 },
       4: { cellWidth: 28 },
+    },
+  });
+  
+  // Añadir pie de página
+  addPDFFooter(doc);
+  
+  // Retornar como base64
+  return doc.output('dataurlstring');
+}
+
+/**
+ * Genera un PDF del reporte de movimientos de inventario
+ */
+export function generateInventoryMovementsReportPDF(
+  data: InventoryMovementReportData[],
+  filters: ReportFilters,
+  businessName: string = 'CRTLPyme'
+): string {
+  const doc = new jsPDF();
+  
+  // Añadir encabezado
+  addPDFHeader(doc, 'Reporte de Movimientos de Inventario', businessName);
+  
+  // Añadir filtros
+  let startY = addFilters(doc, filters, 42);
+  
+  // Calcular totales
+  const totalMovements = data.length;
+  const entriesCount = data.filter(m => m.type === 'Entrada').length;
+  const exitsCount = data.filter(m => m.type === 'Salida').length;
+  const adjustmentsCount = data.filter(m => m.type === 'Ajuste').length;
+  
+  const totalEntryQuantity = data
+    .filter(m => m.type === 'Entrada')
+    .reduce((sum, m) => sum + Math.abs(m.quantity), 0);
+  
+  const totalExitQuantity = data
+    .filter(m => m.type === 'Salida')
+    .reduce((sum, m) => sum + Math.abs(m.quantity), 0);
+  
+  const netChange = totalEntryQuantity - totalExitQuantity;
+  
+  // Añadir resumen
+  doc.setFontSize(11);
+  doc.setTextColor(60, 60, 60);
+  doc.text(`Total de movimientos: ${totalMovements}`, 14, startY);
+  doc.text(`Entradas: ${entriesCount} (${totalEntryQuantity} unidades)`, 14, startY + 6);
+  doc.text(`Salidas: ${exitsCount} (${totalExitQuantity} unidades)`, 14, startY + 12);
+  doc.text(`Ajustes: ${adjustmentsCount}`, 14, startY + 18);
+  doc.text(`Cambio neto: ${netChange >= 0 ? '+' : ''}${netChange} unidades`, 14, startY + 24);
+  startY += 34;
+  
+  // Preparar datos para la tabla
+  const tableData = data.map(movement => {
+    const movementTypeMap: Record<string, string> = {
+      'Entrada': 'ENT',
+      'Salida': 'SAL',
+      'Ajuste': 'AJU',
+      'ENTRY': 'ENT',
+      'EXIT': 'SAL',
+      'ADJUSTMENT': 'AJU',
+    };
+    
+    const typeShort = movementTypeMap[movement.type] || movement.type;
+    const quantityStr = movement.type === 'Entrada' || movement.type === 'ENTRY' 
+      ? `+${Math.abs(movement.quantity)}`
+      : movement.type === 'Salida' || movement.type === 'EXIT'
+      ? `-${Math.abs(movement.quantity)}`
+      : `±${Math.abs(movement.quantity)}`;
+    
+    return [
+      formatDate(new Date(movement.createdAt)),
+      movement.productName.length > 25 ? movement.productName.substring(0, 22) + '...' : movement.productName,
+      movement.productSku,
+      typeShort,
+      quantityStr,
+      movement.userName,
+    ];
+  });
+  
+  // Crear tabla con autoTable
+  autoTable(doc, {
+    startY: startY,
+    head: [['Fecha', 'Producto', 'SKU', 'Tipo', 'Cant.', 'Usuario']],
+    body: tableData,
+    theme: 'striped',
+    headStyles: {
+      fillColor: [52, 152, 219],
+      textColor: 255,
+      fontSize: 8,
+      fontStyle: 'bold',
+    },
+    styles: {
+      fontSize: 7,
+      cellPadding: 2,
+    },
+    alternateRowStyles: {
+      fillColor: [245, 245, 245],
+    },
+    margin: { left: 14, right: 14 },
+    columnStyles: {
+      0: { cellWidth: 28 },
+      1: { cellWidth: 50 },
+      2: { cellWidth: 25 },
+      3: { cellWidth: 18, halign: 'center' },
+      4: { cellWidth: 20, halign: 'center' },
+      5: { cellWidth: 35 },
     },
   });
   
