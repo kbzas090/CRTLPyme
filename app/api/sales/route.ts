@@ -282,18 +282,10 @@ export async function POST(request: Request) {
 
       console.log('✅ [SALES API] Stock actualizado')
 
-      // Actualizar sesión de caja
-      console.log('🟦 [SALES API] Actualizando sesión de caja...')
-      await tx.cashSession.update({
-        where: { id: currentSession.id },
-        data: {
-          totalSales: {
-            increment: new Prisma.Decimal(total)
-          }
-        }
-      })
-
-      console.log('✅ [SALES API] Sesión de caja actualizada')
+      // ⚠️ NOTA: NO se actualiza totalSales en cashSession
+      // El campo 'totalSales' NO existe en el modelo CashSession
+      // Las ventas totales se calculan sumando las ventas relacionadas
+      console.log('ℹ️ [SALES API] CashSession no requiere actualización (totalSales no existe)')
       console.log('✅ [SALES API] Transacción completada')
 
       return newSale
