@@ -323,7 +323,7 @@ export async function POST(request: Request) {
 
     console.log('🟦 [SALES API] ========== FIN EXITOSO ==========')
 
-    // Devolver solo el objeto sale (sin wrapper) para compatibilidad con frontend
+    // Devolver solo el objeto sale (sin wrapper) para compatibilidad con el frontend
     return NextResponse.json(sale)
 
   } catch (error: any) {
@@ -376,7 +376,8 @@ export async function GET(request: Request) {
       orderBy: { createdAt: 'desc' }
     })
 
-    return NextResponse.json({ sales })
+    // Devolver directamente el array (sin wrapper) para compatibilidad con el frontend
+    return NextResponse.json(sales)
   } catch (error: any) {
     console.error('Error al obtener ventas:', error)
     return NextResponse.json(

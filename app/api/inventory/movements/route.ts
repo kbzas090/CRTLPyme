@@ -23,8 +23,29 @@ const createMovementSchema = z.object({
 /**
  * GET /api/inventory/movements
  * Listar movimientos de inventario del tenant
+ * 
+ * ⚠️ TEMPORALMENTE DESHABILITADO
+ * La tabla 'inventory_movements' no existe en producción.
  */
 export async function GET(request: NextRequest) {
+  // ⚠️ FUNCIONALIDAD DESHABILITADA TEMPORALMENTE
+  return NextResponse.json(
+    { 
+      movements: [],
+      stats: {
+        totalMovements: 0,
+        entriesCount: 0,
+        exitsCount: 0,
+        adjustmentsCount: 0,
+        totalEntryQuantity: 0,
+        totalExitQuantity: 0,
+      },
+      message: 'Los movimientos de inventario están temporalmente deshabilitados.'
+    },
+    { status: 200 }
+  )
+
+  /* CÓDIGO DESHABILITADO HASTA QUE SE CREE LA TABLA inventory_movements
   try {
     const session = await getServerSession(authOptions)
     
@@ -124,13 +145,28 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
+  */
 }
 
 /**
  * POST /api/inventory/movements
  * Registrar nuevo movimiento y actualizar stock
+ * 
+ * ⚠️ TEMPORALMENTE DESHABILITADO
+ * La tabla 'inventory_movements' no existe en producción.
+ * TODO: Implementar migración o eliminar feature completa.
  */
 export async function POST(request: NextRequest) {
+  // ⚠️ FUNCIONALIDAD DESHABILITADA TEMPORALMENTE
+  return NextResponse.json(
+    { 
+      error: 'Funcionalidad temporalmente deshabilitada',
+      message: 'Los movimientos de inventario están en mantenimiento. El stock se actualiza automáticamente con las ventas.'
+    },
+    { status: 503 }
+  )
+
+  /* CÓDIGO DESHABILITADO HASTA QUE SE CREE LA TABLA inventory_movements
   try {
     const session = await getServerSession(authOptions)
     
@@ -291,4 +327,5 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+  */
 }
