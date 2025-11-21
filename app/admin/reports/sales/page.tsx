@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { format, subDays, startOfMonth, endOfMonth } from 'date-fns';
+import { format as formatDate, subDays, startOfMonth, endOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import {
   Card,
@@ -80,10 +80,10 @@ export default function SalesReportPage() {
   
   // Filters
   const [startDate, setStartDate] = useState(
-    format(startOfMonth(new Date()), 'yyyy-MM-dd')
+    formatDate(startOfMonth(new Date()), 'yyyy-MM-dd')
   );
   const [endDate, setEndDate] = useState(
-    format(endOfMonth(new Date()), 'yyyy-MM-dd')
+    formatDate(endOfMonth(new Date()), 'yyyy-MM-dd')
   );
   const [groupBy, setGroupBy] = useState('day');
 
