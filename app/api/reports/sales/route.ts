@@ -83,13 +83,6 @@ export async function GET(request: NextRequest) {
             lastName: true,
           },
         },
-        customer: {
-          select: {
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -208,9 +201,6 @@ export async function GET(request: NextRequest) {
         total: Number(sale.total),
         paymentMethod: sale.paymentMethod,
         cashier: `${sale.user.firstName} ${sale.user.lastName}`,
-        customer: sale.customer
-          ? `${sale.customer.firstName} ${sale.customer.lastName}`
-          : null,
         createdAt: sale.createdAt,
         itemCount: sale.items.length,
       })),
