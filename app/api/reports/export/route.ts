@@ -94,8 +94,8 @@ export async function GET(request: NextRequest) {
         const salesData = reportData.rows.map((row: any[], index: number) => ({
           id: index.toString(),
           saleNumber: row[0],
-          total: parseFloat(row[6].replace(/[^0-9.-]+/g, '')),
-          paymentMethod: row[4],
+          total: parseFloat(row[5].replace(/[^0-9.-]+/g, '')),
+          paymentMethod: row[3],
           createdAt: row[1],
           userName: row[2],
         }));
@@ -186,12 +186,6 @@ async function generateSalesReport(tenantId: string, startDate: string | null, e
           lastName: true,
         },
       },
-      customer: {
-        select: {
-          firstName: true,
-          lastName: true,
-        },
-      },
       items: {
         include: {
           tenantInventory: {
@@ -211,7 +205,6 @@ async function generateSalesReport(tenantId: string, startDate: string | null, e
     'Número de Venta',
     'Fecha',
     'Cajero',
-    'Cliente',
     'Método de Pago',
     'Subtotal',
     'Total',
@@ -222,7 +215,6 @@ async function generateSalesReport(tenantId: string, startDate: string | null, e
     sale.saleNumber,
     formatDate(sale.createdAt),
     `${sale.user.firstName} ${sale.user.lastName}`,
-    sale.customer ? `${sale.customer.firstName} ${sale.customer.lastName}` : 'N/A',
     sale.paymentMethod,
     formatCurrency(Number(sale.subtotal)),
     formatCurrency(Number(sale.total)),
