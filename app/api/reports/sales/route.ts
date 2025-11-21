@@ -5,40 +5,33 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { requirePermissions } from '@/lib/api-auth';
+import { MODULES, ACTIONS } from '@/lib/permissions';
 
 export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions);
+  // Verificar permisos: requiere acceso al módulo de reportes de ventas con acción VIEW
+  const authResult = await requirePermissions({
+    module: MODULES.REPORTS_SALES,
+    action: ACTIONS.VIEW,
+  });
 
-  if (!session || !session.user) {
-    return NextResponse.json(
-      { error: 'No autenticado' },
-      { status: 401 }
-    );
+  if (!authResult.success) {
+    return authResult.response;
   }
 
-  // Solo ADMIN y PROVEEDOR pueden ver reportes
-  if (!['ADMIN', 'PROVEEDOR'].includes(session.user.role)) {
-    return NextResponse.json(
-      { error: 'No tiene permisos para ver reportes' },
-      { status: 403 }
-    );
-  }
+  const { user } = authResult;
 
   const { searchParams } = new URL(request.url);
-  const tenantId = searchParams.get('tenantId') || session.user.tenantId;
+  const tenantId = searchParams.get('tenantId') || user.tenantId;
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
   const groupBy = searchParams.get('groupBy') || 'day'; // day, week, month
 
-  // Verify access to tenant
-  if (tenantId !== session.user.tenantId && session.user.role !== 'PROVEEDOR') {
-    return NextResponse.json(
-      { error: 'No tiene permisos para ver reportes de este tenant' },
-      { status: 403 }
-    );
+  // Verificar acceso al tenant
+  const tenantCheckResult = await requirePermissions({ tenantId });
+  if (!tenantCheckResult.success) {
+    return tenantCheckResult.response;
   }
 
   try {

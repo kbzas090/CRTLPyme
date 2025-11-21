@@ -1,13 +1,13 @@
 /**
  * API para gestionar el inventario del tenant
- * Accesible por ADMIN, INVENTARIO, CAJA
+ * Accesible según permisos de rol
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { z } from 'zod'
+import { requirePermissions } from '@/lib/api-auth'
+import { MODULES, ACTIONS } from '@/lib/permissions'
 
 // Schema para agregar producto del pool al inventario
 const addToInventorySchema = z.object({
@@ -26,15 +26,19 @@ const addToInventorySchema = z.object({
  * Listar inventario del tenant
  */
 export async function GET(request: NextRequest) {
+  // Verificar permisos de lectura en inventario
+  const authResult = await requirePermissions({
+    module: MODULES.INVENTORY,
+    action: ACTIONS.VIEW,
+  })
+
+  if (!authResult.success) {
+    return authResult.response
+  }
+
+  const { user } = authResult
+
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'No autorizado' },
-        { status: 401 }
-      )
-    }
 
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
@@ -43,7 +47,7 @@ export async function GET(request: NextRequest) {
 
     // Construir filtros
     const where: any = {
-      tenantId: session.user.tenantId,
+      tenantId: user.tenantId,
       isActive: true,
     }
 
@@ -124,24 +128,19 @@ export async function GET(request: NextRequest) {
  * Agregar producto del pool al inventario del tenant
  */
 export async function POST(request: NextRequest) {
+  // Verificar permisos de creación en inventario
+  const authResult = await requirePermissions({
+    module: MODULES.INVENTORY,
+    action: ACTIONS.CREATE,
+  })
+
+  if (!authResult.success) {
+    return authResult.response
+  }
+
+  const { user } = authResult
+
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'No autorizado' },
-        { status: 401 }
-      )
-    }
-
-    // Verificar permisos
-    if (!['ADMIN', 'INVENTARIO', 'PROVEEDOR'].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: 'No tienes permisos para agregar productos al inventario' },
-        { status: 403 }
-      )
-    }
-
     const body = await request.json()
     const validatedData = addToInventorySchema.parse(body)
 
@@ -161,7 +160,7 @@ export async function POST(request: NextRequest) {
     const existingInventory = await prisma.tenantInventory.findUnique({
       where: {
         tenantId_masterProductId: {
-          tenantId: session.user.tenantId,
+          tenantId: user.tenantId,
           masterProductId: validatedData.masterProductId,
         },
       },
@@ -178,7 +177,7 @@ export async function POST(request: NextRequest) {
     const inventoryItem = await prisma.tenantInventory.create({
       data: {
         ...validatedData,
-        tenantId: session.user.tenantId,
+        tenantId: user.tenantId,
       },
       include: {
         masterProduct: true,
@@ -193,7 +192,7 @@ export async function POST(request: NextRequest) {
         entityId: inventoryItem.id,
         newValues: inventoryItem,
         userId: session.user.id,
-        tenantId: session.user.tenantId,
+        tenantId: user.tenantId,
       },
     })
 

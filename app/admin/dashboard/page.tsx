@@ -16,6 +16,8 @@ import {
   AlertTriangle
 } from 'lucide-react'
 import Link from 'next/link'
+import { usePermissions } from '@/hooks/usePermissions'
+import { MODULES } from '@/lib/permissions'
 
 interface DashboardStats {
   totalProducts: number
@@ -29,6 +31,7 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const { hasModuleAccess, isAdmin } = usePermissions()
 
   useEffect(() => {
     // Verificar autenticación
@@ -45,34 +48,59 @@ export default function AdminDashboard() {
 
   const loadDashboardStats = async () => {
     try {
-      // Obtener inventario y ventas en paralelo
-      const [inventoryRes, salesRes, usersRes] = await Promise.all([
-        fetch('/api/inventory'),
-        fetch('/api/sales/stats?period=month'),
-        fetch('/api/users/stats')
-      ])
+      // Cargar solo las estadísticas a las que el usuario tiene acceso
+      const promises: Promise<Response>[] = []
+      
+      // Inventario - Solo si tiene acceso al módulo
+      if (hasModuleAccess(MODULES.INVENTORY)) {
+        promises.push(fetch('/api/inventory'))
+      }
+      
+      // Ventas - Solo si tiene acceso al módulo
+      if (hasModuleAccess(MODULES.SALES)) {
+        promises.push(fetch('/api/sales/stats?period=month'))
+      }
+      
+      // Usuarios - Solo para administradores
+      if (isAdmin()) {
+        promises.push(fetch('/api/users/stats'))
+      }
 
-      // Procesar inventario
+      const results = await Promise.allSettled(promises)
+      
       let totalProducts = 0
       let lowStockProducts = 0
-      if (inventoryRes.ok) {
-        const inventoryData = await inventoryRes.json()
-        totalProducts = inventoryData.stats?.totalItems || 0
-        lowStockProducts = inventoryData.stats?.lowStockCount || 0
-      }
-
-      // Procesar ventas
       let totalSales = 0
-      if (salesRes.ok) {
-        const salesData = await salesRes.json()
-        totalSales = salesData.totalRevenue || 0
+      let activeUsers = 0
+      
+      let resultIndex = 0
+      
+      // Procesar inventario si se solicitó
+      if (hasModuleAccess(MODULES.INVENTORY)) {
+        const result = results[resultIndex++]
+        if (result.status === 'fulfilled' && result.value.ok) {
+          const inventoryData = await result.value.json()
+          totalProducts = inventoryData.stats?.totalItems || 0
+          lowStockProducts = inventoryData.stats?.lowStockCount || 0
+        }
       }
-
-      // Procesar usuarios
-      let activeUsers = 1
-      if (usersRes.ok) {
-        const usersData = await usersRes.json()
-        activeUsers = usersData.activeUsers || 1
+      
+      // Procesar ventas si se solicitó
+      if (hasModuleAccess(MODULES.SALES)) {
+        const result = results[resultIndex++]
+        if (result.status === 'fulfilled' && result.value.ok) {
+          const salesData = await result.value.json()
+          totalSales = salesData.totalRevenue || 0
+        }
+      }
+      
+      // Procesar usuarios si se solicitó
+      if (isAdmin()) {
+        const result = results[resultIndex++]
+        if (result.status === 'fulfilled' && result.value.ok) {
+          const usersData = await result.value.json()
+          activeUsers = usersData.activeUsers || 0
+        }
       }
 
       const dashboardStats: DashboardStats = {
@@ -119,205 +147,208 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      {/* Tarjetas de estadísticas */}
+      {/* Tarjetas de estadísticas - Filtradas por permisos */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-4 sm:px-0 max-w-full">
-        {/* Total Productos */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
-              Total Productos
-            </CardTitle>
-            <Package className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{stats?.totalProducts || 0}</div>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Productos activos en inventario
-            </p>
-          </CardContent>
-        </Card>
+        {/* Total Productos - Solo si tiene acceso a inventario */}
+        {hasModuleAccess(MODULES.INVENTORY) && (
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+                Total Productos
+              </CardTitle>
+              <Package className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{stats?.totalProducts || 0}</div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                Productos activos en inventario
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
-        {/* Stock Bajo */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
-              Stock Bajo
-            </CardTitle>
-            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
-              {stats?.lowStockProducts || 0}
-            </div>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Productos bajo stock mínimo
-            </p>
-          </CardContent>
-        </Card>
+        {/* Stock Bajo - Solo si tiene acceso a inventario */}
+        {hasModuleAccess(MODULES.INVENTORY) && (
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+                Stock Bajo
+              </CardTitle>
+              <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+                {stats?.lowStockProducts || 0}
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                Productos bajo stock mínimo
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
-        {/* Ventas del Mes */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
-              Ventas del Mes
-            </CardTitle>
-            <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold">${stats?.totalSales?.toLocaleString('es-CL') || 0}</div>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Ingresos del mes actual
-            </p>
-          </CardContent>
-        </Card>
+        {/* Ventas del Mes - Solo si tiene acceso a ventas */}
+        {hasModuleAccess(MODULES.SALES) && (
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+                Ventas del Mes
+              </CardTitle>
+              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg sm:text-xl lg:text-2xl font-bold">${stats?.totalSales?.toLocaleString('es-CL') || 0}</div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                Ingresos del mes actual
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
-        {/* Usuarios Activos */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
-              Usuarios Activos
-            </CardTitle>
-            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{stats?.activeUsers || 0}</div>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Usuarios del sistema
-            </p>
-          </CardContent>
-        </Card>
+        {/* Usuarios Activos - Solo para administradores */}
+        {isAdmin() && (
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+                Usuarios Activos
+              </CardTitle>
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{stats?.activeUsers || 0}</div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                Usuarios del sistema
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
-      {/* Módulos disponibles */}
+      {/* Módulos disponibles - Filtrados por permisos */}
       <div className="space-y-3 lg:space-y-4 px-4 sm:px-0">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           Módulos del Sistema
         </h2>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-full">
-          {/* Punto de Venta */}
-          <Card className="hover:shadow-lg transition-shadow border-green-200 bg-green-50">
-            <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="flex items-center gap-2 text-green-700 text-base sm:text-lg">
-                <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
-                Punto de Venta
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Sistema de ventas rápido y eficiente
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/admin/pos">
-                <Button className="w-full bg-green-600 hover:bg-green-700 min-h-[44px] touch-manipulation text-sm sm:text-base">
-                  Ir al POS
-                  <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+          {/* Punto de Venta - Solo si tiene acceso */}
+          {hasModuleAccess(MODULES.POS) && (
+            <Card className="hover:shadow-lg transition-shadow border-green-200 bg-green-50">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="flex items-center gap-2 text-green-700 text-base sm:text-lg">
+                  <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                  Punto de Venta
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Sistema de ventas rápido y eficiente
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link href="/admin/pos">
+                  <Button className="w-full bg-green-600 hover:bg-green-700 min-h-[44px] touch-manipulation text-sm sm:text-base">
+                    Ir al POS
+                    <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
 
-          {/* Sesión de Caja */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                Sesión de Caja
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Apertura, cierre y arqueo de caja
+          {/* Sesión de Caja - Solo si tiene acceso */}
+          {hasModuleAccess(MODULES.CASH_SESSION) && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                  Sesión de Caja
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Apertura, cierre y arqueo de caja
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link href="/admin/cash-session">
+                  <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base">
+                    Gestionar Caja
+                    <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Historial de Ventas - Solo si tiene acceso */}
+          {hasModuleAccess(MODULES.SALES) && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                  Historial de Ventas
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Consulta y reportes de ventas
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link href="/admin/sales">
+                  <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base">
+                    Ver Ventas
+                    <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Inventario - Solo si tiene acceso */}
+          {hasModuleAccess(MODULES.INVENTORY) && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Package className="h-4 w-4 sm:h-5 sm:w-5" />
+                  Inventario
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Gestiona productos, stock y categorías
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link href="/admin/inventory">
+                  <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base">
+                    Ir a Inventario
+                    <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Reportes - Solo si tiene acceso */}
+          {hasModuleAccess(MODULES.REPORTS) && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                  Reportes
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Reportes y análisis del negocio
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Link href="/admin/cash-session">
+              <Link href="/admin/reports">
                 <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base">
-                  Gestionar Caja
+                  Ver Reportes
                   <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </Link>
             </CardContent>
           </Card>
-
-          {/* Historial de Ventas */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                Historial de Ventas
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Consulta y reportes de ventas
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/admin/sales">
-                <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base">
-                  Ver Ventas
-                  <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Inventario */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                <Package className="h-4 w-4 sm:h-5 sm:w-5" />
-                Inventario
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Gestiona productos, stock y categorías
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/admin/inventory">
-                <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base">
-                  Ir a Inventario
-                  <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Usuarios (próximamente) */}
-          <Card className="opacity-60">
-            <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                <Users className="h-4 w-4 sm:h-5 sm:w-5" />
-                Usuarios
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Gestión de usuarios del sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base" disabled>
-                Próximamente
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Reportes Avanzados (próximamente) */}
-          <Card className="opacity-60">
-            <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                Reportes Avanzados
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Análisis de rentabilidad y break-even
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button className="w-full min-h-[44px] touch-manipulation text-sm sm:text-base" disabled>
-                Próximamente
-              </Button>
-            </CardContent>
-          </Card>
+          )}
         </div>
       </div>
 
-      {/* Alertas de stock bajo */}
-      {stats && stats.lowStockProducts > 0 && (
+      {/* Alertas de stock bajo - Solo si tiene acceso a inventario */}
+      {hasModuleAccess(MODULES.INVENTORY) && stats && stats.lowStockProducts > 0 && (
         <Card className="border-orange-200 bg-orange-50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-orange-700">

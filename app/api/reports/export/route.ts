@@ -5,44 +5,47 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { generateExcel, generateCSV, formatCurrency, formatDate } from '@/lib/report-generator';
 import { generateSalesReportPDF, generateProductsReportPDF, generateCustomersReportPDF, generateInventoryMovementsReportPDF } from '@/lib/pdf-generator';
+import { requirePermissions } from '@/lib/api-auth';
+import { MODULES, ACTIONS } from '@/lib/permissions';
 
 export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || !session.user) {
-    return NextResponse.json(
-      { error: 'No autenticado' },
-      { status: 401 }
-    );
-  }
-
-  // Solo ADMIN y PROVEEDOR pueden exportar reportes
-  if (!['ADMIN', 'PROVEEDOR'].includes(session.user.role)) {
-    return NextResponse.json(
-      { error: 'No tiene permisos para exportar reportes' },
-      { status: 403 }
-    );
-  }
-
   const { searchParams } = new URL(request.url);
-  const tenantId = searchParams.get('tenantId') || session.user.tenantId;
   const reportType = searchParams.get('type') || 'sales'; // sales, products, customers, inventory-movements
   const format = searchParams.get('format') || 'excel'; // excel, csv, pdf
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
   const movementType = searchParams.get('movementType'); // Para filtrar tipo de movimiento
 
-  // Verify access to tenant
-  if (tenantId !== session.user.tenantId && session.user.role !== 'PROVEEDOR') {
-    return NextResponse.json(
-      { error: 'No tiene permisos para exportar reportes de este tenant' },
-      { status: 403 }
-    );
+  // Mapear tipo de reporte a módulo de permisos
+  const moduleMap: Record<string, any> = {
+    sales: MODULES.REPORTS_SALES,
+    products: MODULES.REPORTS_PRODUCTS,
+    customers: MODULES.REPORTS_CUSTOMERS,
+    'inventory-movements': MODULES.REPORTS_INVENTORY_MOVEMENTS,
+  };
+
+  const requiredModule = moduleMap[reportType] || MODULES.REPORTS;
+
+  // Verificar permisos de exportación para el tipo de reporte específico
+  const authResult = await requirePermissions({
+    module: requiredModule,
+    action: ACTIONS.EXPORT,
+  });
+
+  if (!authResult.success) {
+    return authResult.response;
+  }
+
+  const { user } = authResult;
+  const tenantId = searchParams.get('tenantId') || user.tenantId;
+
+  // Verificar acceso al tenant
+  const tenantCheckResult = await requirePermissions({ tenantId });
+  if (!tenantCheckResult.success) {
+    return tenantCheckResult.response;
   }
 
   try {

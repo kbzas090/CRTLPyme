@@ -28,12 +28,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { usePermissions } from '@/hooks/usePermissions'
+import { MODULES } from '@/lib/permissions'
 
 interface NavItem {
   name: string
   href: string
   icon: React.ComponentType<{ className?: string }>
-  roles?: string[]
+  module: string // Módulo del sistema de permisos
 }
 
 const navigationItems: NavItem[] = [
@@ -41,32 +43,37 @@ const navigationItems: NavItem[] = [
     name: 'Dashboard',
     href: '/admin/dashboard',
     icon: LayoutDashboard,
+    module: MODULES.DASHBOARD,
   },
   {
     name: 'Punto de Venta',
     href: '/admin/pos',
     icon: ShoppingCart,
+    module: MODULES.POS,
   },
   {
     name: 'Inventario',
     href: '/admin/inventory',
     icon: Package,
+    module: MODULES.INVENTORY,
   },
   {
     name: 'Sesión de Caja',
     href: '/admin/cash-session',
     icon: TrendingUp,
+    module: MODULES.CASH_SESSION,
   },
   {
     name: 'Ventas',
     href: '/admin/sales',
     icon: FileText,
+    module: MODULES.SALES,
   },
   {
     name: 'Reportes',
     href: '/admin/reports',
     icon: BarChart3,
-    roles: ['ADMIN', 'PROVEEDOR'],
+    module: MODULES.REPORTS,
   },
 ]
 
@@ -75,6 +82,7 @@ export default function AdminNavBar() {
   const router = useRouter()
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { hasModuleAccess, isAdmin: checkIsAdmin } = usePermissions()
 
   const handleLogout = async () => {
     // Verificar si hay una sesión de caja abierta antes de cerrar sesión
@@ -108,10 +116,8 @@ export default function AdminNavBar() {
     return pathname === href || pathname?.startsWith(href + '/')
   }
 
-  const filteredNavItems = navigationItems.filter(item => {
-    if (!item.roles) return true
-    return item.roles.includes(session?.user?.role || '')
-  })
+  // Filtrar elementos de navegación según permisos del usuario
+  const filteredNavItems = navigationItems.filter(item => hasModuleAccess(item.module))
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 overflow-x-hidden">
@@ -191,7 +197,7 @@ export default function AdminNavBar() {
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
-                {session?.user?.role === 'ADMIN' && (
+                {checkIsAdmin() && hasModuleAccess(MODULES.SETTINGS) && (
                   <DropdownMenuItem asChild>
                     <Link href="/admin/settings" className="cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
