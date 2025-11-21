@@ -126,7 +126,7 @@ export default function SalesReportPage() {
     }
   };
 
-  const handleExport = async (format: 'excel' | 'csv') => {
+  const handleExport = async (format: 'excel' | 'csv' | 'pdf') => {
     try {
       const params = new URLSearchParams({
         type: 'sales',
@@ -142,7 +142,8 @@ export default function SalesReportPage() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `reporte-ventas-${Date.now()}.${format === 'excel' ? 'xlsx' : 'csv'}`;
+        const extension = format === 'excel' ? 'xlsx' : format === 'csv' ? 'csv' : 'pdf';
+        a.download = `reporte-ventas-${Date.now()}.${extension}`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -382,6 +383,10 @@ export default function SalesReportPage() {
             <Button variant="outline" onClick={() => handleExport('csv')}>
               <Download className="mr-2 h-4 w-4" />
               Descargar CSV
+            </Button>
+            <Button variant="outline" onClick={() => handleExport('pdf')}>
+              <Download className="mr-2 h-4 w-4" />
+              Descargar PDF
             </Button>
           </div>
         </CardContent>

@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { generateExcel, generateCSV, formatCurrency, formatDate } from '@/lib/report-generator';
+import { generateSalesReportPDF, generateProductsReportPDF, generateCustomersReportPDF } from '@/lib/pdf-generator';
 
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const tenantId = searchParams.get('tenantId') || session.user.tenantId;
   const reportType = searchParams.get('type') || 'sales'; // sales, products, customers
-  const format = searchParams.get('format') || 'excel'; // excel, csv
+  const format = searchParams.get('format') || 'excel'; // excel, csv, pdf
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
 
@@ -78,6 +79,60 @@ export async function GET(request: NextRequest) {
       fileBuffer = generateCSV(reportData);
       contentType = 'text/csv';
       filename += '.csv';
+    } else if (format === 'pdf') {
+      // Generar PDF según el tipo de reporte
+      const tenant = await prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { businessName: true },
+      });
+      const businessName = tenant?.businessName || 'CRTLPyme';
+      const filters = { startDate, endDate };
+      
+      let pdfBase64: string;
+      
+      if (reportType === 'sales') {
+        const salesData = reportData.rows.map((row: any[], index: number) => ({
+          id: index.toString(),
+          saleNumber: row[0],
+          total: parseFloat(row[6].replace(/[^0-9.-]+/g, '')),
+          paymentMethod: row[4],
+          createdAt: row[1],
+          userName: row[2],
+        }));
+        pdfBase64 = generateSalesReportPDF(salesData, filters, businessName);
+      } else if (reportType === 'products') {
+        const productsData = reportData.rows.map((row: any[], index: number) => ({
+          id: index.toString(),
+          sku: row[0],
+          name: row[1],
+          category: row[2],
+          stock: parseInt(row[4]),
+          salePrice: parseFloat(row[7].replace(/[^0-9.-]+/g, '')),
+          costPrice: parseFloat(row[6].replace(/[^0-9.-]+/g, '')),
+        }));
+        pdfBase64 = generateProductsReportPDF(productsData, filters, businessName);
+      } else if (reportType === 'customers') {
+        const customersData = reportData.rows.map((row: any[], index: number) => ({
+          id: index.toString(),
+          name: row[0],
+          email: row[1],
+          phone: row[2],
+          address: row[3] || null,
+          createdAt: row[7] || new Date().toISOString(),
+        }));
+        pdfBase64 = generateCustomersReportPDF(customersData, filters, businessName);
+      } else {
+        return NextResponse.json(
+          { error: 'Tipo de reporte no soportado para PDF' },
+          { status: 400 }
+        );
+      }
+      
+      // Convertir base64 a buffer
+      const base64Data = pdfBase64.split(',')[1];
+      fileBuffer = Buffer.from(base64Data, 'base64');
+      contentType = 'application/pdf';
+      filename += '.pdf';
     } else {
       return NextResponse.json(
         { error: 'Formato inválido' },
@@ -253,14 +308,9 @@ async function generateCustomersReport(tenantId: string) {
   const customers = await prisma.customer.findMany({
     where: {
       tenantId,
-      isActive: true,
     },
-    include: {
-      sales: {
-        where: {
-          status: 'COMPLETED',
-        },
-      },
+    orderBy: {
+      createdAt: 'desc',
     },
   });
 
@@ -268,42 +318,17 @@ async function generateCustomersReport(tenantId: string) {
     'Nombre',
     'Email',
     'Teléfono',
-    'RUT',
-    'Total de Compras',
-    'Monto Total Gastado',
-    'Ticket Promedio',
-    'Última Compra',
+    'Dirección',
+    'Fecha de Registro',
   ];
 
-  const rows = customers.map((customer) => {
-    const totalPurchases = customer.sales.length;
-    const totalSpent = customer.sales.reduce(
-      (sum, sale) => sum + Number(sale.total),
-      0
-    );
-    const averageTicket = totalPurchases > 0 ? totalSpent / totalPurchases : 0;
-    const lastPurchase =
-      customer.sales.length > 0
-        ? new Date(Math.max(...customer.sales.map((s) => s.createdAt.getTime())))
-        : null;
-
-    return [
-      `${customer.firstName} ${customer.lastName}`,
-      customer.email || 'N/A',
-      customer.phone || 'N/A',
-      customer.rut || 'N/A',
-      totalPurchases.toString(),
-      formatCurrency(totalSpent),
-      formatCurrency(averageTicket),
-      lastPurchase ? formatDate(lastPurchase) : 'N/A',
-    ];
-  });
-
-  const totalRevenue = customers.reduce(
-    (sum, customer) =>
-      sum + customer.sales.reduce((s, sale) => s + Number(sale.total), 0),
-    0
-  );
+  const rows = customers.map((customer) => [
+    customer.name,
+    customer.email || 'N/A',
+    customer.phone || 'N/A',
+    customer.address || 'N/A',
+    formatDate(customer.createdAt),
+  ]);
 
   return {
     title: 'Reporte de Clientes',
@@ -311,10 +336,6 @@ async function generateCustomersReport(tenantId: string) {
     rows,
     summary: {
       'Total de Clientes': customers.length,
-      'Ingresos Totales': formatCurrency(totalRevenue),
-      'Valor Promedio por Cliente': formatCurrency(
-        customers.length > 0 ? totalRevenue / customers.length : 0
-      ),
     },
   };
 }

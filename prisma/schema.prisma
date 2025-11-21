@@ -51,6 +51,7 @@ model Tenant {
   refunds                 Refund[]
   notificationPreferences NotificationPreference[]
   notificationHistory     NotificationHistory[]
+  customers               Customer[]
 
   @@map("tenants")
 }
@@ -77,6 +78,27 @@ model User {
 
   @@index([tenantId])
   @@map("users")
+}
+
+// ============ CUSTOMERS ============
+
+model Customer {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([tenantId, email])
+  @@index([tenantId, name])
+  @@map("customers")
 }
 
 // ============ PRODUCTS & INVENTORY ============
