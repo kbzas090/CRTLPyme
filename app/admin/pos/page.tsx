@@ -268,6 +268,11 @@ export default function POSPage() {
       return
     }
 
+    if (!hasActiveSession) {
+      toast.error('Debes abrir una sesión de caja antes de realizar ventas')
+      return
+    }
+
     const { total } = calculateTotals()
 
     // Validar efectivo recibido si es pago en efectivo
@@ -282,34 +287,53 @@ export default function POSPage() {
     setIsProcessing(true)
 
     try {
+      const saleData = {
+        items: cart.map((item) => ({
+          tenantInventoryId: item.product.id,
+          quantity: item.quantity,
+        })),
+        paymentMethod,
+        cashReceived: paymentMethod === 'CASH' ? parseFloat(cashReceived) : undefined,
+      }
+
+      console.log('📤 Enviando venta:', saleData)
+
       const response = await fetch('/api/sales', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: cart.map((item) => ({
-            tenantInventoryId: item.product.id,
-            quantity: item.quantity,
-          })),
-          paymentMethod,
-          cashReceived: paymentMethod === 'CASH' ? parseFloat(cashReceived) : undefined,
-        }),
+        body: JSON.stringify(saleData),
       })
 
+      const result = await response.json()
+      console.log('📥 Respuesta de API:', result)
+
       if (response.ok) {
-        const sale = await response.json()
         toast.success('Venta procesada correctamente')
-        setCompletedSale(sale)
+        setCompletedSale(result)
         setIsPaymentDialogOpen(false)
         setIsReceiptDialogOpen(true)
         setCart([])
         loadData() // Recargar productos para actualizar stock
       } else {
-        const error = await response.json()
-        toast.error(error.error || 'Error al procesar venta')
+        // Manejar diferentes tipos de errores
+        if (result.limitExceeded) {
+          toast.error('Has alcanzado el límite de ventas de tu plan. Actualiza tu suscripción para continuar.', {
+            duration: 5000,
+          })
+        } else if (result.error) {
+          toast.error(result.error)
+        } else {
+          toast.error('Error al procesar venta')
+        }
+        
+        // Si hay detalles adicionales, mostrarlos en la consola
+        if (result.details) {
+          console.error('Detalles del error:', result.details)
+        }
       }
     } catch (error) {
-      console.error('Error al procesar venta:', error)
-      toast.error('Error al procesar venta')
+      console.error('❌ Error al procesar venta:', error)
+      toast.error('Error de conexión. Verifica tu conexión a internet e intenta nuevamente.')
     } finally {
       setIsProcessing(false)
     }

@@ -109,11 +109,15 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions)
     
     if (!session?.user) {
+      console.error('❌ POST /api/sales: No autorizado - no hay sesión')
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
+    console.log('📝 POST /api/sales: Usuario:', session.user.email, 'Role:', session.user.role)
+
     // Verificar permisos (ADMIN y CAJA pueden crear ventas)
     if (!['ADMIN', 'CAJA'].includes(session.user.role)) {
+      console.error('❌ POST /api/sales: Usuario sin permisos:', session.user.role)
       return NextResponse.json(
         { error: 'No tienes permisos para crear ventas' },
         { status: 403 }
@@ -123,6 +127,7 @@ export async function POST(request: NextRequest) {
     // VALIDACIÓN DE LÍMITES DE SUSCRIPCIÓN
     const limitCheck = await canPerformAction(session.user.tenantId, 'create_sale')
     if (!limitCheck.allowed) {
+      console.warn('⚠️ POST /api/sales: Límite de suscripción alcanzado para tenant:', session.user.tenantId)
       return NextResponse.json(
         { 
           error: limitCheck.message,
@@ -134,7 +139,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    console.log('📦 POST /api/sales: Body recibido:', JSON.stringify(body, null, 2))
+    
     const validatedData = createSaleSchema.parse(body)
+    console.log('✅ POST /api/sales: Datos validados correctamente')
 
     // Verificar que haya una sesión de caja abierta
     const activeSession = await prisma.cashSession.findFirst({
@@ -146,14 +154,19 @@ export async function POST(request: NextRequest) {
     })
 
     if (!activeSession) {
+      console.error('❌ POST /api/sales: No hay sesión de caja abierta para usuario:', session.user.id)
       return NextResponse.json(
         { error: 'Debes abrir una sesión de caja antes de realizar ventas' },
         { status: 400 }
       )
     }
 
+    console.log('✅ POST /api/sales: Sesión de caja encontrada:', activeSession.id)
+
     // Obtener inventario del tenant y verificar stock
     const inventoryIds = validatedData.items.map(item => item.tenantInventoryId)
+    console.log('🔍 POST /api/sales: Buscando productos en inventario:', inventoryIds)
+    
     const inventoryItems = await prisma.tenantInventory.findMany({
       where: {
         id: { in: inventoryIds },
@@ -171,7 +184,10 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('📦 POST /api/sales: Productos encontrados:', inventoryItems.length)
+
     if (inventoryItems.length !== validatedData.items.length) {
+      console.error('❌ POST /api/sales: Algunos productos no existen. Esperados:', validatedData.items.length, 'Encontrados:', inventoryItems.length)
       return NextResponse.json(
         { error: 'Algunos productos no existen o están inactivos' },
         { status: 400 }
@@ -182,18 +198,22 @@ export async function POST(request: NextRequest) {
     for (const item of validatedData.items) {
       const inventoryItem = inventoryItems.find(p => p.id === item.tenantInventoryId)
       if (!inventoryItem) {
+        console.error('❌ POST /api/sales: Producto no encontrado:', item.tenantInventoryId)
         return NextResponse.json(
           { error: `Producto no encontrado en inventario: ${item.tenantInventoryId}` },
           { status: 400 }
         )
       }
       if (inventoryItem.stock < item.quantity) {
+        console.error('❌ POST /api/sales: Stock insuficiente para', inventoryItem.masterProduct.name, 'Solicitado:', item.quantity, 'Disponible:', inventoryItem.stock)
         return NextResponse.json(
           { error: `Stock insuficiente para ${inventoryItem.masterProduct.name}. Disponible: ${inventoryItem.stock}` },
           { status: 400 }
         )
       }
     }
+
+    console.log('✅ POST /api/sales: Todos los productos tienen stock suficiente')
 
     // Calcular totales
     let subtotal = 0
@@ -237,8 +257,10 @@ export async function POST(request: NextRequest) {
       ? parseInt(lastSale.saleNumber) + 1 
       : 1
     const saleNumber = nextNumber.toString().padStart(8, '0')
+    console.log('🔢 POST /api/sales: Número de venta generado:', saleNumber)
 
     // Crear venta en transacción
+    console.log('💾 POST /api/sales: Iniciando transacción de base de datos...')
     const sale = await prisma.$transaction(async (tx) => {
       // Crear venta
       const newSale = await tx.sale.create({
@@ -280,7 +302,10 @@ export async function POST(request: NextRequest) {
         },
       })
 
+      console.log('✅ POST /api/sales: Venta creada con ID:', newSale.id)
+
       // Actualizar stock en TenantInventory
+      console.log('📦 POST /api/sales: Actualizando stock de productos...')
       for (const item of validatedData.items) {
         await tx.tenantInventory.update({
           where: { 
@@ -294,8 +319,12 @@ export async function POST(request: NextRequest) {
         })
       }
 
+      console.log('✅ POST /api/sales: Stock actualizado correctamente')
+
       return newSale
     })
+
+    console.log('✅ POST /api/sales: Transacción completada exitosamente')
 
     // Registrar en auditoría
     await prisma.auditLog.create({

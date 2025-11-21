@@ -71,10 +71,14 @@ interface Sale {
     quantity: number
     unitPrice: number
     subtotal: number
-    product: {
+    tenantInventory: {
       id: string
-      name: string
-      sku: string
+      customSku: string
+      masterProduct: {
+        id: string
+        name: string
+        sku: string
+      }
     }
   }>
   cashSession?: {
@@ -503,7 +507,7 @@ export default function SalesPage() {
                   {selectedSale.items.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
                       <div className="flex-1">
-                        <div className="font-medium">{item.product.name}</div>
+                        <div className="font-medium">{item.tenantInventory.masterProduct.name}</div>
                         <div className="text-xs text-muted-foreground">
                           {item.quantity} x {formatCurrency(Number(item.unitPrice))}
                         </div>
