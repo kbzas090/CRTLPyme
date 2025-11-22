@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/db'
 import {
   hasModuleAccess,
   canPerformAction,
@@ -39,11 +40,28 @@ export async function getAuthenticatedUser(): Promise<AuthenticatedSession | nul
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || !session.user) {
+    if (!session?.user?.email) {
       return null
     }
     
-    return session as AuthenticatedSession
+    // Buscar usuario completo en la base de datos para asegurar que tenemos todos los campos
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        tenantId: true,
+      }
+    })
+    
+    if (!user) {
+      return null
+    }
+    
+    return { user }
   } catch (error) {
     console.error('Error getting authenticated user:', error)
     return null

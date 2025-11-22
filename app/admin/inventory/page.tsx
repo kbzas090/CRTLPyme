@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import { usePermissions } from '@/hooks/usePermissions'
+import { MODULES, ACTIONS } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -96,6 +98,13 @@ interface Product {
 export default function InventoryPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const { canPerformAction, role } = usePermissions()
+  
+  // Verificar permisos para acciones específicas
+  const canEdit = canPerformAction(MODULES.INVENTORY, ACTIONS.EDIT)
+  const canDelete = canPerformAction(MODULES.INVENTORY, ACTIONS.DELETE)
+  const canCreate = canPerformAction(MODULES.INVENTORY, ACTIONS.CREATE)
+  const canViewCostPrice = role !== 'CAJA' // Los cajeros no pueden ver precios de compra
   
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
@@ -371,10 +380,12 @@ export default function InventoryPage() {
             <Package className="mr-2 h-4 w-4" />
             Movimientos
           </Button>
-          <Button onClick={() => router.push('/admin/inventory/add-from-pool')}>
-            <Plus className="mr-2 h-4 w-4" />
-            Agregar del Pool
-          </Button>
+          {canCreate && (
+            <Button onClick={() => router.push('/admin/inventory/add-from-pool')}>
+              <Plus className="mr-2 h-4 w-4" />
+              Agregar del Pool
+            </Button>
+          )}
         </div>
       </div>
 
@@ -420,7 +431,9 @@ export default function InventoryPage() {
                   <TableHead>Código</TableHead>
                   <TableHead>Nombre</TableHead>
                   <TableHead>Categoría</TableHead>
-                  <TableHead className="text-right">Precio Compra</TableHead>
+                  {canViewCostPrice && (
+                    <TableHead className="text-right">Precio Compra</TableHead>
+                  )}
                   <TableHead className="text-right">Precio Venta</TableHead>
                   <TableHead className="text-center">Stock</TableHead>
                   <TableHead className="text-center">Estado</TableHead>
@@ -452,9 +465,11 @@ export default function InventoryPage() {
                         </div>
                       </TableCell>
                       <TableCell>{product.masterProduct.category}</TableCell>
-                      <TableCell className="text-right">
-                        ${Math.round(Number(product.costPrice)).toLocaleString('es-CL')}
-                      </TableCell>
+                      {canViewCostPrice && (
+                        <TableCell className="text-right">
+                          ${Math.round(Number(product.costPrice)).toLocaleString('es-CL')}
+                        </TableCell>
+                      )}
                       <TableCell className="text-right">
                         ${Math.round(Number(product.salePrice)).toLocaleString('es-CL')}
                       </TableCell>
@@ -473,20 +488,24 @@ export default function InventoryPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openEditDialog(product)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openDeleteDialog(product)}
-                          >
-                            <Trash2 className="h-4 w-4 text-red-500" />
-                          </Button>
+                          {canEdit && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => openEditDialog(product)}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {canDelete && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => openDeleteDialog(product)}
+                            >
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -588,19 +607,21 @@ export default function InventoryPage() {
 
             <div className="grid grid-cols-2 gap-4">
               {/* Precio de Compra */}
-              <div className="space-y-2">
-                <Label htmlFor="costPrice">Precio de Compra *</Label>
-                <Input
-                  id="costPrice"
-                  type="number"
-                  step="0.01"
-                  {...register('costPrice')}
-                  placeholder="0.00"
-                />
-                {errors.costPrice && (
-                  <p className="text-sm text-red-500">{errors.costPrice.message}</p>
-                )}
-              </div>
+              {canViewCostPrice && (
+                <div className="space-y-2">
+                  <Label htmlFor="costPrice">Precio de Compra *</Label>
+                  <Input
+                    id="costPrice"
+                    type="number"
+                    step="0.01"
+                    {...register('costPrice')}
+                    placeholder="0.00"
+                  />
+                  {errors.costPrice && (
+                    <p className="text-sm text-red-500">{errors.costPrice.message}</p>
+                  )}
+                </div>
+              )}
 
               {/* Precio de Venta */}
               <div className="space-y-2">
