@@ -158,7 +158,12 @@ export default function POSPage() {
     try {
       // Verificar sesión de caja activa
       const sessionRes = await fetch('/api/cash-sessions/active')
-      setHasActiveSession(sessionRes.ok)
+      if (sessionRes.ok) {
+        const sessionData = await sessionRes.json()
+        setHasActiveSession(sessionData.hasActiveSession || false)
+      } else {
+        setHasActiveSession(false)
+      }
 
       // Cargar inventario
       const productsRes = await fetch('/api/inventory')

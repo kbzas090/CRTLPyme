@@ -196,9 +196,6 @@ export async function POST(request: NextRequest) {
             quantity: validatedData.stock,
             reason: 'Stock inicial al agregar producto',
             createdBy: user.id,
-            user: {
-              connect: { id: user.id }
-            }
           }
         })
       }
