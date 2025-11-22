@@ -292,6 +292,16 @@ export async function POST(request: Request) {
               connect: {
                 id: item.tenantInventoryId
               }
+            },
+            user: {
+              connect: {
+                id: user.id
+              }
+            },
+            tenant: {
+              connect: {
+                id: user.tenantId
+              }
             }
           }
         })

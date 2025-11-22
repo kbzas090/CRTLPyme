@@ -23,7 +23,8 @@ import {
   Trash2,
   Edit,
   Plus,
-  X
+  X,
+  Loader2
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import {
@@ -117,6 +118,12 @@ export default function SettingsPage() {
     notificationEmail: '',
   })
 
+  // Change Plan Dialog State
+  const [isChangePlanDialogOpen, setIsChangePlanDialogOpen] = useState(false)
+  const [availablePlans, setAvailablePlans] = useState<any[]>([])
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
+
   // Load data on mount
   useEffect(() => {
     if (session?.user?.role === 'ADMIN') {
@@ -186,6 +193,23 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error('Error loading notification preferences:', error)
+    }
+  }
+
+  const loadAvailablePlans = async () => {
+    try {
+      const response = await fetch('/api/subscription-plans')
+      const data = await response.json()
+      if (Array.isArray(data)) {
+        setAvailablePlans(data.filter((plan: any) => plan.isActive))
+      }
+    } catch (error) {
+      console.error('Error loading available plans:', error)
+      toast({
+        title: "Error",
+        description: "Error al cargar los planes disponibles.",
+        variant: "destructive",
+      })
     }
   }
 
@@ -372,6 +396,13 @@ export default function SettingsPage() {
   }
 
   const handleSubscriptionAction = async (action: 'upgrade' | 'cancel') => {
+    if (action === 'upgrade') {
+      // Abrir modal de cambio de plan
+      loadAvailablePlans()
+      setIsChangePlanDialogOpen(true)
+      return
+    }
+
     if (action === 'cancel' && !confirm('¿Está seguro de cancelar su suscripción?')) {
       return
     }
@@ -385,9 +416,7 @@ export default function SettingsPage() {
       if (data.success) {
         toast({
           title: "✓ Acción Completada",
-          description: action === 'upgrade' 
-            ? "Se procesará el cambio de plan." 
-            : "Su suscripción ha sido cancelada.",
+          description: "Su suscripción ha sido cancelada.",
         })
         loadSubscriptionData()
       } else {
@@ -401,6 +430,62 @@ export default function SettingsPage() {
       })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleChangePlan = async (planId: string) => {
+    if (!session?.user?.tenantId) return
+
+    setIsProcessingPayment(true)
+    setSelectedPlanId(planId)
+
+    try {
+      // Crear la transacción de pago con Transbank
+      const response = await fetch('/api/payments/transbank/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tenantId: session.user.tenantId,
+          planId: planId,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al crear la transacción de pago')
+      }
+
+      const data = await response.json()
+
+      // Redirigir a Transbank
+      if (data.url && data.token) {
+        // Crear un formulario para enviar el token a Transbank
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = data.url
+
+        const input = document.createElement('input')
+        input.type = 'hidden'
+        input.name = 'token_ws'
+        input.value = data.token
+
+        form.appendChild(input)
+        document.body.appendChild(form)
+        form.submit()
+      } else {
+        throw new Error('No se recibió URL de pago de Transbank')
+      }
+    } catch (error: any) {
+      console.error('Error al iniciar pago:', error)
+      toast({
+        title: "Error",
+        description: error.message || "Error al procesar solicitud",
+        variant: "destructive",
+      })
+      setIsProcessingPayment(false)
+      setSelectedPlanId(null)
     }
   }
 
@@ -1038,6 +1123,127 @@ export default function SettingsPage() {
               disabled={loading}
             >
               Guardar Cambios
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change Plan Dialog */}
+      <Dialog open={isChangePlanDialogOpen} onOpenChange={setIsChangePlanDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Cambiar Plan de Suscripción</DialogTitle>
+            <DialogDescription>
+              Selecciona un nuevo plan. Se iniciará el proceso de pago con Transbank.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {availablePlans.length === 0 ? (
+              <div className="text-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">Cargando planes disponibles...</p>
+              </div>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2">
+                {availablePlans.map((plan) => (
+                  <Card 
+                    key={plan.id} 
+                    className={`hover:shadow-lg transition-shadow ${
+                      subscriptionData?.planId === plan.id ? 'border-blue-500 border-2' : ''
+                    }`}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{plan.name}</CardTitle>
+                          {plan.description && (
+                            <CardDescription className="mt-1">{plan.description}</CardDescription>
+                          )}
+                        </div>
+                        {subscriptionData?.planId === plan.id && (
+                          <Badge variant="default">Plan Actual</Badge>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {/* Precio */}
+                        <div>
+                          <p className="text-3xl font-bold text-green-600">
+                            ${Number(plan.price).toLocaleString('es-CL')} CLP
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {plan.billingCycle === 'MONTHLY' && '/ mes'}
+                            {plan.billingCycle === 'QUARTERLY' && '/ trimestre'}
+                            {plan.billingCycle === 'ANNUAL' && '/ año'}
+                          </p>
+                        </div>
+
+                        {/* Características */}
+                        {plan.features && plan.features.length > 0 && (
+                          <div>
+                            <p className="text-sm font-medium mb-2">Incluye:</p>
+                            <ul className="space-y-2">
+                              {plan.features.map((feature: string, index: number) => (
+                                <li key={index} className="flex items-start gap-2 text-sm">
+                                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Límites */}
+                        {(plan.maxUsers || plan.maxProducts || plan.maxSales) && (
+                          <div className="pt-2 border-t">
+                            <p className="text-xs text-gray-600">
+                              {plan.maxUsers && `• Hasta ${plan.maxUsers} usuarios`}
+                              {plan.maxProducts && ` • ${plan.maxProducts} productos`}
+                              {plan.maxSales && ` • ${plan.maxSales === -1 ? 'Ventas ilimitadas' : `${plan.maxSales} ventas/mes`}`}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Botón de acción */}
+                        <Button
+                          className="w-full"
+                          onClick={() => handleChangePlan(plan.id)}
+                          disabled={
+                            isProcessingPayment || 
+                            subscriptionData?.planId === plan.id
+                          }
+                        >
+                          {isProcessingPayment && selectedPlanId === plan.id ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Procesando...
+                            </>
+                          ) : subscriptionData?.planId === plan.id ? (
+                            'Plan Actual'
+                          ) : (
+                            <>
+                              <CreditCard className="mr-2 h-4 w-4" />
+                              Seleccionar Plan
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsChangePlanDialogOpen(false)}
+              disabled={isProcessingPayment}
+            >
+              Cancelar
             </Button>
           </DialogFooter>
         </DialogContent>

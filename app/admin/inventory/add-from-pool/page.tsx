@@ -75,9 +75,13 @@ export default function AddFromPoolPage() {
 
   const handleSelectProduct = (product: MasterProduct) => {
     setSelectedProduct(product)
+    // Formatear precios a 2 decimales para evitar decimales excesivos
+    const costPrice = Math.round(Number(product.suggestedPrice) * 0.7 * 100) / 100
+    const salePrice = Math.round(Number(product.suggestedPrice) * 100) / 100
+    
     setFormData({
-      costPrice: Number(product.suggestedPrice) * 0.7, // 70% del precio sugerido como costo
-      salePrice: Number(product.suggestedPrice),
+      costPrice,
+      salePrice,
       stock: 0,
       minStock: 5,
       location: '',
@@ -94,6 +98,11 @@ export default function AddFromPoolPage() {
     setIsSubmitting(true)
 
     try {
+      console.log('📦 Enviando producto al inventario:', {
+        masterProductId: selectedProduct.id,
+        ...formData,
+      })
+
       const response = await fetch('/api/inventory', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -103,15 +112,23 @@ export default function AddFromPoolPage() {
         }),
       })
 
+      console.log('📦 Respuesta del servidor:', {
+        status: response.status,
+        ok: response.ok,
+      })
+
+      // Parsear la respuesta
+      const data = await response.json()
+      console.log('📦 Datos recibidos:', data)
+
       if (!response.ok) {
-        const data = await response.json()
         throw new Error(data.error || 'Error al agregar producto')
       }
 
-      // Usar toast nativo de window para no depender de sonner
+      // Mostrar toast de éxito
       if (typeof window !== 'undefined') {
         const toast = document.createElement('div')
-        toast.textContent = 'Producto agregado exitosamente'
+        toast.textContent = '✓ Producto agregado exitosamente'
         toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; z-index: 9999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); font-weight: 600;'
         document.body.appendChild(toast)
         setTimeout(() => toast.remove(), 3000)
@@ -121,7 +138,9 @@ export default function AddFromPoolPage() {
       setSelectedProduct(null)
       fetchAvailableProducts() // Recargar lista
     } catch (err) {
-      // Usar toast nativo de window para errores
+      console.error('❌ Error al agregar producto:', err)
+      
+      // Mostrar toast de error
       if (typeof window !== 'undefined') {
         const toast = document.createElement('div')
         toast.textContent = '❌ ' + (err instanceof Error ? err.message : 'Error desconocido')
@@ -283,7 +302,10 @@ export default function AddFromPoolPage() {
                   min="0"
                   step="0.01"
                   value={formData.costPrice}
-                  onChange={(e) => setFormData({ ...formData, costPrice: parseFloat(e.target.value) })}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 0
+                    setFormData({ ...formData, costPrice: Math.round(value * 100) / 100 })
+                  }}
                   className="w-full px-3 py-2 border rounded-md"
                 />
               </div>
@@ -298,7 +320,10 @@ export default function AddFromPoolPage() {
                   min="0"
                   step="0.01"
                   value={formData.salePrice}
-                  onChange={(e) => setFormData({ ...formData, salePrice: parseFloat(e.target.value) })}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 0
+                    setFormData({ ...formData, salePrice: Math.round(value * 100) / 100 })
+                  }}
                   className="w-full px-3 py-2 border rounded-md"
                 />
               </div>

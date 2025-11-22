@@ -199,6 +199,16 @@ export async function POST(request: NextRequest) {
               connect: {
                 id: newItem.id
               }
+            },
+            user: {
+              connect: {
+                id: user.id
+              }
+            },
+            tenant: {
+              connect: {
+                id: user.tenantId
+              }
             }
           }
         })
