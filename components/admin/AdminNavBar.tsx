@@ -91,10 +91,16 @@ export default function AdminNavBar() {
       if (response.ok) {
         const data = await response.json()
         
-        // Si hay una sesión de caja abierta, mostrar alerta
+        // Si hay una sesión de caja abierta, mostrar advertencia pero permitir cerrar sesión
         if (data.session && data.session.status === 'OPEN') {
-          alert('⚠️ No puedes cerrar sesión mientras tengas una caja abierta.\n\nPor favor, cierra tu sesión de caja primero en la sección "Sesión de Caja".')
-          return
+          const confirmed = confirm(
+            '⚠️ ADVERTENCIA: Tienes una sesión de caja abierta\n\n' +
+            'Se recomienda cerrar la caja antes de cerrar sesión.\n' +
+            '¿Deseas cerrar sesión de todas formas?'
+          )
+          if (!confirmed) {
+            return
+          }
         }
       }
     } catch (error) {
@@ -102,7 +108,7 @@ export default function AdminNavBar() {
       // En caso de error en la verificación, permitir cerrar sesión
     }
     
-    // Si no hay caja abierta o hay error, permitir cerrar sesión
+    // Permitir cerrar sesión
     router.push('/auth/signout')
   }
 

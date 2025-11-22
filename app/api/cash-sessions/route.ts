@@ -83,18 +83,31 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = openSessionSchema.parse(body)
 
-    // Verificar que el usuario no tenga una sesión abierta
+    // Verificar que no haya ninguna sesión abierta en el tenant
     const openSession = await prisma.cashSession.findFirst({
       where: {
-        userId: session.user.id,
         tenantId: session.user.tenantId,
         status: 'OPEN',
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
     })
 
     if (openSession) {
+      const userName = `${openSession.user.firstName} ${openSession.user.lastName}`
+      const isOwnSession = openSession.userId === session.user.id
+      const errorMessage = isOwnSession
+        ? 'Ya tienes una sesión de caja abierta'
+        : `Ya existe una sesión de caja abierta por ${userName}`
+      
       return NextResponse.json(
-        { error: 'Ya tienes una sesión de caja abierta' },
+        { error: errorMessage },
         { status: 400 }
       )
     }

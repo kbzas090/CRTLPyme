@@ -27,9 +27,17 @@ export async function POST(request: NextRequest) {
       include: { tenant: true }
     });
 
-    if (!user || user.role !== 'PROVEEDOR') {
+    if (!user) {
       return NextResponse.json(
-        { error: 'No tienes permisos para realizar esta acción' },
+        { error: 'Usuario no encontrado' },
+        { status: 404 }
+      );
+    }
+
+    // Solo ADMIN y PROVEEDOR pueden cambiar el plan
+    if (!['ADMIN', 'PROVEEDOR'].includes(user.role)) {
+      return NextResponse.json(
+        { error: 'No tienes permisos para realizar esta acción. Solo administradores pueden cambiar el plan.' },
         { status: 403 }
       );
     }

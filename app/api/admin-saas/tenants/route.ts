@@ -57,15 +57,21 @@ export async function GET(request: NextRequest) {
         });
 
         // ✅ Obtener productos con stock bajo desde TenantInventory
-        const lowStockCount = await prisma.tenantInventory.count({
+        // Se filtran productos donde el stock actual <= stock mínimo
+        const inventoryItems = await prisma.tenantInventory.findMany({
           where: {
             tenantId: tenant.id,
-            quantity: {
-              lte: prisma.tenantInventory.fields.minStock,
-            },
             isActive: true,
           },
+          select: {
+            stock: true,
+            minStock: true,
+          },
         });
+        
+        const lowStockCount = inventoryItems.filter(
+          item => item.stock <= item.minStock
+        ).length;
 
         return {
           id: tenant.id,

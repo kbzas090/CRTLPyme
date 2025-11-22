@@ -201,14 +201,23 @@ export async function POST(request: Request) {
       
       const lastSale = await tx.sale.findFirst({
         where: { tenantId: user.tenantId },
-        orderBy: { saleNumber: 'desc' },
+        orderBy: { createdAt: 'desc' },
         select: { saleNumber: true }
       })
 
       let saleNumber: string
-      if (lastSale) {
-        const lastNumber = parseInt(lastSale.saleNumber.split('-')[1])
-        saleNumber = `V-${String(lastNumber + 1).padStart(6, '0')}`
+      if (lastSale && lastSale.saleNumber) {
+        // Extraer el número del formato "V-XXXXXX"
+        const parts = lastSale.saleNumber.split('-')
+        const lastNumber = parts.length > 1 ? parseInt(parts[1]) : 0
+        
+        // Validar que sea un número válido
+        if (isNaN(lastNumber)) {
+          console.warn('⚠️ [SALES API] Número de venta anterior inválido, iniciando desde 1')
+          saleNumber = 'V-000001'
+        } else {
+          saleNumber = `V-${String(lastNumber + 1).padStart(6, '0')}`
+        }
       } else {
         saleNumber = 'V-000001'
       }
