@@ -201,7 +201,34 @@ export default function SettingsPage() {
       const response = await fetch('/api/subscription-plans')
       const data = await response.json()
       if (data.plans && Array.isArray(data.plans)) {
-        setAvailablePlans(data.plans.filter((plan: any) => plan.isActive))
+        // Parsear features como JSON si es un string
+        const plansWithParsedFeatures = data.plans.map((plan: any) => {
+          try {
+            // Si features es un string, parsearlo como JSON
+            if (typeof plan.features === 'string') {
+              return {
+                ...plan,
+                features: JSON.parse(plan.features)
+              }
+            }
+            // Si features es null o undefined, usar array vacío
+            if (!plan.features || !Array.isArray(plan.features)) {
+              return {
+                ...plan,
+                features: []
+              }
+            }
+            // Si ya es un array, dejarlo como está
+            return plan
+          } catch (error) {
+            console.error('Error parsing features for plan:', plan.id, error)
+            return {
+              ...plan,
+              features: [] // En caso de error de parsing, usar array vacío
+            }
+          }
+        })
+        setAvailablePlans(plansWithParsedFeatures.filter((plan: any) => plan.isActive))
       }
     } catch (error) {
       console.error('Error loading available plans:', error)
