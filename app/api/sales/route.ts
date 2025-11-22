@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
     console.log('✅ [SALES API] Usuario encontrado:', {
       id: user.id,
-      name: user.name,
+      email: user.email,
       tenantId: user.tenantId
     })
 
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
 
     console.log('✅ [SALES API] Sesión de caja encontrada:', {
       id: currentSession.id,
-      openingAmount: currentSession.openingAmount
+      initialAmount: currentSession.initialAmount
     })
 
     // PASO 6: Verificar límites de suscripción
@@ -177,11 +177,16 @@ export async function POST(request: Request) {
 
     const tax = subtotal * 0.19
     const total = subtotal + tax
+    const change = (paymentMethod === 'CASH' && cashReceived) 
+      ? Number(cashReceived) - total 
+      : null
 
     console.log('✅ [SALES API] Totales calculados:', {
       subtotal,
       tax,
       total,
+      cashReceived,
+      change,
       itemsCount: saleItems.length
     })
 
@@ -223,6 +228,7 @@ export async function POST(request: Request) {
           total: new Prisma.Decimal(total),
           paymentMethod,
           cashReceived: cashReceived ? new Prisma.Decimal(cashReceived) : null,
+          change: change !== null ? new Prisma.Decimal(change) : null,
           status: 'COMPLETED',
           items: {
             create: saleItems.map(item => ({
@@ -315,10 +321,10 @@ export async function POST(request: Request) {
         data: {
           tenantId: user.tenantId,
           userId: user.id,
-          action: 'CREATE_SALE',
-          entityType: 'Sale',
+          action: 'CREATE',
+          entity: 'Sale',
           entityId: sale.id,
-          details: serializedSale
+          newValues: serializedSale
         }
       })
       
