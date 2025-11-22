@@ -284,25 +284,11 @@ export async function POST(request: Request) {
         await tx.inventoryMovement.create({
           data: {
             tenantId: user.tenantId,
+            tenantInventoryId: item.tenantInventoryId,
             type: 'EXIT',
             quantity: -item.quantity,
             reason: `Venta ${saleNumber}`,
-            createdBy: user.id,
-            tenantInventory: {
-              connect: {
-                id: item.tenantInventoryId
-              }
-            },
-            user: {
-              connect: {
-                id: user.id
-              }
-            },
-            tenant: {
-              connect: {
-                id: user.tenantId
-              }
-            }
+            createdBy: user.id
           }
         })
         console.log(`✅ [SALES API] Movimiento de inventario registrado`)

@@ -191,25 +191,11 @@ export async function POST(request: NextRequest) {
         await tx.inventoryMovement.create({
           data: {
             tenantId: user.tenantId,
+            tenantInventoryId: newItem.id,
             type: 'ENTRY',
             quantity: validatedData.stock,
             reason: 'Stock inicial al agregar producto',
-            createdBy: user.id,
-            tenantInventory: {
-              connect: {
-                id: newItem.id
-              }
-            },
-            user: {
-              connect: {
-                id: user.id
-              }
-            },
-            tenant: {
-              connect: {
-                id: user.tenantId
-              }
-            }
+            createdBy: user.id
           }
         })
       }
