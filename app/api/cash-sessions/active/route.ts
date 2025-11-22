@@ -9,14 +9,23 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user) {
+    if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    // Obtener usuario completo de la base de datos
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email }
+    })
+
+    if (!user?.tenantId) {
+      return NextResponse.json({ error: 'Usuario sin tenant' }, { status: 400 })
     }
 
     const activeSession = await prisma.cashSession.findFirst({
       where: {
-        userId: session.user.id,
-        tenantId: session.user.tenantId,
+        userId: user.id,
+        tenantId: user.tenantId,
         status: 'OPEN',
       },
       include: {
