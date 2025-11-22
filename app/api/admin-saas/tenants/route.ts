@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         _count: {
           select: {
             users: true,
-            tenantInventory: true,  // ✅ Usar tenantInventory en lugar de products
+            tenantInventories: true,  // ✅ Usar tenantInventories (plural) según el schema de Prisma
             sales: true,
           },
         },
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
           updatedAt: tenant.updatedAt,
           stats: {
             totalUsers: tenant._count.users,
-            totalProducts: tenant._count.tenantInventory,  // ✅ Usar tenantInventory
+            totalProducts: tenant._count.tenantInventories,  // ✅ Usar tenantInventories (plural)
             totalSales: tenant._count.sales,
             salesAmount: salesTotal._sum.total || 0,
             lowStockProducts: lowStockCount,
