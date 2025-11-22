@@ -200,8 +200,8 @@ export default function SettingsPage() {
     try {
       const response = await fetch('/api/subscription-plans')
       const data = await response.json()
-      if (Array.isArray(data)) {
-        setAvailablePlans(data.filter((plan: any) => plan.isActive))
+      if (data.plans && Array.isArray(data.plans)) {
+        setAvailablePlans(data.plans.filter((plan: any) => plan.isActive))
       }
     } catch (error) {
       console.error('Error loading available plans:', error)

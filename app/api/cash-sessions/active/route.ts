@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!activeSession) {
-      return NextResponse.json({ error: 'No hay sesión activa' }, { status: 404 })
+      return NextResponse.json({ hasActiveSession: false, session: null }, { status: 200 })
     }
 
     // Calcular totales de la sesión
@@ -62,10 +62,13 @@ export async function GET(request: NextRequest) {
     const expectedAmount = Number(activeSession.initialAmount) + totalSales
 
     return NextResponse.json({
-      ...activeSession,
-      totalSales,
-      totalCash,
-      expectedAmount,
+      hasActiveSession: true,
+      session: {
+        ...activeSession,
+        totalSales,
+        totalCash,
+        expectedAmount,
+      }
     })
   } catch (error) {
     console.error('Error al obtener sesión activa:', error)
