@@ -206,19 +206,23 @@ export async function POST(request: Request) {
       })
 
       let saleNumber: string
-      if (lastSale && lastSale.saleNumber) {
+      if (lastSale && lastSale.saleNumber && typeof lastSale.saleNumber === 'string') {
         // Extraer el número del formato "V-XXXXXX"
         const parts = lastSale.saleNumber.split('-')
-        const lastNumber = parts.length > 1 ? parseInt(parts[1]) : 0
+        const numberPart = parts.length > 1 ? parts[1] : '0'
+        const lastNumber = parseInt(numberPart, 10)
         
-        // Validar que sea un número válido
-        if (isNaN(lastNumber)) {
-          console.warn('⚠️ [SALES API] Número de venta anterior inválido, iniciando desde 1')
-          saleNumber = 'V-000001'
+        // Validar que sea un número válido y positivo
+        if (!isNaN(lastNumber) && lastNumber >= 0 && isFinite(lastNumber)) {
+          const nextNumber = lastNumber + 1
+          saleNumber = `V-${String(nextNumber).padStart(6, '0')}`
+          console.log(`✅ [SALES API] Número incrementado de ${lastSale.saleNumber} a ${saleNumber}`)
         } else {
-          saleNumber = `V-${String(lastNumber + 1).padStart(6, '0')}`
+          console.warn('⚠️ [SALES API] Número de venta anterior inválido:', lastSale.saleNumber)
+          saleNumber = 'V-000001'
         }
       } else {
+        console.log('ℹ️ [SALES API] No hay ventas previas, iniciando desde V-000001')
         saleNumber = 'V-000001'
       }
 
