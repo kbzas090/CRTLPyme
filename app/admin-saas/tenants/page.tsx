@@ -24,6 +24,17 @@ import {
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 
+// Helper para traducir tipos de plan
+const getPlanName = (planType: string): string => {
+  const planNames: Record<string, string> = {
+    'BASIC': 'Plan Básico',
+    'STANDARD': 'Plan Estándar', 
+    'PREMIUM': 'Plan Premium',
+    'ENTERPRISE': 'Plan Enterprise',
+  };
+  return planNames[planType] || planType;
+};
+
 interface Tenant {
   id: string;
   businessName: string;
@@ -233,7 +244,7 @@ export default function TenantsListPage() {
                     <Badge variant={tenant.isActive ? 'default' : 'secondary'}>
                       {tenant.isActive ? 'Activo' : 'Inactivo'}
                     </Badge>
-                    <Badge variant="outline">{tenant.planType}</Badge>
+                    <Badge variant="outline">{getPlanName(tenant.planType)}</Badge>
                   </div>
                   <CardDescription>
                     RUT: {tenant.rut} • Creado: {formatDate(tenant.createdAt)}

@@ -32,6 +32,17 @@ import {
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
+// Helper para traducir tipos de plan
+const getPlanName = (planType: string): string => {
+  const planNames: Record<string, string> = {
+    'BASIC': 'Plan Básico',
+    'STANDARD': 'Plan Estándar', 
+    'PREMIUM': 'Plan Premium',
+    'ENTERPRISE': 'Plan Enterprise',
+  };
+  return planNames[planType] || planType;
+};
+
 interface SubscriptionPlan {
   id: string;
   name: string;
@@ -342,7 +353,7 @@ export default function TenantDetailPage() {
                   </>
                 )}
               </Badge>
-              <Badge variant="outline">{tenant.planType}</Badge>
+              <Badge variant="outline">{getPlanName(tenant.planType)}</Badge>
             </div>
             <p className="mt-2 text-gray-600">RUT: {tenant.rut}</p>
           </div>

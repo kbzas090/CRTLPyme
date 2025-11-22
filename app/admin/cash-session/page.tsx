@@ -124,7 +124,12 @@ export default function CashSessionPage() {
       const activeRes = await fetch('/api/cash-sessions/active')
       if (activeRes.ok) {
         const data = await activeRes.json()
-        setActiveSession(data)
+        // Extraer correctamente la propiedad session
+        if (data.hasActiveSession && data.session) {
+          setActiveSession(data.session)
+        } else {
+          setActiveSession(null)
+        }
       } else {
         setActiveSession(null)
       }

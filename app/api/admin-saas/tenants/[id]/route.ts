@@ -34,17 +34,25 @@ export async function GET(
             createdAt: true,
           },
         },
-        products: {
+        tenantInventories: {
           select: {
             id: true,
-            sku: true,
-            name: true,
-            category: true,
+            customSku: true,
             costPrice: true,
             salePrice: true,
             stock: true,
             minStock: true,
+            location: true,
             isActive: true,
+            masterProduct: {
+              select: {
+                id: true,
+                sku: true,
+                name: true,
+                category: true,
+                brand: true,
+              },
+            },
           },
           where: {
             isActive: true,
@@ -133,7 +141,7 @@ export async function GET(
           totalSales: salesStats._count,
           salesAmount: salesStats._sum.total || 0,
           totalUsers: tenant.users.length,
-          totalProducts: tenant.products.length,
+          totalProducts: tenant.tenantInventories.length,
           totalCashSessions: tenant._count.cashSessions,
         },
         recentSales,
