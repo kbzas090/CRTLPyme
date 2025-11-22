@@ -78,8 +78,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Generar identificadores únicos para la transacción
-    const buyOrder = `ORDER-${Date.now()}-${tenantId.substring(0, 8)}`;
-    const sessionId = `SESSION-${Date.now()}-${user.id.substring(0, 8)}`;
+    // buyOrder debe ser máximo 26 caracteres para Transbank
+    const timestamp = Date.now().toString().slice(-10); // Últimos 10 dígitos
+    const tenantShort = tenantId.substring(0, 8); // Primeros 8 caracteres
+    const buyOrder = `PC${timestamp}${tenantShort}`; // PC = Plan Change, total 20 chars
+    const sessionId = `PS${timestamp}${user.id.substring(0, 8)}`; // PS = Payment Session
     const amount = Math.round(Number(plan.price)); // Transbank requiere enteros
     const returnUrl = getReturnUrl();
 

@@ -1,0 +1,202 @@
+
+> pos-saas-chile@0.1.0 build
+> next build
+
+   ▲ Next.js 15.0.3
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./app/api/payments/confirm/route.ts
+Attempted import error: 'confirmSubscriptionPayment' is not exported from '@/lib/transbank' (imported as 'confirmSubscriptionPayment').
+
+Import trace for requested module:
+./app/api/payments/confirm/route.ts
+
+./app/api/payments/initiate/route.ts
+Attempted import error: 'generateBuyOrder' is not exported from '@/lib/transbank' (imported as 'generateBuyOrder').
+
+Import trace for requested module:
+./app/api/payments/initiate/route.ts
+
+./app/api/payments/initiate/route.ts
+Attempted import error: 'processSubscriptionPayment' is not exported from '@/lib/transbank' (imported as 'processSubscriptionPayment').
+
+Import trace for requested module:
+./app/api/payments/initiate/route.ts
+
+./app/api/subscriptions/payment/callback/route.ts
+Attempted import error: 'commitTransaction' is not exported from '@/lib/transbank' (imported as 'commitTransaction').
+
+Import trace for requested module:
+./app/api/subscriptions/payment/callback/route.ts
+
+./app/api/subscriptions/payment/callback/route.ts
+Attempted import error: 'isTransactionApproved' is not exported from '@/lib/transbank' (imported as 'isTransactionApproved').
+
+Import trace for requested module:
+./app/api/subscriptions/payment/callback/route.ts
+
+./app/api/subscriptions/payment/callback/route.ts
+Attempted import error: 'getResponseCodeDescription' is not exported from '@/lib/transbank' (imported as 'getResponseCodeDescription').
+
+Import trace for requested module:
+./app/api/subscriptions/payment/callback/route.ts
+
+./app/api/subscriptions/payment/init/route.ts
+Attempted import error: 'generateBuyOrder' is not exported from '@/lib/transbank' (imported as 'generateBuyOrder').
+
+Import trace for requested module:
+./app/api/subscriptions/payment/init/route.ts
+
+./app/api/subscriptions/payment/init/route.ts
+Attempted import error: 'formatAmount' is not exported from '@/lib/transbank' (imported as 'formatAmount').
+
+Import trace for requested module:
+./app/api/subscriptions/payment/init/route.ts
+
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+   Generating static pages (0/91) ...
+API key does not start with "SG.".
+API key does not start with "SG.".
+   Generating static pages (22/91) 
+   Generating static pages (45/91) 
+API key does not start with "SG.".
+   Generating static pages (68/91) 
+ ✓ Generating static pages (91/91)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                   Size     First Load JS
+┌ ○ /                                         5.06 kB         137 kB
+├ ○ /_not-found                               905 B           101 kB
+├ ○ /admin-saas                               4.18 kB         130 kB
+├ ○ /admin-saas/master-products               6.76 kB         150 kB
+├ ○ /admin-saas/payment-return                4.2 kB          121 kB
+├ ○ /admin-saas/plans                         5.83 kB         152 kB
+├ ○ /admin-saas/revenue                       4.26 kB         255 kB
+├ ○ /admin-saas/stats                         4.1 kB          112 kB
+├ ○ /admin-saas/subscriptions                 2.5 kB          112 kB
+├ ƒ /admin-saas/subscriptions/[id]            3.15 kB         113 kB
+├ ○ /admin-saas/tenants                       4.99 kB         122 kB
+├ ƒ /admin-saas/tenants/[id]                  7.74 kB         144 kB
+├ ○ /admin/cash-session                       7.14 kB         175 kB
+├ ○ /admin/dashboard                          4.32 kB         132 kB
+├ ○ /admin/inventory                          7.79 kB         172 kB
+├ ○ /admin/inventory/add-from-pool            3.76 kB         104 kB
+├ ○ /admin/inventory/movements                8.47 kB         197 kB
+├ ○ /admin/pos                                15 kB           183 kB
+├ ○ /admin/reports                            3.99 kB         130 kB
+├ ○ /admin/reports/customers                  5.31 kB         229 kB
+├ ○ /admin/reports/inventory-movements        7.75 kB         269 kB
+├ ○ /admin/reports/products                   5.15 kB         229 kB
+├ ○ /admin/reports/sales                      5.05 kB         267 kB
+├ ○ /admin/sales                              7.77 kB         155 kB
+├ ○ /admin/settings                           9.51 kB         168 kB
+├ ƒ /api/admin-saas/master-products           310 B           101 kB
+├ ƒ /api/admin-saas/master-products/[id]      310 B           101 kB
+├ ƒ /api/admin-saas/metrics                   310 B           101 kB
+├ ƒ /api/admin-saas/stats                     310 B           101 kB
+├ ƒ /api/admin-saas/tenants                   310 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]              310 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/activate     310 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/change-plan  310 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/products     310 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/suspend      310 B           101 kB
+├ ƒ /api/admin-saas/tenants/[id]/users        310 B           101 kB
+├ ƒ /api/auth/[...nextauth]                   310 B           101 kB
+├ ƒ /api/auth/register                        310 B           101 kB
+├ ƒ /api/cash-sessions                        310 B           101 kB
+├ ƒ /api/cash-sessions/[id]/close             310 B           101 kB
+├ ƒ /api/cash-sessions/active                 310 B           101 kB
+├ ƒ /api/cash-sessions/current                310 B           101 kB
+├ ƒ /api/cron/subscription-tasks              310 B           101 kB
+├ ƒ /api/demo                                 310 B           101 kB
+├ ƒ /api/init-db                              310 B           101 kB
+├ ƒ /api/inventory                            310 B           101 kB
+├ ƒ /api/inventory/[id]                       310 B           101 kB
+├ ƒ /api/inventory/available-products         310 B           101 kB
+├ ƒ /api/inventory/movements                  310 B           101 kB
+├ ƒ /api/onboarding                           310 B           101 kB
+├ ƒ /api/payments/confirm                     310 B           101 kB
+├ ƒ /api/payments/history                     310 B           101 kB
+├ ƒ /api/payments/initiate                    310 B           101 kB
+├ ƒ /api/payments/transbank/confirm           310 B           101 kB
+├ ƒ /api/payments/transbank/create            310 B           101 kB
+├ ƒ /api/products                             310 B           101 kB
+├ ƒ /api/products/[id]                        310 B           101 kB
+├ ƒ /api/public/plans                         310 B           101 kB
+├ ƒ /api/reports/customers                    310 B           101 kB
+├ ƒ /api/reports/export                       310 B           101 kB
+├ ƒ /api/reports/inventory-movements          310 B           101 kB
+├ ƒ /api/reports/products                     310 B           101 kB
+├ ƒ /api/reports/sales                        310 B           101 kB
+├ ƒ /api/saas/metrics                         310 B           101 kB
+├ ƒ /api/saas/plans                           310 B           101 kB
+├ ƒ /api/saas/plans/[id]                      310 B           101 kB
+├ ƒ /api/saas/revenue                         310 B           101 kB
+├ ƒ /api/saas/subscriptions                   310 B           101 kB
+├ ƒ /api/saas/subscriptions/recent            310 B           101 kB
+├ ƒ /api/saas/subscriptions/renewals          310 B           101 kB
+├ ƒ /api/sales                                310 B           101 kB
+├ ƒ /api/sales/[id]                           310 B           101 kB
+├ ƒ /api/sales/stats                          310 B           101 kB
+├ ƒ /api/settings/company                     310 B           101 kB
+├ ƒ /api/settings/notifications               310 B           101 kB
+├ ƒ /api/settings/pos                         310 B           101 kB
+├ ƒ /api/settings/subscription                310 B           101 kB
+├ ƒ /api/settings/subscription/cancel         310 B           101 kB
+├ ƒ /api/settings/subscription/upgrade        310 B           101 kB
+├ ƒ /api/settings/users                       310 B           101 kB
+├ ƒ /api/subscription-plans                   310 B           101 kB
+├ ƒ /api/subscription-plans/[id]              310 B           101 kB
+├ ƒ /api/subscriptions                        310 B           101 kB
+├ ƒ /api/subscriptions/[id]                   310 B           101 kB
+├ ƒ /api/subscriptions/[id]/cancel            310 B           101 kB
+├ ƒ /api/subscriptions/[id]/change-plan       310 B           101 kB
+├ ƒ /api/subscriptions/[id]/reactivate        310 B           101 kB
+├ ƒ /api/subscriptions/[id]/renew             310 B           101 kB
+├ ƒ /api/subscriptions/payment/callback       310 B           101 kB
+├ ƒ /api/subscriptions/payment/init           310 B           101 kB
+├ ƒ /api/subscriptions/plans                  310 B           101 kB
+├ ƒ /api/subscriptions/status                 310 B           101 kB
+├ ƒ /api/users/stats                          310 B           101 kB
+├ ○ /auth/login                               4.31 kB         151 kB
+├ ○ /auth/register                            4.66 kB         142 kB
+├ ○ /auth/signout                             2.61 kB         119 kB
+├ ○ /demo                                     4.96 kB         122 kB
+├ ○ /onboarding                               6.66 kB         123 kB
+├ ○ /privacy                                  180 B           110 kB
+├ ○ /provider/products                        565 B           101 kB
+├ ○ /saas-admin.deprecated                    7.45 kB         259 kB
+├ ○ /saas-admin.deprecated/plans              4.29 kB         112 kB
+├ ○ /saas-admin.deprecated/revenue            4.26 kB         255 kB
+├ ○ /saas-admin.deprecated/subscriptions      4.72 kB         144 kB
+├ ○ /subscription                             2.72 kB         121 kB
+├ ○ /subscriptions/payment/error              4.02 kB         112 kB
+├ ○ /subscriptions/payment/success            3.33 kB         111 kB
+├ ○ /subscriptions/plans                      7.32 kB         129 kB
+├ ○ /terms                                    180 B           110 kB
+└ ○ /unauthorized                             2.9 kB          122 kB
++ First Load JS shared by all                 100 kB
+  ├ chunks/1517-8393d4caf3b92c87.js           45.9 kB
+  ├ chunks/4bd1b696-e394c379f94ebe03.js       52.5 kB
+  └ other shared chunks (total)               1.93 kB
+
+
+ƒ Middleware                                  57.5 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
