@@ -76,8 +76,8 @@ export default function AddFromPoolPage() {
   const handleSelectProduct = (product: MasterProduct) => {
     setSelectedProduct(product)
     // Formatear precios a 2 decimales para evitar decimales excesivos
-    const costPrice = Math.round(Number(product.suggestedPrice) * 0.7 * 100) / 100
-    const salePrice = Math.round(Number(product.suggestedPrice) * 100) / 100
+    const costPrice = parseFloat((Number(product.suggestedPrice) * 0.7).toFixed(2))
+    const salePrice = parseFloat(Number(product.suggestedPrice).toFixed(2))
     
     setFormData({
       costPrice,
