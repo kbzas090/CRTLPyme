@@ -83,9 +83,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = openSessionSchema.parse(body)
 
-    // Verificar que no haya ninguna sesión abierta en el tenant
+    // Verificar que el usuario no tenga ya una sesión abierta
+    // Permitimos múltiples sesiones en el tenant (una por usuario/cajero)
     const openSession = await prisma.cashSession.findFirst({
       where: {
+        userId: session.user.id,
         tenantId: session.user.tenantId,
         status: 'OPEN',
       },
@@ -100,14 +102,13 @@ export async function POST(request: NextRequest) {
     })
 
     if (openSession) {
-      const userName = `${openSession.user.firstName} ${openSession.user.lastName}`
-      const isOwnSession = openSession.userId === session.user.id
-      const errorMessage = isOwnSession
-        ? 'Ya tienes una sesión de caja abierta'
-        : `Ya existe una sesión de caja abierta por ${userName}`
-      
       return NextResponse.json(
-        { error: errorMessage },
+        { 
+          error: 'Ya tienes una sesión de caja abierta',
+          sessionId: openSession.id,
+          openedAt: openSession.openedAt,
+          initialAmount: openSession.initialAmount
+        },
         { status: 400 }
       )
     }
