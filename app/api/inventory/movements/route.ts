@@ -253,6 +253,9 @@ export async function POST(request: NextRequest) {
           notes: validatedData.notes,
           createdBy: session.user.id,
           tenantId: session.user.tenantId,
+          user: {
+            connect: { id: session.user.id }
+          }
         },
         include: {
           tenantInventory: {

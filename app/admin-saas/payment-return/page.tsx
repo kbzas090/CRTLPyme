@@ -10,91 +10,58 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Loader2, AlertCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 
 interface PaymentResult {
   success: boolean;
   message: string;
-  transaction?: {
-    id: string;
-    amount: number;
-    status: string;
-    authorizationCode?: string;
-    paymentTypeCode?: string;
-    responseCode?: number;
-  };
-  subscription?: {
-    id: string;
-    planName: string;
-    tenantId: string;
-  };
 }
 
 function PaymentReturnContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(true);
   const [result, setResult] = useState<PaymentResult | null>(null);
 
   useEffect(() => {
-    const token = searchParams.get('token_ws');
+    // Leer el resultado del pago desde los parámetros de URL
+    const paymentStatus = searchParams.get('payment');
     
-    if (!token) {
+    if (paymentStatus === 'success') {
+      setResult({
+        success: true,
+        message: '¡Tu cambio de plan fue exitoso!',
+      });
+      
+      // Mostrar toast de éxito
+      toast({
+        title: '✅ ¡Cambio de plan exitoso!',
+        description: 'El plan del tenant ha sido actualizado correctamente.',
+        variant: 'default',
+      });
+    } else if (paymentStatus === 'failed') {
       setResult({
         success: false,
-        message: 'No se recibió el token de pago',
+        message: 'El pago no pudo ser procesado.',
       });
-      setIsProcessing(false);
-      return;
-    }
-
-    confirmPayment(token);
-  }, [searchParams]);
-
-  const confirmPayment = async (token: string) => {
-    try {
-      const response = await fetch('/api/payments/transbank/confirm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
+      
+      // Mostrar toast de error
+      toast({
+        title: '❌ Pago rechazado',
+        description: 'No se pudo procesar el pago. Intenta nuevamente.',
+        variant: 'destructive',
       });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setResult({
-          success: true,
-          message: data.message || '¡Cambio de plan realizado con éxito!',
-          transaction: data.transaction,
-          subscription: data.subscription,
-        });
-      } else {
-        setResult({
-          success: false,
-          message: data.message || 'Pago fallido. No se pudo procesar la compra del nuevo plan.',
-          transaction: data.transaction,
-        });
-      }
-    } catch (error) {
-      console.error('Error al confirmar pago:', error);
+    } else {
       setResult({
         success: false,
-        message: 'Error de conexión al confirmar el pago. Por favor, contacte con soporte.',
+        message: 'No se pudo determinar el estado del pago.',
       });
-    } finally {
-      setIsProcessing(false);
     }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-CL', {
-      style: 'currency',
-      currency: 'CLP',
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
+    
+    setIsProcessing(false);
+  }, [searchParams, toast]);
 
   if (isProcessing) {
     return (
@@ -137,52 +104,15 @@ function PaymentReturnContent() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Información de la transacción */}
-          {result?.transaction && (
-            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-              <h3 className="font-semibold text-gray-900">Detalles de la Transacción</h3>
-              <div className="grid gap-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">ID de Transacción:</span>
-                  <span className="font-mono font-medium">{result.transaction.id}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Monto:</span>
-                  <span className="font-semibold">{formatCurrency(result.transaction.amount)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Estado:</span>
-                  <span className={`font-medium ${
-                    result.success ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {result.transaction.status}
-                  </span>
-                </div>
-                {result.transaction.authorizationCode && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Código de Autorización:</span>
-                    <span className="font-mono">{result.transaction.authorizationCode}</span>
-                  </div>
-                )}
-                {result.transaction.paymentTypeCode && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tipo de Pago:</span>
-                    <span>{result.transaction.paymentTypeCode}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Información de la suscripción */}
-          {result?.success && result?.subscription && (
+          {/* Mensaje de éxito */}
+          {result?.success && (
             <div className="bg-green-50 rounded-lg p-4 space-y-2">
               <div className="flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <h3 className="font-semibold text-green-900">Plan Actualizado</h3>
                   <p className="text-sm text-green-700">
-                    El tenant ha sido actualizado al plan <strong>{result.subscription.planName}</strong>
+                    El cambio de plan se ha completado exitosamente. El tenant ha sido actualizado con el nuevo plan.
                   </p>
                 </div>
               </div>
@@ -200,7 +130,7 @@ function PaymentReturnContent() {
                     <li>Verifica que tu tarjeta tenga fondos suficientes</li>
                     <li>Asegúrate de que tu tarjeta esté habilitada para compras en línea</li>
                     <li>Si el problema persiste, contacta con tu banco</li>
-                    <li>Puedes intentar el proceso nuevamente</li>
+                    <li>Puedes intentar el proceso nuevamente desde la página del cliente</li>
                   </ul>
                 </div>
               </div>
@@ -209,27 +139,11 @@ function PaymentReturnContent() {
 
           {/* Botones de acción */}
           <div className="flex gap-4 justify-center pt-4">
-            {result?.subscription?.tenantId ? (
-              <Link href={`/admin-saas/tenants/${result.subscription.tenantId}`}>
-                <Button size="lg">
-                  Ver Detalles del Cliente
-                </Button>
-              </Link>
-            ) : (
-              <Link href="/admin-saas/tenants">
-                <Button size="lg">
-                  Volver a Clientes
-                </Button>
-              </Link>
-            )}
-            
-            {!result?.success && result?.subscription?.tenantId && (
-              <Link href={`/admin-saas/tenants/${result.subscription.tenantId}`}>
-                <Button variant="outline" size="lg">
-                  Intentar Nuevamente
-                </Button>
-              </Link>
-            )}
+            <Link href="/admin-saas/tenants">
+              <Button size="lg">
+                Volver a Clientes
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

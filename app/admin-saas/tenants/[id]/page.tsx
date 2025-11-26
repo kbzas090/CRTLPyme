@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import TenantLocationMap from '@/components/maps/TenantLocationMap';
 
 // Helper para traducir tipos de plan
 const getPlanName = (planType: string): string => {
@@ -412,6 +413,14 @@ export default function TenantDetailPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Mapa de ubicación */}
+      {tenant.address && (
+        <TenantLocationMap 
+          address={tenant.address} 
+          tenantName={tenant.businessName}
+        />
+      )}
 
       {/* Suscripción y Plan */}
       <Card>

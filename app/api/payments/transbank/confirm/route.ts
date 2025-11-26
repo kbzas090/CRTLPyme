@@ -120,9 +120,7 @@ async function handleTransbankCallback(request: NextRequest) {
             startDate,
             endDate,
             nextBillingDate,
-            currentPeriodStart: startDate,
-            currentPeriodEnd: endDate,
-            cancelAtPeriodEnd: false
+            autoRenew: true
           }
         });
 
@@ -137,9 +135,7 @@ async function handleTransbankCallback(request: NextRequest) {
             startDate,
             endDate,
             nextBillingDate,
-            currentPeriodStart: startDate,
-            currentPeriodEnd: endDate,
-            cancelAtPeriodEnd: false
+            autoRenew: true
           }
         });
 
@@ -161,12 +157,12 @@ async function handleTransbankCallback(request: NextRequest) {
         data: {
           tenantId: paymentTransaction.tenantId,
           action: 'UPDATE_SUBSCRIPTION',
-          entityType: 'Subscription',
+          entity: 'Subscription',
           entityId: paymentTransaction.id,
-          details: {
+          newValues: {
             planId: plan.id,
             planName: plan.name,
-            amount: paymentTransaction.amount,
+            amount: paymentTransaction.amount.toString(),
             transactionId: token,
             paymentMethod: 'TRANSBANK'
           }

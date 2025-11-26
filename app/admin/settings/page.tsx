@@ -27,6 +27,7 @@ import {
   Loader2
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import TenantLocationMap from '@/components/maps/TenantLocationMap'
 import {
   Dialog,
   DialogContent,
@@ -611,6 +612,16 @@ export default function SettingsPage() {
                   rows={3}
                 />
               </div>
+
+              {/* Mostrar mapa si hay dirección */}
+              {companyData.address && (
+                <div className="pt-4">
+                  <TenantLocationMap 
+                    address={companyData.address} 
+                    tenantName={companyData.businessName}
+                  />
+                </div>
+              )}
 
               <div className="flex justify-end pt-4">
                 <Button onClick={saveCompanyData} disabled={loading}>

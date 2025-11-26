@@ -301,7 +301,10 @@ export async function POST(request: Request) {
             type: 'EXIT',
             quantity: -item.quantity,
             reason: `Venta ${saleNumber}`,
-            createdBy: user.id
+            createdBy: user.id,
+            user: {
+              connect: { id: user.id }
+            }
           }
         })
         console.log(`✅ [SALES API] Movimiento de inventario registrado`)

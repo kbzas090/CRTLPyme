@@ -23,12 +23,12 @@ export const getReturnUrl = () => {
 
 export const getSuccessUrl = () => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  return `${baseUrl}/admin-saas/clients?payment=success`;
+  return `${baseUrl}/admin-saas/payment-return?payment=success`;
 };
 
 export const getFailureUrl = () => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  return `${baseUrl}/admin-saas/clients?payment=failed`;
+  return `${baseUrl}/admin-saas/payment-return?payment=failed`;
 };
 
 /**
