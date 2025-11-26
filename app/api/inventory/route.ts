@@ -195,10 +195,7 @@ export async function POST(request: NextRequest) {
             type: 'ENTRY',
             quantity: validatedData.stock,
             reason: 'Stock inicial al agregar producto',
-            createdBy: user.id,
-            user: {
-              connect: { id: user.id }
-            }
+            createdBy: user.id
           }
         })
       }
