@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   BarChart3,
+  AlertTriangle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,6 +28,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { usePermissions } from '@/hooks/usePermissions'
 import { MODULES } from '@/lib/permissions'
@@ -82,6 +93,8 @@ export default function AdminNavBar() {
   const router = useRouter()
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [hasCashSessionOpen, setHasCashSessionOpen] = useState(false)
   const { hasModuleAccess, isAdmin: checkIsAdmin } = usePermissions()
 
   const handleLogout = async () => {
@@ -91,16 +104,11 @@ export default function AdminNavBar() {
       if (response.ok) {
         const data = await response.json()
         
-        // Si hay una sesión de caja abierta, mostrar advertencia pero permitir cerrar sesión
+        // Si hay una sesión de caja abierta, mostrar diálogo de advertencia
         if (data.session && data.session.status === 'OPEN') {
-          const confirmed = confirm(
-            '⚠️ ADVERTENCIA: Tienes una sesión de caja abierta\n\n' +
-            'Se recomienda cerrar la caja antes de cerrar sesión.\n' +
-            '¿Deseas cerrar sesión de todas formas?'
-          )
-          if (!confirmed) {
-            return
-          }
+          setHasCashSessionOpen(true)
+          setShowLogoutConfirm(true)
+          return
         }
       }
     } catch (error) {
@@ -108,8 +116,18 @@ export default function AdminNavBar() {
       // En caso de error en la verificación, permitir cerrar sesión
     }
     
-    // Permitir cerrar sesión
+    // Si no hay caja abierta, cerrar sesión directamente
     router.push('/auth/signout')
+  }
+
+  const confirmLogout = () => {
+    setShowLogoutConfirm(false)
+    router.push('/auth/signout')
+  }
+
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false)
+    setHasCashSessionOpen(false)
   }
 
   const getInitials = (firstName?: string, lastName?: string) => {
@@ -272,6 +290,47 @@ export default function AdminNavBar() {
           </div>
         </div>
       )}
+
+      {/* Diálogo de confirmación de cierre de sesión con caja abierta */}
+      <AlertDialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-amber-100">
+                <AlertTriangle className="h-6 w-6 text-amber-600" />
+              </div>
+              <AlertDialogTitle className="text-xl">
+                Sesión de Caja Abierta
+              </AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-base text-gray-600 pt-2">
+              {hasCashSessionOpen && (
+                <>
+                  Tienes una <strong>sesión de caja abierta</strong>.
+                  <br /><br />
+                  Se recomienda <strong>cerrar la caja</strong> antes de cerrar sesión para mantener la integridad de los registros.
+                  <br /><br />
+                  ¿Deseas cerrar sesión de todas formas?
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+            <AlertDialogCancel 
+              onClick={cancelLogout}
+              className="w-full sm:w-auto min-h-[44px] touch-manipulation"
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmLogout}
+              className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white min-h-[44px] touch-manipulation"
+            >
+              Cerrar Sesión de Todas Formas
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </nav>
   )
 }
