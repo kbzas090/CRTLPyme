@@ -475,7 +475,7 @@ export default function TenantDetailPage() {
                 </div>
               </div>
 
-              {tenant.subscription.plan.features && tenant.subscription.plan.features.length > 0 && (
+              {tenant.subscription.plan.features && Array.isArray(tenant.subscription.plan.features) && tenant.subscription.plan.features.length > 0 && (
                 <div>
                   <p className="text-sm font-medium text-gray-700 mb-2">Características del Plan:</p>
                   <ul className="grid gap-2 md:grid-cols-2">
@@ -840,7 +840,7 @@ export default function TenantDetailPage() {
                       </div>
 
                       {/* Características */}
-                      {plan.features && plan.features.length > 0 && (
+                      {plan.features && Array.isArray(plan.features) && plan.features.length > 0 && (
                         <div className="space-y-2">
                           {plan.features.slice(0, 5).map((feature, index) => (
                             <div key={index} className="flex items-start gap-2 text-sm">
