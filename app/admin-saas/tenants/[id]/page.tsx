@@ -98,18 +98,24 @@ interface TenantDetail {
     isActive: boolean;
     createdAt: string;
   }>;
-  products: Array<{
+  tenantInventories?: Array<{
     id: string;
-    sku: string;
-    name: string;
-    category: string;
+    customSku: string | null;
     costPrice: string;
     salePrice: string;
     stock: number;
     minStock: number;
+    location: string | null;
     isActive: boolean;
+    masterProduct: {
+      id: string;
+      sku: string;
+      name: string;
+      category: string;
+      brand: string | null;
+    };
   }>;
-  recentSales: Array<{
+  recentSales?: Array<{
     id: string;
     saleNumber: string;
     total: string;
@@ -120,7 +126,7 @@ interface TenantDetail {
       lastName: string;
     };
   }>;
-  fixedExpenses: Array<{
+  fixedExpenses?: Array<{
     id: string;
     name: string;
     amount: string;
@@ -576,7 +582,7 @@ export default function TenantDetailPage() {
             Usuarios ({tenant.users.length})
           </TabsTrigger>
           <TabsTrigger value="products">
-            Productos ({tenant.products.length})
+            Productos ({tenant.tenantInventories?.length || 0})
           </TabsTrigger>
           <TabsTrigger value="sales">
             Ventas Recientes
@@ -661,24 +667,24 @@ export default function TenantDetailPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {tenant.products.map((product) => (
-                      <tr key={product.id} className="border-b">
-                        <td className="py-3 text-sm">{product.sku}</td>
-                        <td className="py-3 text-sm font-medium">{product.name}</td>
-                        <td className="py-3 text-sm text-gray-600">{product.category}</td>
-                        <td className="py-3 text-right text-sm">{formatCurrency(product.costPrice)}</td>
-                        <td className="py-3 text-right text-sm font-medium">{formatCurrency(product.salePrice)}</td>
+                    {tenant.tenantInventories?.map((inventory) => (
+                      <tr key={inventory.id} className="border-b">
+                        <td className="py-3 text-sm">{inventory.customSku || inventory.masterProduct.sku}</td>
+                        <td className="py-3 text-sm font-medium">{inventory.masterProduct.name}</td>
+                        <td className="py-3 text-sm text-gray-600">{inventory.masterProduct.category}</td>
+                        <td className="py-3 text-right text-sm">{formatCurrency(inventory.costPrice)}</td>
+                        <td className="py-3 text-right text-sm font-medium">{formatCurrency(inventory.salePrice)}</td>
                         <td className={`py-3 text-right text-sm font-medium ${
-                          product.stock <= product.minStock ? 'text-orange-600' : ''
+                          inventory.stock <= inventory.minStock ? 'text-orange-600' : ''
                         }`}>
-                          {product.stock}
-                          {product.stock <= product.minStock && (
+                          {inventory.stock}
+                          {inventory.stock <= inventory.minStock && (
                             <AlertCircle className="ml-1 inline h-4 w-4 text-orange-500" />
                           )}
                         </td>
                         <td className="py-3 text-center">
-                          <Badge variant={product.isActive ? 'default' : 'secondary'}>
-                            {product.isActive ? 'Activo' : 'Inactivo'}
+                          <Badge variant={inventory.isActive ? 'default' : 'secondary'}>
+                            {inventory.isActive ? 'Activo' : 'Inactivo'}
                           </Badge>
                         </td>
                       </tr>
@@ -686,7 +692,7 @@ export default function TenantDetailPage() {
                   </tbody>
                 </table>
                 
-                {tenant.products.length === 0 && (
+                {(!tenant.tenantInventories || tenant.tenantInventories.length === 0) && (
                   <p className="py-8 text-center text-gray-500">
                     No hay productos registrados
                   </p>
@@ -707,7 +713,7 @@ export default function TenantDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {tenant.recentSales.map((sale) => (
+                {tenant.recentSales?.map((sale) => (
                   <div
                     key={sale.id}
                     className="flex items-center justify-between border-b pb-4 last:border-0"
@@ -730,7 +736,7 @@ export default function TenantDetailPage() {
                   </div>
                 ))}
                 
-                {tenant.recentSales.length === 0 && (
+                {(!tenant.recentSales || tenant.recentSales.length === 0) && (
                   <p className="py-8 text-center text-gray-500">
                     No hay ventas registradas
                   </p>
@@ -751,7 +757,7 @@ export default function TenantDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {tenant.fixedExpenses.map((expense) => (
+                {tenant.fixedExpenses?.map((expense) => (
                   <div
                     key={expense.id}
                     className="flex items-center justify-between border-b pb-4 last:border-0"
@@ -773,7 +779,7 @@ export default function TenantDetailPage() {
                   </div>
                 ))}
                 
-                {tenant.fixedExpenses.length === 0 && (
+                {(!tenant.fixedExpenses || tenant.fixedExpenses.length === 0) && (
                   <p className="py-8 text-center text-gray-500">
                     No hay gastos fijos configurados
                   </p>
