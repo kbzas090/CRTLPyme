@@ -26,7 +26,7 @@ interface Stats {
     tenantsTotal: number;
     recentTenants: number;
     totalUsers: number;
-    totalProducts: number;
+    totalInventoryItems: number;
     totalSales: number;
     totalSalesAmount: number;
   };
@@ -240,9 +240,9 @@ export default function StatsPage() {
               <Package className="h-4 w-4 text-orange-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.overview.totalProducts}</div>
+              <div className="text-2xl font-bold">{stats.overview.totalInventoryItems}</div>
               <p className="text-xs text-gray-500">
-                {safeDivide(stats.overview.totalProducts, stats.overview.tenantsActive)} productos/tenant
+                {safeDivide(stats.overview.totalInventoryItems, stats.overview.tenantsActive)} productos/tenant
               </p>
             </CardContent>
           </Card>
@@ -408,7 +408,7 @@ export default function StatsPage() {
             <div className="text-center">
               <p className="text-sm text-gray-500">Promedio Productos/Tenant</p>
               <p className="text-3xl font-bold text-purple-600">
-                {safeDivide(stats.overview.totalProducts, stats.overview.tenantsActive)}
+                {safeDivide(stats.overview.totalInventoryItems, stats.overview.tenantsActive)}
               </p>
             </div>
             
