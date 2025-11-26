@@ -123,6 +123,7 @@ export async function GET(request: NextRequest) {
         tenantsTotal: tenantsActive + tenantsInactive,
         recentTenants,
         totalUsers,
+        totalProducts: totalInventoryItems,  // Items en inventarios de tenants (renombrado para compatibilidad con frontend)
         totalInventoryItems,  // Items en inventarios de tenants
         totalMasterProducts,  // Productos en el pool maestro
         totalSales: salesStats._count,
