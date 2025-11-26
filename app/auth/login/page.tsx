@@ -32,8 +32,11 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
+    clearErrors,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur', // Valida cuando el usuario sale del campo
+    reValidateMode: 'onBlur', // Revalida solo en blur después del primer submit
   })
 
   const onSubmit = async (data: LoginFormData) => {
@@ -102,7 +105,12 @@ export default function LoginPage() {
                 type="email"
                 placeholder="tu@email.com"
                 disabled={isLoading}
-                {...register('email')}
+                {...register('email', {
+                  onChange: () => {
+                    // Limpiar error del servidor cuando el usuario empieza a escribir
+                    if (error) setError(null)
+                  }
+                })}
                 className={errors.email ? 'border-red-500' : ''}
               />
               {errors.email && (
@@ -118,7 +126,12 @@ export default function LoginPage() {
                 type="password"
                 placeholder="••••••••"
                 disabled={isLoading}
-                {...register('password')}
+                {...register('password', {
+                  onChange: () => {
+                    // Limpiar error del servidor cuando el usuario empieza a escribir
+                    if (error) setError(null)
+                  }
+                })}
                 className={errors.password ? 'border-red-500' : ''}
               />
               {errors.password && (
