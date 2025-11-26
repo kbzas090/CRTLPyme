@@ -31,11 +31,27 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({
-      plans: plans.map(plan => ({
-        ...plan,
-        price: Number(plan.price),
-        activeSubscriptions: plan._count.subscriptions
-      }))
+      plans: plans.map(plan => {
+        // Transformar features a array si es necesario
+        let features = plan.features;
+        if (typeof features === 'string') {
+          try {
+            features = JSON.parse(features);
+          } catch (e) {
+            features = [];
+          }
+        }
+        if (!Array.isArray(features)) {
+          features = [];
+        }
+
+        return {
+          ...plan,
+          features,
+          price: Number(plan.price),
+          activeSubscriptions: plan._count.subscriptions
+        };
+      })
     });
 
   } catch (error) {

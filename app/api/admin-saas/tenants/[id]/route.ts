@@ -129,9 +129,26 @@ export async function GET(
     });
 
     // Obtener la suscripción activa (si existe)
-    const activeSubscription = tenant.subscriptions && tenant.subscriptions.length > 0 
+    let activeSubscription = tenant.subscriptions && tenant.subscriptions.length > 0 
       ? tenant.subscriptions[0] 
       : null;
+
+    // Transformar features a array si es necesario
+    if (activeSubscription && activeSubscription.plan && activeSubscription.plan.features) {
+      const features = activeSubscription.plan.features;
+      // Si features es un string JSON, parsearlo
+      if (typeof features === 'string') {
+        try {
+          activeSubscription.plan.features = JSON.parse(features);
+        } catch (e) {
+          activeSubscription.plan.features = [];
+        }
+      }
+      // Si features no es un array, convertirlo a array vacío
+      if (!Array.isArray(activeSubscription.plan.features)) {
+        activeSubscription.plan.features = [];
+      }
+    }
 
     return NextResponse.json({
       tenant: {
