@@ -93,6 +93,35 @@ export default function StatsPage() {
     return labels[plan] || plan;
   };
 
+  /**
+   * Realiza una división segura evitando NaN e Infinity
+   * @param numerator - El numerador
+   * @param denominator - El denominador
+   * @param decimals - Número de decimales (default: 1)
+   * @returns El resultado formateado o "0.0" si la división no es válida
+   */
+  const safeDivide = (numerator: number, denominator: number, decimals: number = 1): string => {
+    // Validar que ambos valores sean números válidos
+    if (
+      typeof numerator !== 'number' || 
+      typeof denominator !== 'number' ||
+      isNaN(numerator) || 
+      isNaN(denominator) ||
+      denominator === 0
+    ) {
+      return '0.0';
+    }
+    
+    const result = numerator / denominator;
+    
+    // Validar que el resultado sea un número válido
+    if (isNaN(result) || !isFinite(result)) {
+      return '0.0';
+    }
+    
+    return result.toFixed(decimals);
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -153,7 +182,7 @@ export default function StatsPage() {
                 {stats.overview.tenantsActive}
               </div>
               <p className="text-xs text-gray-500">
-                {((stats.overview.tenantsActive / stats.overview.tenantsTotal) * 100).toFixed(1)}% del total
+                {safeDivide(stats.overview.tenantsActive * 100, stats.overview.tenantsTotal)}% del total
               </p>
             </CardContent>
           </Card>
@@ -168,7 +197,7 @@ export default function StatsPage() {
                 {stats.overview.tenantsInactive}
               </div>
               <p className="text-xs text-gray-500">
-                {((stats.overview.tenantsInactive / stats.overview.tenantsTotal) * 100).toFixed(1)}% del total
+                {safeDivide(stats.overview.tenantsInactive * 100, stats.overview.tenantsTotal)}% del total
               </p>
             </CardContent>
           </Card>
@@ -200,7 +229,7 @@ export default function StatsPage() {
             <CardContent>
               <div className="text-2xl font-bold">{stats.overview.totalUsers}</div>
               <p className="text-xs text-gray-500">
-                {(stats.overview.totalUsers / stats.overview.tenantsActive).toFixed(1)} usuarios/tenant
+                {safeDivide(stats.overview.totalUsers, stats.overview.tenantsActive)} usuarios/tenant
               </p>
             </CardContent>
           </Card>
@@ -213,7 +242,7 @@ export default function StatsPage() {
             <CardContent>
               <div className="text-2xl font-bold">{stats.overview.totalProducts}</div>
               <p className="text-xs text-gray-500">
-                {(stats.overview.totalProducts / stats.overview.tenantsActive).toFixed(1)} productos/tenant
+                {safeDivide(stats.overview.totalProducts, stats.overview.tenantsActive)} productos/tenant
               </p>
             </CardContent>
           </Card>
@@ -259,7 +288,7 @@ export default function StatsPage() {
         <CardContent>
           <div className="space-y-4">
             {stats.usersByRole.map((item, index) => {
-              const percentage = (item.count / stats.overview.totalUsers) * 100;
+              const percentage = parseFloat(safeDivide(item.count * 100, stats.overview.totalUsers));
               const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-orange-500', 'bg-pink-500'];
               
               return (
@@ -298,7 +327,7 @@ export default function StatsPage() {
         <CardContent>
           <div className="grid gap-6 md:grid-cols-3">
             {stats.planDistribution.map((item, index) => {
-              const percentage = (item.count / stats.overview.tenantsActive) * 100;
+              const percentage = parseFloat(safeDivide(item.count * 100, stats.overview.tenantsActive));
               const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500'];
               
               return (
@@ -372,28 +401,28 @@ export default function StatsPage() {
             <div className="text-center">
               <p className="text-sm text-gray-500">Promedio Usuarios/Tenant</p>
               <p className="text-3xl font-bold text-blue-600">
-                {(stats.overview.totalUsers / stats.overview.tenantsActive).toFixed(1)}
+                {safeDivide(stats.overview.totalUsers, stats.overview.tenantsActive)}
               </p>
             </div>
             
             <div className="text-center">
               <p className="text-sm text-gray-500">Promedio Productos/Tenant</p>
               <p className="text-3xl font-bold text-purple-600">
-                {(stats.overview.totalProducts / stats.overview.tenantsActive).toFixed(1)}
+                {safeDivide(stats.overview.totalProducts, stats.overview.tenantsActive)}
               </p>
             </div>
             
             <div className="text-center">
               <p className="text-sm text-gray-500">Promedio Ventas/Tenant</p>
               <p className="text-3xl font-bold text-green-600">
-                {(stats.overview.totalSales / stats.overview.tenantsActive).toFixed(1)}
+                {safeDivide(stats.overview.totalSales, stats.overview.tenantsActive)}
               </p>
             </div>
             
             <div className="text-center">
               <p className="text-sm text-gray-500">Ticket Promedio</p>
               <p className="text-3xl font-bold text-orange-600">
-                {formatCurrency(Number(stats.overview.totalSalesAmount) / stats.overview.totalSales)}
+                {formatCurrency(parseFloat(safeDivide(Number(stats.overview.totalSalesAmount), stats.overview.totalSales, 0)))}
               </p>
             </div>
           </div>
