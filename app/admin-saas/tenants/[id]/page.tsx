@@ -13,6 +13,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Building2,
   Users,
@@ -146,6 +148,14 @@ export default function TenantDetailPage() {
   const [isChangePlanDialogOpen, setIsChangePlanDialogOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    businessName: '',
+    email: '',
+    phone: '',
+    address: '',
+  });
 
   useEffect(() => {
     if (params.id) {
@@ -247,6 +257,91 @@ export default function TenantDetailPage() {
       });
       setIsProcessingPayment(false);
       setSelectedPlanId(null);
+    }
+  };
+
+  const handleOpenEditDialog = () => {
+    if (!tenant) return;
+    setEditFormData({
+      businessName: tenant.businessName,
+      email: tenant.email,
+      phone: tenant.phone || '',
+      address: tenant.address || '',
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateTenant = async () => {
+    if (!tenant) return;
+
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/admin-saas/tenants/${tenant.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editFormData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar el tenant');
+      }
+
+      toast({
+        title: 'Éxito',
+        description: 'Tenant actualizado correctamente',
+      });
+
+      setIsEditDialogOpen(false);
+      loadTenantDetail(); // Recargar datos
+    } catch (error) {
+      console.error('Error al actualizar tenant:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar el tenant',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleToggleActive = async () => {
+    if (!tenant) return;
+
+    const newStatus = !tenant.isActive;
+    const action = newStatus ? 'activar' : 'desactivar';
+
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/admin-saas/tenants/${tenant.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isActive: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al ${action} el tenant`);
+      }
+
+      toast({
+        title: 'Éxito',
+        description: `Tenant ${newStatus ? 'activado' : 'desactivado'} correctamente`,
+      });
+
+      loadTenantDetail(); // Recargar datos
+    } catch (error) {
+      console.error(`Error al ${action} tenant:`, error);
+      toast({
+        title: 'Error',
+        description: `No se pudo ${action} el tenant`,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -366,9 +461,22 @@ export default function TenantDetailPage() {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline">Editar</Button>
-            <Button variant={tenant.isActive ? 'destructive' : 'default'}>
-              {tenant.isActive ? 'Desactivar' : 'Activar'}
+            <Button variant="outline" onClick={handleOpenEditDialog} disabled={isUpdating}>
+              Editar
+            </Button>
+            <Button 
+              variant={tenant.isActive ? 'destructive' : 'default'}
+              onClick={handleToggleActive}
+              disabled={isUpdating}
+            >
+              {isUpdating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Procesando...
+                </>
+              ) : (
+                tenant.isActive ? 'Desactivar' : 'Activar'
+              )}
             </Button>
           </div>
         </div>
@@ -789,6 +897,84 @@ export default function TenantDetailPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Diálogo de Edición */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Editar Tenant</DialogTitle>
+            <DialogDescription>
+              Actualiza la información del tenant
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="businessName">Nombre del Negocio</Label>
+              <Input
+                id="businessName"
+                value={editFormData.businessName}
+                onChange={(e) => setEditFormData({ ...editFormData, businessName: e.target.value })}
+                placeholder="Ej: Mi Negocio SpA"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={editFormData.email}
+                onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                placeholder="email@ejemplo.com"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Teléfono</Label>
+              <Input
+                id="phone"
+                value={editFormData.phone}
+                onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
+                placeholder="+56 9 1234 5678"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="address">Dirección</Label>
+              <Input
+                id="address"
+                value={editFormData.address}
+                onChange={(e) => setEditFormData({ ...editFormData, address: e.target.value })}
+                placeholder="Ej: Av. Libertador Bernardo O'Higgins 1234, Santiago"
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+              disabled={isUpdating}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleUpdateTenant}
+              disabled={isUpdating}
+            >
+              {isUpdating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Guardando...
+                </>
+              ) : (
+                'Guardar Cambios'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Diálogo de Cambio de Plan */}
       <Dialog open={isChangePlanDialogOpen} onOpenChange={setIsChangePlanDialogOpen}>

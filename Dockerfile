@@ -20,6 +20,10 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Build arguments para variables de entorno públicas de Next.js
+ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
 RUN npx prisma generate
 RUN npm run build
 
