@@ -51,6 +51,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
+            --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} \
             -t us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
             -t us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }}:latest \
             .
@@ -85,6 +86,7 @@ jobs:
             --port 3000 \
             --update-env-vars NODE_ENV=production \
             --update-env-vars NEXT_PUBLIC_APP_NAME=CRTLPyme \
+            --update-env-vars NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} \
             --update-env-vars GOOGLE_CLOUD_PROJECT_ID=${{ env.PROJECT_ID }} \
             --update-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }} \
             --update-env-vars NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
