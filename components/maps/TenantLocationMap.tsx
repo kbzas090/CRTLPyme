@@ -14,7 +14,9 @@ export default function TenantLocationMap({ address, tenantName }: TenantLocatio
   // Encode address for URL
   const encodedAddress = encodeURIComponent(address);
   const googleMapsUrl = `https://www.google.com/maps?q=${encodedAddress}`;
-  const embedUrl = `https://miro.medium.com/v2/resize:fit:1400/0*AAw6DtKQLDu6st4v.jpeg`;
+  
+  // URL para iframe con formato de escritorio y pin
+  const embedUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <Card>
@@ -25,7 +27,7 @@ export default function TenantLocationMap({ address, tenantName }: TenantLocatio
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="w-full h-[400px] rounded-lg overflow-hidden border">
+        <div className="w-full h-[450px] rounded-lg overflow-hidden border">
           <iframe
             src={embedUrl}
             width="100%"
@@ -38,7 +40,10 @@ export default function TenantLocationMap({ address, tenantName }: TenantLocatio
           />
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">{address}</p>
+          <p className="text-sm text-muted-foreground flex items-center gap-2">
+            <MapPin className="h-4 w-4" />
+            {address}
+          </p>
           <Button
             variant="outline"
             size="sm"
