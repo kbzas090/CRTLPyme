@@ -49,6 +49,7 @@ steps:
       - '--set-env-vars=NEXT_PUBLIC_APP_NAME=CRTLPyme'
       - '--set-env-vars=GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID'
       - '--set-env-vars=NEXTAUTH_URL=https://crtlpyme-ean57to77a-uc.a.run.app'
+      - '--set-env-vars=NEXT_PUBLIC_APP_URL=https://crtlpyme-ean57to77a-uc.a.run.app'
       - '--set-env-vars=NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyDASIXVuJkrmGYb4wUbDdUo1XJShaDP9A'
 
 images:

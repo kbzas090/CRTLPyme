@@ -16,9 +16,11 @@ export const webpayPlus = new WebpayPlus.Transaction(
 );
 
 // URLs de retorno (deben ser públicas para que Transbank pueda llamarlas)
+// IMPORTANTE: Transbank redirige primero al endpoint de confirmación (/api/payments/transbank/confirm)
+// Este endpoint procesa el pago y luego redirige a la página de retorno
 export const getReturnUrl = () => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  return `${baseUrl}/admin-saas/payment-return`;
+  return `${baseUrl}/api/payments/transbank/confirm`;
 };
 
 export const getSuccessUrl = () => {
